@@ -250,6 +250,12 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
   Future<void> _initialize() async {
     try {
       ref.read(initializationProvider.notifier).state = false;
+      
+      // 🗃️ ATTENDRE le chargement SQLite AVANT de continuer
+      print('🔄 Attente chargement paramètres SQLite...');
+      await ref.read(gameSettingsProvider.notifier).ensureLoaded();
+      print('✅ Paramètres SQLite chargés !');
+      
       await ref.read(imageControllerProvider.notifier).loadRandomImage();
       if (mounted) {
         ref.read(initializationProvider.notifier).state = true;

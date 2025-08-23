@@ -65,6 +65,13 @@ final gameSettingsProvider =
   return GameSettingsNotifier(ref);
 });
 
+// Provider pour charger les paramètres de façon asynchrone
+final gameSettingsLoadedProvider = FutureProvider<GameSettings>((ref) async {
+  final notifier = ref.read(gameSettingsProvider.notifier);
+  await notifier.ensureLoaded();
+  return ref.read(gameSettingsProvider);
+});
+
 // Providers
 final gameStateProvider =
     StateNotifierProvider<GameStateNotifier, GameState>((ref) {
@@ -81,15 +88,27 @@ final initializationProvider = StateProvider<bool>((ref) => false);
 // Notifier pour les paramètres du jeu
 class GameSettingsNotifier extends StateNotifier<GameSettings> {
   final Ref ref;
+  bool _isLoaded = false;
+  Future<void>? _loadingFuture;
 
   GameSettingsNotifier(this.ref) : super(GameSettings.initial()) {
-    _loadSettingsFromDatabase();
+    _loadingFuture = _loadSettingsFromDatabase();
+  }
+
+  Future<void> ensureLoaded() async {
+    if (!_isLoaded && _loadingFuture != null) {
+      await _loadingFuture;
+    }
   }
 
   Future<void> _loadSettingsFromDatabase() async {
+    if (_isLoaded) return;
+    
     try {
       final repository = ref.read(gameSettingsRepositoryProvider);
       final dbSettings = await repository.getSettings();
+      
+      print('🗃️ SQLite settings loaded: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
       
       // Convertir les paramètres SQLite vers le modèle Freezed
       state = state.copyWith(
@@ -98,9 +117,13 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
         useCustomGridSize: dbSettings.useCustomGridSize,
         hasSeenDocumentation: dbSettings.hasSeenDocumentation,
       );
+      
+      _isLoaded = true;
+      print('✅ GameSettings state updated with SQLite data');
     } catch (e) {
       // En cas d'erreur, garder les valeurs par défaut
-      print('Erreur chargement paramètres SQLite: $e');
+      print('❌ Erreur chargement paramètres SQLite: $e');
+      _isLoaded = true; // Marquer comme chargé même en cas d'erreur
     }
   }
 
@@ -143,9 +166,11 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
         hasSeenDocumentation: state.hasSeenDocumentation,
       );
       
+      print('💾 Saving to SQLite: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
       await repository.saveSettings(dbSettings);
+      print('✅ SQLite save completed');
     } catch (e) {
-      print('Erreur sauvegarde paramètres SQLite: $e');
+      print('❌ Erreur sauvegarde paramètres SQLite: $e');
     }
   }
 }
