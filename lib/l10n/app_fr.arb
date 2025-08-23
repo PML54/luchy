@@ -1,0 +1,111 @@
+
+{
+    "@@locale": "fr",
+    "cancel": "Annuler",
+
+    "photoGalleryLabel": "Galerie Photos",
+    "success": "Puzzle terminé !",
+    "photoGalleryOption": "Ouvrir Galerie",
+    "levelTitleLabel": "Niveau",
+    "levelTitle": "Niveau",
+    "levelEasyLabel": "Facile",
+    "levelMediumLabel": "Moyen",
+    "levelHardLabel": "Difficile",
+    "levelCustomLabel": "Personnalisé",
+    "difficultyLabel": "Difficulté",
+    "puzzleSizeLabel": "Taille",
+
+    "share": "Partager",
+    "shareCodeText": "Code : {code}",
+    "sharePuzzleInfo": "Un puzzle passionnant en {difficulty} pièces",
+    "shareTitle": "Nouveau défi PuzHub !",
+    "shareDownloadPrompt": "Téléchargez PuzHub et rejoignez le défi !",
+    "shareHashtags": "#PuzHub #Puzzle #JeuMobile",
+
+    "@sharePuzzleInfo": {
+        "placeholders": {
+            "difficulty": {
+                "type": "String"
+            }
+        }
+    },
+
+    "@shareCodeText": {
+        "placeholders": {
+            "code": {
+                "type": "String"
+            }
+        }
+    },
+
+
+    "ok": "OK",
+    "error": "Erreur",
+    "sourceDialogTitle": "Artuzz V1.1",
+    "galleryOption": "Galerie",
+    "cameraOption": "Photo",
+    "codeOption": "Photo+Code",
+    "processingImage": "Analyse de l'image...",
+    "resizingImage": "Redimensionnement de l'image...",
+    "photoReady": "Photo : {width}x{height} px",
+    "@photoReady": {
+        "placeholders": {
+            "width": {"type": "int"},
+            "height": {"type": "int"}
+        }
+    },
+    "processing": "Traitement en cours...",
+    "codeDialogTitle": "Entrer le code",
+    "codeHint": "Code à 3 chiffres",
+    "shareCodeTitle": "Code du Puzzle",
+    "shareCodeMessage": "Votre code de puzzle est :",
+    "shareWithImage": "Partagez ce code avec vos amis !",
+    "sharingImage": "Partage de l'image...",
+    "photoError": "Erreur photo : {message}",
+    "@photoError": {
+        "placeholders": {
+            "message": {"type": "String"}
+        }
+    },
+    "imageError": "Erreur image : {message}",
+    "@imageError": {
+        "placeholders": {
+            "message": {"type": "String"}
+        }
+    },
+    "sharingError": "Erreur de partage : {message}",
+    "@sharingError": {
+        "placeholders": {
+            "message": {"type": "String"}
+        }
+    },
+    "takePhotoError": "Erreur prise de photo : {message}",
+    "@takePhotoError": {
+        "placeholders": {
+            "message": {"type": "String"}
+        }
+    },
+    "decodeError": "Impossible de décoder l'image",
+    "tempFileError": "Le fichier temporaire n'a pas pu être créé",
+    "selectImageHelp": "Sélectionnez une photo ou prenez une photo",
+    "surpriseLabel": "Pissarro",
+    "previewLabel": "Aperçu",
+
+    "imageProcessingReport": "Rapport de traitement d'image",
+    "image": "Image",
+    "dimensions": "Dimensions",
+    "grid": "Grille",
+    "originalSize": "Taille originale",
+    "optimizedSize": "Taille optimisée",
+    "imageEntropy": "Complexité:",
+    "processingTimes": "Temps de traitement",
+    "decodingTime": "Décodage",
+    "piecesCreationTime": "Création des pièces",
+    "shuffleTime": "Mélange",
+    "cropTime": "Recadrage",
+    "initTime": "Initialisation",
+    "pickImageTime": "Sélection de l'image",
+    "totalTime": "Temps total",
+    "close": "Fermer"
+
+}

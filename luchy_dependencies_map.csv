@@ -1,0 +1,32 @@
+Fichier source,Dépend de,Type de dépendance,Raison,Impact si modifié,Criticité
+main.dart,app_config.dart,Configuration,Initialisation providers,Redémarrage app requis,Critique
+main.dart,puzzle_game_screen.dart,UI,Écran principal,Change interface principale,Élevée
+main.dart,app_localizations.dart,i18n,Support multilingue,Perte de traductions,Moyenne
+puzzle_game_screen.dart,game_providers.dart,State,Logique de jeu,Jeu non fonctionnel,Critique
+puzzle_game_screen.dart,puzzle_board.dart,UI,Interface plateau,Pas d'interaction puzzle,Critique
+puzzle_game_screen.dart,custom_toolbar.dart,UI,Actions utilisateur,Perte de fonctions,Élevée
+puzzle_game_screen.dart,image_preview.dart,UI,Sélection images,Pas de choix d'images,Élevée
+puzzle_game_screen.dart,device_config_provider.dart,State,Adaptation écran,Interface mal adaptée,Moyenne
+game_providers.dart,game_state.dart,Model,État du jeu,Logique métier cassée,Critique
+game_providers.dart,image_processing_data.dart,Model,Métadonnées images,Perte de statistiques,Faible
+puzzle_board.dart,game_providers.dart,State,État des pièces,Plateau non interactif,Critique
+puzzle_board.dart,game_state.dart,Model,Configuration puzzle,Structure incorrecte,Élevée
+image_controller.dart,image_optimizer.dart,Utility,Optimisation images,Images non optimisées,Élevée
+image_controller.dart,image_processing_data.dart,Model,Tracking performance,Pas de métriques,Faible
+image_optimizer.dart,profiler.dart,Utility,Mesure performance,Pas de monitoring,Faible
+help_screen.dart,app_localizations.dart,i18n,Contenu bilingue,Aide en une langue,Moyenne
+help_screen.dart,package_info_plus,External,Version app,Pas de numéro version,Faible
+device_config_provider.dart,device_config.dart,Model,Types d'appareils,Détection incorrecte,Moyenne
+image_preview.dart,image_list.dart,Constants,Images artistiques,Pas d'images prédéfinies,Moyenne
+image_preview.dart,image_controller.dart,Controller,Sélection images,Pas de sélection,Élevée
+custom_toolbar.dart,game_providers.dart,State,Actions de jeu,Boutons non fonctionnels,Élevée
+image_processing_report_widget.dart,image_processing_data.dart,Model,Données à afficher,Widget vide,Faible
+app_config.dart,Aucune,Root,Configuration base,Impact sur toute l'app,Critique
+game_state.dart,Aucune,Root,Modèle central,Impact sur logique jeu,Critique
+device_config.dart,Aucune,Root,Configuration appareil,Impact sur adaptation UI,Moyenne
+image_list.dart,Aucune,Root,Constantes,Impact sur contenu,Faible
+profiler.dart,Aucune,Root,Utilitaire indépendant,Pas d'impact fonctionnel,Très faible
+app_localizations_fr.dart,app_localizations.dart,i18n,Interface de base,Textes français perdus,Moyenne
+app_localizations_en.dart,app_localizations.dart,i18n,Interface de base,Textes anglais perdus,Moyenne
+Tous les .freezed.dart,Fichier source correspondant,Generated,Code généré,Regénération auto,Auto
+

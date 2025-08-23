@@ -1,0 +1,29 @@
+# Flutter essentiels
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# iOS spécifiques (ne pas sauvegarder)
+ios/.generated/
+ios/Flutter/Generated.xcconfig
+ios/Runner/GeneratedPluginRegistrant.*
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/flutter_assets/
+
+# Dossiers non nécessaires pour iOS
+android/
+web/
+linux/
+macos/
+windows/
+
+# IDE et divers
+.vscode/
+.idea/
+*.iml
+*.log
+.DS_Store

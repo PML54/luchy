@@ -1,0 +1,31 @@
+{
+  "models": {
+    "default": "claude-3.5-sonnet",
+    "chat": "claude-3.5-sonnet",
+    "code": "claude-3.5-sonnet",
+    "openai": {
+      "model": "gpt-4-turbo",
+      "enabled": true
+    }
+  },
+  "keybindings": {
+    "claude": "cmd+k",
+    "chatgpt": "cmd+shift+k", 
+    "chat_window": "cmd+l"
+  },
+  "workflow": {
+    "technical_tasks": "claude-3.5-sonnet",
+    "creative_tasks": "gpt-4-turbo",
+    "architecture": "claude-3.5-sonnet",
+    "brainstorming": "gpt-4-turbo"
+  },
+  "project_context": {
+    "name": "Luchy",
+    "version": "1.1.0+3",
+    "framework": "Flutter",
+    "state_management": "Riverpod",
+    "documentation_format": "cursor_headers"
+  }
+}
+
+

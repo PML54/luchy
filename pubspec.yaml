@@ -1,0 +1,92 @@
+name: luchy
+description: Luchy - A modern puzzle game that brings images to life as jigsaw puzzles.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Architecture
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Freezed annotations (models)
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+  # UI & utils
+  cupertino_icons: ^1.0.8
+  collection: ^1.18.0
+  intl: ^0.20.2
+  url_launcher: ^6.2.4
+  flutter_markdown: ^0.7.7+1
+  marquee: ^2.2.3
+
+  # Media, files & device info
+  image: ^4.2.0
+  image_picker: ^1.1.2
+  path_provider: ^2.1.4
+  share_plus: ^11.0.0
+  flutter_cache_manager: ^3.3.1
+  shared_preferences: ^2.3.2
+  universal_html: ^2.2.4
+  flutter_exif_rotation: ^0.5.1
+  in_app_review: ^2.0.8
+  device_info_plus: ^11.5.0
+  package_info_plus: ^8.1.0
+  http: ^1.2.2
+  sqlite3: ^2.7.7
+  path: ^1.8.0
+  git: ^2.0.0
+  win32: ^5.0.7
+  audioplayers: ^6.1.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Lints stables pour Dart 3.x
+  flutter_lints: ^3.0.2
+
+  # Génération de code
+  build_runner: ^2.4.6
+  riverpod_generator: ^2.4.0
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+
+  # Outils
+  test: ^1.25.7
+  flutter_launcher_icons: ^0.14.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+  # fonts:
+  #   - family: Poppins
+  #     fonts:
+  #       - asset: assets/fonts/Poppins-Regular.ttf
+  #       - asset: assets/fonts/Poppins-Bold.ttf
+  #         weight: 700
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  remove_alpha_ios: true
+  min_sdk_android: 21
+
+platforms:
+  android: null
+  ios: null
+  web: null
+  macos: null
+  windows: null
+  linux: null

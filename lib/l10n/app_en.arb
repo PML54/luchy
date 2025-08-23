@@ -1,0 +1,109 @@
+
+{
+  "@@locale": "en",
+  "cancel": "Cancel",
+  "photoGalleryLabel": "Photo Gallery",
+  "photoGalleryOption": "Open Gallery",
+  "levelTitleLabel": "Level",
+  "levelTitle": "Level",
+  "levelEasyLabel": "Easy",
+  "levelMediumLabel": "Medium",
+  "levelHardLabel": "Hard",
+  "levelCustomLabel": "Custom",
+  "difficultyLabel": "Difficulty",
+  "puzzleSizeLabel": "Size",
+  "share": "Share",
+  "shareTitle": "New PuzHub Challenge!",
+  "sharePuzzleInfo": "An exciting puzzle with {difficulty} pieces",
+  "success": "Puzzle completed!",
+  "@sharePuzzleInfo": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      }
+    }
+  },
+
+  "shareDownloadPrompt": "Download PuzHub and join the challenge!",
+  "shareHashtags": "#PuzHub #Puzzle #MobileGame",
+
+  "@shareCodeText": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+
+  "ok": "OK",
+  "error": "Error",
+  "sourceDialogTitle": "PuzHub V1.4",
+  "galleryOption": "Gallery",
+  "cameraOption": "Camera",
+  "codeOption": "Photo+Code",
+  "processingImage": "Processing image...",
+  "resizingImage": "Resizing image...",
+  "photoReady": "Photo: {width}x{height} px",
+  "@photoReady": {
+    "placeholders": {
+      "width": {"type": "int"},
+      "height": {"type": "int"}
+    }
+  },
+  "processing": "Running...",
+  "codeDialogTitle": "Enter Code",
+  "codeHint": "3-digit code",
+  "shareCodeTitle": "Puzzle Code",
+  "shareCodeMessage": "Your puzzle code is:",
+  "shareWithImage": "Share this Code with your Friends!",
+  "sharingImage": "Sharing image...",
+  "photoError": "Photo error: {message}",
+  "@photoError": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "imageError": "Error Image: {message}",
+  "@imageError": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "sharingError": "Sharing Error: {message}",
+  "@sharingError": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "takePhotoError": "Error Take Photo: {message}",
+  "@takePhotoError": {
+    "placeholders": {
+      "message": {"type": "String"}
+    }
+  },
+  "decodeError": "No decode",
+  "tempFileError": "Temporary file could not be created",
+  "selectImageHelp": "Select a photo or Take photo",
+  "surpriseLabel": "Pissarro",
+  "previewLabel": "Preview",
+
+  "shareCodeText": "Code: {code}",
+
+  "imageProcessingReport": "Image Processing Report",
+  "image": "Image",
+  "dimensions": "Dimensions",
+  "grid": "Grid",
+  "originalSize": "Original Size",
+  "optimizedSize": "Optimized Size",
+  "imageEntropy": "Image Complexity:",
+  "processingTimes": "Processing Times",
+  "decodingTime": "Decoding",
+  "piecesCreationTime": "Pieces Creation",
+  "shuffleTime": "Shuffle",
+  "cropTime": "Cropping",
+  "initTime": "Initialization",
+  "pickImageTime": "Image Selection",
+  "totalTime": "Total Time",
+  "close": "Close"
+
+}
