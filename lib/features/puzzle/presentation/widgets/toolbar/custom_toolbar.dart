@@ -269,22 +269,11 @@ class CustomToolbar extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Bouton source d'image
-        Row(
-          children: [
-            ToolbarButton(
-              icon: Icons.add_photo_alternate,
-              label: l10n.photoGalleryLabel,
-              color: Colors.white,
-              onPressed: () => PuzzleGameScreen.showImageSourceDialog(context),
-            ),
-            // Affichage de la version
-            const SizedBox(width: 8),
-            packageInfoAsync.when(
-              data: (packageInfo) => _buildVersionDisplay(packageInfo.version),
-              loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
-            ),
-          ],
+        ToolbarButton(
+          icon: Icons.add_photo_alternate,
+          label: l10n.photoGalleryLabel,
+          color: Colors.white,
+          onPressed: () => PuzzleGameScreen.showImageSourceDialog(context),
         ),
 
         // Contrôle du niveau
@@ -303,7 +292,7 @@ class CustomToolbar extends ConsumerWidget {
                     }
                   : null,
             ),
-            _buildLevelDisplay(l10n.levelTitleLabel, currentLevel.toString()),
+            _buildLevelDisplay("🧩", currentLevel.toString()),
             IconButton(
               icon: _rightChevronIcon,
               iconSize: _iconSize,

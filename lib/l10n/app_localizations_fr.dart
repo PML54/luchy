@@ -12,7 +12,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
-  String get photoGalleryLabel => 'Galerie Photos';
+  String get photoGalleryLabel => 'Photos';
 
   @override
   String get photoGalleryOption => 'Ouvrir Galerie';
