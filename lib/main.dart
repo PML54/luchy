@@ -10,19 +10,17 @@
 /// - EmergencyApp: Interface de secours en cas d'erreur fatale
 ///
 /// ÉTAT ACTUEL:
-/// - Firebase: Désactivé (config dummy, pas d'initialisation)
-/// - Version: 1.1.0+3 (build visible dans l'aide)
+/// - SQLite: Intégré avec succès (remplace SharedPreferences)
+/// - Version: 1.0.0+3 (build avec SQLite)
 /// - Localisation: Français/Anglais supportés
-/// - État: Stable après nettoyage Firebase
+/// - État: Stable avec persistance SQLite
 ///
 /// HISTORIQUE RÉCENT:
-/// - Suppression Firebase (garde config dummy pour éviter erreurs)
-/// - Nettoyage logs debug problématiques
-/// - Versioning mis à jour pour suivi builds
-/// - Documentation mise à jour format <cursor>
-/// - Suppression commentaires Firebase obsolètes
-/// - Suppression classes inutilisées (SafeApp, ProviderLogger)
-/// - Build & install iOS validé après nettoyage (v1.1.0+3)
+/// - 2024-12-19: Intégration SQLite complète
+/// - Paramètres jeu sauvegardés en base SQLite
+/// - Architecture: DatabaseService + Repository + Providers
+/// - Tables: game_settings, user_stats, puzzle_history, favorite_images
+/// - Test iOS réussi avec SQLite fonctionnel
 ///
 /// 🔧 POINTS D'ATTENTION:
 /// - Config Firebase dummy: Ne pas mettre de valeurs vides (cause plantages)
@@ -42,6 +40,7 @@
 /// - l10n/app_localizations.dart: Système de traduction
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Point d'entrée critique)
+/// 📅 Dernière modification: 2024-12-19 17:00
 /// </cursor>
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

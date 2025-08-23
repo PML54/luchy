@@ -1,7 +1,7 @@
 name: luchy
 description: Luchy - A modern puzzle game that brings images to life as jigsaw puzzles.
 publish_to: "none"
-version: 1.0.0+2
+version: 1.0.0+3
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -41,6 +41,7 @@ dependencies:
   device_info_plus: ^11.5.0
   package_info_plus: ^8.1.0
   http: ^1.2.2
+  sqflite: ^2.4.2
   sqlite3: ^2.7.7
   path: ^1.8.0
   git: ^2.0.0

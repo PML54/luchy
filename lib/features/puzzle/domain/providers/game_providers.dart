@@ -57,10 +57,12 @@ import 'package:luchy/features/puzzle/domain/models/image_processing_data.dart';
 
 import 'package:luchy/core/utils/image_optimizer.dart';
 import 'package:luchy/core/utils/profiler.dart';
+import 'package:luchy/core/database/providers/database_providers.dart';
+import 'package:luchy/core/database/models/database_models.dart';
 
 final gameSettingsProvider =
     StateNotifierProvider<GameSettingsNotifier, GameSettings>((ref) {
-  return GameSettingsNotifier();
+  return GameSettingsNotifier(ref);
 });
 
 // Providers
@@ -78,22 +80,73 @@ final initializationProvider = StateProvider<bool>((ref) => false);
 
 // Notifier pour les paramètres du jeu
 class GameSettingsNotifier extends StateNotifier<GameSettings> {
-  GameSettingsNotifier() : super(GameSettings.initial());
+  final Ref ref;
 
-  void resetToDefaultDifficulty() {
+  GameSettingsNotifier(this.ref) : super(GameSettings.initial()) {
+    _loadSettingsFromDatabase();
+  }
+
+  Future<void> _loadSettingsFromDatabase() async {
+    try {
+      final repository = ref.read(gameSettingsRepositoryProvider);
+      final dbSettings = await repository.getSettings();
+      
+      // Convertir les paramètres SQLite vers le modèle Freezed
+      state = state.copyWith(
+        difficultyCols: dbSettings.difficultyCols,
+        difficultyRows: dbSettings.difficultyRows,
+        useCustomGridSize: dbSettings.useCustomGridSize,
+        hasSeenDocumentation: dbSettings.hasSeenDocumentation,
+      );
+    } catch (e) {
+      // En cas d'erreur, garder les valeurs par défaut
+      print('Erreur chargement paramètres SQLite: $e');
+    }
+  }
+
+  Future<void> resetToDefaultDifficulty() async {
     state = state.copyWith(
       difficultyCols: 3,
       difficultyRows: 3,
       useCustomGridSize: false,
     );
+    
+    // Sauvegarder en base
+    await _saveToDatabase();
   }
 
-  void setDifficulty(int cols, int rows) {
+  Future<void> setDifficulty(int cols, int rows) async {
     state = state.copyWith(
       difficultyCols: cols,
       difficultyRows: rows,
       useCustomGridSize: true,
     );
+    
+    // Sauvegarder en base
+    await _saveToDatabase();
+  }
+
+  Future<void> markDocumentationSeen() async {
+    if (!state.hasSeenDocumentation) {
+      state = state.copyWith(hasSeenDocumentation: true);
+      await _saveToDatabase();
+    }
+  }
+
+  Future<void> _saveToDatabase() async {
+    try {
+      final repository = ref.read(gameSettingsRepositoryProvider);
+      final dbSettings = GameSettingsDb(
+        difficultyRows: state.difficultyRows,
+        difficultyCols: state.difficultyCols,
+        useCustomGridSize: state.useCustomGridSize,
+        hasSeenDocumentation: state.hasSeenDocumentation,
+      );
+      
+      await repository.saveSettings(dbSettings);
+    } catch (e) {
+      print('Erreur sauvegarde paramètres SQLite: $e');
+    }
   }
 }
 
