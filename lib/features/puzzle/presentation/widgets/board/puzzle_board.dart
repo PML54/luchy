@@ -123,7 +123,7 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
       _hasPlayed = false;
     }
 
-    final screenSize = MediaQuery.of(context).size;
+        final screenSize = MediaQuery.of(context).size;
     final appBarHeight = AppBar().preferredSize.height;
     final availableHeight = screenSize.height - appBarHeight;
     final imageAspectRatio =
