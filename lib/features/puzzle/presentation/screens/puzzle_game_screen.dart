@@ -48,6 +48,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:luchy/features/puzzle/domain/models/game_state.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 import 'package:luchy/features/puzzle/presentation/screens/help_screen.dart';
@@ -214,7 +215,15 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
 
   Widget _buildFloatingActionButtons(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
+    final gameState = ref.watch(gameStateProvider);
+
+    // Calcul des pièces correctement placées
+    final correctPieces = ref.read(gameStateProvider.notifier).countCorrectPieces();
+
     final buttons = [
+      // Compteurs
+      _buildCountersWidget(gameState, correctPieces),
+      const SizedBox(height: 16, width: 16),
       FloatingActionButton(
         heroTag: 'helpButton',
         onPressed: () => Navigator.push(
@@ -247,15 +256,64 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
     );
   }
 
+  Widget _buildCountersWidget(GameState gameState, int correctPieces) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: const BorderRadius.horizontal(
+              left: Radius.circular(15),
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.swap_horiz, color: Colors.white, size: 18),
+              const SizedBox(width: 4),
+              Text(
+                '${gameState.swapCount}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: const BorderRadius.horizontal(
+              right: Radius.circular(15),
+            ),
+          ),
+          child: Text(
+            '$correctPieces/${gameState.pieces.length}',
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.greenAccent,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Future<void> _initialize() async {
     try {
       ref.read(initializationProvider.notifier).state = false;
-      
+
       // 🗃️ ATTENDRE le chargement SQLite AVANT de continuer
       print('🔄 Attente chargement paramètres SQLite...');
       await ref.read(gameSettingsProvider.notifier).ensureLoaded();
       print('✅ Paramètres SQLite chargés !');
-      
+
       await ref.read(imageControllerProvider.notifier).loadRandomImage();
       if (mounted) {
         ref.read(initializationProvider.notifier).state = true;

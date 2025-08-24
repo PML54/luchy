@@ -109,8 +109,6 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
   @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(gameStateProvider);
-    final correctPieces =
-        ref.read(gameStateProvider.notifier).countCorrectPieces();
     final isComplete = ref.read(gameStateProvider.notifier).isGameComplete();
 
     if (!gameState.isInitialized || gameState.columns == 0) {
@@ -196,57 +194,6 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
                 },
               ),
             ),
-          ),
-        ),
-        Positioned(
-          top: 10,
-          right: 10,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(15),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.swap_horiz, color: Colors.white, size: 18),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${gameState.swapCount}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: const BorderRadius.horizontal(
-                    right: Radius.circular(15),
-                  ),
-                ),
-                child: Text(
-                  '$correctPieces/${gameState.pieces.length}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.greenAccent,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
         if (isComplete)

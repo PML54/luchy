@@ -106,7 +106,7 @@ class ToolbarButton extends StatelessWidget {
         children: [
           IconButton(
             icon: Icon(icon, color: color),
-            iconSize: 28,
+            iconSize: 32,
             onPressed: onPressed,
             padding: const EdgeInsets.all(2.0),
             constraints: const BoxConstraints(minHeight: 32),
@@ -132,23 +132,13 @@ class CustomToolbar extends ConsumerWidget {
   // Styles et constantes
   static const _buttonPadding = EdgeInsets.all(2.0);
   static const _buttonConstraints = BoxConstraints(minHeight: 32);
-  static const _iconSize = 28.0;
-
-  static const _levelLabelStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 12,
-  );
-
-  static const _levelNumberStyle = TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontSize: 16,
-  );
+  static const _iconSize = 32.0;
 
   // Icons constants
-  static const _leftChevronIcon = Icon(Icons.chevron_left, color: Colors.white);
+  static const _leftChevronIcon =
+      Icon(Icons.keyboard_arrow_down, color: Colors.white);
   static const _rightChevronIcon =
-      Icon(Icons.chevron_right, color: Colors.white);
+      Icon(Icons.keyboard_arrow_up, color: Colors.white);
 
   /// Conversion niveau en taille de grille (colonnes, lignes)
   static (int, int) _getGridSize(int level) {
@@ -201,36 +191,6 @@ class CustomToolbar extends ConsumerWidget {
     return 0; // Par défaut
   }
 
-  Widget _buildLevelDisplay(String title, String level) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(title, style: _levelLabelStyle),
-        Text(level, style: _levelNumberStyle),
-      ],
-    );
-  }
-
-  Widget _buildVersionDisplay(String version) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(8),
-        border:
-            Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
-      ),
-      child: Text(
-        'v$version',
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
   Future<void> _changeDifficulty(WidgetRef ref, int cols, int rows) async {
     final imageState = ref.read(imageProcessingProvider);
     if (imageState.fullImage == null) return;
@@ -260,7 +220,6 @@ class CustomToolbar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameStateProvider);
-    final packageInfoAsync = ref.watch(packageInfoProvider);
 
     final currentLevel = _getCurrentLevel(gameState.columns, gameState.rows);
     final l10n = AppLocalizations.of(context)!;
@@ -269,13 +228,20 @@ class CustomToolbar extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Bouton source d'image
-        ToolbarButton(
-          icon: Icons.add_photo_alternate,
+        /*ToolbarButton(
+          icon: Icons.camera_alt_outlined,
           label: l10n.photoGalleryLabel,
           color: Colors.white,
           onPressed: () => PuzzleGameScreen.showImageSourceDialog(context),
         ),
-
+*/
+        IconButton(
+          icon: const Icon(Icons.camera_alt_outlined),
+          iconSize: _iconSize,
+          onPressed: () => PuzzleGameScreen.showImageSourceDialog(context),
+          tooltip: l10n.photoGalleryLabel, // garde l'accessibilité
+          color: Colors.white,
+        ),
         // Contrôle du niveau
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -292,7 +258,6 @@ class CustomToolbar extends ConsumerWidget {
                     }
                   : null,
             ),
-            _buildLevelDisplay("🧩", currentLevel.toString()),
             IconButton(
               icon: _rightChevronIcon,
               iconSize: _iconSize,
@@ -311,22 +276,26 @@ class CustomToolbar extends ConsumerWidget {
         // Boutons d'action
         Row(
           children: [
-            ToolbarButton(
-              icon: Icons.refresh,
-              label: l10n.surpriseLabel,
-              color: Colors.white,
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              iconSize: _iconSize,
+              tooltip: l10n.surpriseLabel,
+              color: Colors
+                  .white, // ou: style: IconButton.styleFrom(foregroundColor: Colors.white)
               onPressed: () =>
                   ref.read(imageControllerProvider.notifier).loadRandomImage(),
             ),
             if (gameState.swapCount > 20) ...[
               const SizedBox(width: 8),
-              ToolbarButton(
-                icon: Icons.remove_red_eye,
-                label: l10n.previewLabel,
-                color: Colors.white,
+              IconButton(
+                icon: const Icon(Icons.remove_red_eye),
+                iconSize: _iconSize,
+                tooltip: l10n.previewLabel,
+                color: Colors
+                    .white, // ou: style: IconButton.styleFrom(foregroundColor: Colors.white)
                 onPressed: () => PuzzleGameScreen.toggleFullImage(context),
               ),
-            ],
+            ]
           ],
         ),
       ],
