@@ -92,27 +92,13 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.white, width: 2),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              "👍 Puzzle Complete!",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "en ${gameState.swapCount} coups",
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
+        child: Text(
+          "👍 en ${gameState.swapCount} coups",
+          style: const TextStyle(
+            fontSize: 24,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

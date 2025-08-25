@@ -262,58 +262,21 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
   }
 
   Widget _buildCountersWidget(GameState gameState, int correctPieces) {
-    final isComplete = ref.read(gameStateProvider.notifier).isGameComplete();
-    
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Masquer le compteur de coups si puzzle terminé
-        if (!isComplete) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.horizontal(
-                left: const Radius.circular(15),
-                // Si pas de compteur de pièces, arrondir aussi à droite
-                right: gameState.pieces.isEmpty ? const Radius.circular(15) : Radius.zero,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '${gameState.swapCount}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-        // Afficher le compteur de pièces (toujours visible)
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.horizontal(
-              left: isComplete ? const Radius.circular(15) : Radius.zero,
-              right: const Radius.circular(15),
-            ),
-          ),
-          child: Text(
-            '$correctPieces/${gameState.pieces.length}',
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.greenAccent,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+    // Afficher seulement le compteur de pièces (sans compteur de coups)
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(15), // Arrondi complet
+      ),
+      child: Text(
+        '$correctPieces/${gameState.pieces.length}',
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.greenAccent,
+          fontWeight: FontWeight.bold,
         ),
-      ],
+      ),
     );
   }
 
