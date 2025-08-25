@@ -179,6 +179,12 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
                     const Center(
                       child: CircularProgressIndicator(color: Colors.white),
                     ),
+                  // FloatingActionButtons maintenant flottants au-dessus de l'image
+                  Positioned(
+                    right: 16,
+                    bottom: 16,
+                    child: _buildFloatingActionButtons(context),
+                  ),
                 ],
               ),
             ),
@@ -186,8 +192,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
           if (gameState.isInitialized == false) const _InitializationMessage(),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: _buildFloatingActionButtons(context),
+
     );
   }
 
@@ -271,8 +276,6 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.swap_horiz, color: Colors.white, size: 18),
-              const SizedBox(width: 4),
               Text(
                 '${gameState.swapCount}',
                 style: const TextStyle(
