@@ -111,7 +111,7 @@ class _RotationSuggestionState extends State<RotationSuggestion>
                   const SizedBox(width: 12),
                   const Flexible(
                     child: Text(
-                      "Tournez votre appareil pour une meilleure expérience",
+                      "Tournez votre appareil pour optimiser l'affichage",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,

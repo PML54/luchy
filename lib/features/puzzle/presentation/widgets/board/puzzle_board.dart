@@ -46,9 +46,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:luchy/core/utils/rotation_helper.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/widgets/rotation_suggestion.dart';
-import 'package:luchy/core/utils/rotation_helper.dart';
 
 class PuzzleBoard extends ConsumerStatefulWidget {
   const PuzzleBoard({super.key});
@@ -85,7 +85,7 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
 
   Widget _buildCompletionMessage(BuildContext context) {
     final gameState = ref.watch(gameStateProvider);
-    
+
     return AnimatedOpacity(
       opacity: 1.0,
       duration: const Duration(milliseconds: 2000),
@@ -132,7 +132,7 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
     final imageAspectRatio =
         gameState.imageSize.width / gameState.imageSize.height;
 
-    // Logique de suggestion de rotation
+    // Logique de suggestion de rotation avec debug
     if (!_rotationSuggestionDismissed && !isComplete) {
       final shouldSuggest = RotationHelper.shouldSuggestRotation(
         screenSize: screenSize,
@@ -140,11 +140,21 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
         imageAspectRatio: imageAspectRatio,
         currentOrientation: orientation,
       );
-      
+
+      // Debug information
+      debugPrint('🔄 Rotation Analysis:');
+      debugPrint('  Image ratio: ${imageAspectRatio.toStringAsFixed(2)}');
+      debugPrint('  Orientation: $orientation');
+      debugPrint('  Should suggest: $shouldSuggest');
+      debugPrint('  Dismissed: $_rotationSuggestionDismissed');
+      debugPrint('  Currently showing: $_showRotationSuggestion');
+
       if (shouldSuggest && !_showRotationSuggestion) {
+        debugPrint('  → Will show rotation suggestion in 2s');
         // Délai avant d'afficher la suggestion (laisse le temps de voir l'image)
         Future.delayed(const Duration(seconds: 2), () {
           if (mounted && !_rotationSuggestionDismissed) {
+            debugPrint('  → Showing rotation suggestion now!');
             setState(() {
               _showRotationSuggestion = true;
             });

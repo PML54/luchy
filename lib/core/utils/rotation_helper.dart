@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Utilitaire pour calculer l'occupation d'écran et suggérer des rotations
+/// Utilitaire pour suggérer des rotations selon logique simple
 class RotationHelper {
-  /// Seuil minimum de gain d'occupation pour suggérer une rotation (en %)
-  static const double _minimumGainThreshold = 15.0;
-
-  /// Seuil d'aspect ratio pour considérer une image comme "paysage"
-  static const double _landscapeThreshold = 1.3;
 
   /// Calcule le pourcentage d'occupation d'une image dans l'espace disponible
   static double calculateOccupationPercentage({
@@ -31,42 +26,37 @@ class RotationHelper {
     return (imageArea / availableArea) * 100;
   }
 
-  /// Détermine si on devrait suggérer une rotation
+  /// Détermine si on devrait suggérer une rotation (logique simplifiée)
   static bool shouldSuggestRotation({
     required Size screenSize,
     required double appBarHeight,
     required double imageAspectRatio,
     required Orientation currentOrientation,
   }) {
-    // Ne suggérer que si on est en portrait avec une image paysage
-    if (currentOrientation != Orientation.portrait) {
-      return false;
+    // Debug des paramètres d'entrée
+    debugPrint('🔄 Simple Rotation Logic:');
+    debugPrint('  Image ratio: ${imageAspectRatio.toStringAsFixed(2)}');
+    debugPrint('  Current orientation: $currentOrientation');
+
+    bool shouldSuggest = false;
+    String reason = '';
+
+    if (currentOrientation == Orientation.portrait && imageAspectRatio > 1.0) {
+      // En portrait avec image paysage → Suggérer paysage
+      shouldSuggest = true;
+      reason = 'Portrait + image paysage (ratio > 1) → Suggérer PAYSAGE';
+    } else if (currentOrientation == Orientation.landscape && imageAspectRatio < 1.0) {
+      // En paysage avec image portrait → Suggérer portrait
+      shouldSuggest = true;
+      reason = 'Paysage + image portrait (ratio < 1) → Suggérer PORTRAIT';
+    } else {
+      reason = 'Orientation et image déjà compatibles';
     }
 
-    // L'image doit être suffisamment "paysage"
-    if (imageAspectRatio < _landscapeThreshold) {
-      return false;
-    }
+    debugPrint('  💭 $reason');
+    debugPrint('  🎯 Should suggest: $shouldSuggest');
 
-    // Calculer l'occupation actuelle (portrait)
-    final currentOccupation = calculateOccupationPercentage(
-      screenSize: screenSize,
-      appBarHeight: appBarHeight,
-      imageAspectRatio: imageAspectRatio,
-    );
-
-    // Simuler l'occupation en paysage (inverser dimensions écran)
-    final landscapeScreenSize = Size(screenSize.height, screenSize.width);
-    final landscapeOccupation = calculateOccupationPercentage(
-      screenSize: landscapeScreenSize,
-      appBarHeight: appBarHeight,
-      imageAspectRatio: imageAspectRatio,
-    );
-
-    // Calculer le gain potentiel
-    final gain = landscapeOccupation - currentOccupation;
-    
-    return gain >= _minimumGainThreshold;
+    return shouldSuggest;
   }
 
   /// Calcule le gain d'occupation potentiel avec la rotation
@@ -94,7 +84,7 @@ class RotationHelper {
   /// Formatage user-friendly du gain
   static String formatGainMessage(double gain) {
     if (gain <= 0) return '';
-    
+
     if (gain < 10) {
       return 'Gain modeste de ${gain.toStringAsFixed(1)}%';
     } else if (gain < 25) {
