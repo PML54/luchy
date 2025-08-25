@@ -80,24 +80,36 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
   }
 
   Widget _buildCompletionMessage(BuildContext context) {
+    final gameState = ref.watch(gameStateProvider);
+    
     return AnimatedOpacity(
       opacity: 1.0,
       duration: const Duration(milliseconds: 2000),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.grey.withAlpha(128), // 0.5 * 255 ≈ 128
+          color: Colors.green.withAlpha(200), // Fond vert victoire
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white, width: 2),
         ),
-        child: const Column(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               "👍 Puzzle Complete!",
               style: TextStyle(
                 fontSize: 24,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "en ${gameState.swapCount} coups",
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
