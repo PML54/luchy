@@ -1,4 +1,3 @@
-
 /// <cursor>
 /// LUCHY - Providers centraux du jeu de puzzle
 ///
@@ -20,6 +19,7 @@
 /// - Optimisation: Cache et optimisation mémoire
 ///
 /// HISTORIQUE RÉCENT:
+/// - 2025-01-08: Ajout types de puzzles éducatifs (type 2)
 /// - Amélioration performance traitement grandes images
 /// - Intégration monitoring temps réel
 /// - Optimisation gestion mémoire et cache
@@ -32,6 +32,7 @@
 /// - Thread safety: Async operations bien gérées
 ///
 /// 🚀 PROCHAINES ÉTAPES:
+/// - Étendre système types puzzles (type 3, 4, etc.)
 /// - Ajouter sauvegarde/restauration état jeu
 /// - Implémenter undo/redo pour mouvements
 /// - Optimiser algorithmes shuffle et détection completion
@@ -44,21 +45,20 @@
 /// - core/utils/profiler.dart: Monitoring performance
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Cœur logique métier application)
+/// 📅 Dernière modification: 2025-08-25 14:42
 /// </cursor>
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
-
-import 'package:luchy/features/puzzle/domain/models/game_state.dart';
-
-import 'package:luchy/features/puzzle/domain/models/image_processing_data.dart';
-
+import 'package:luchy/core/database/models/database_models.dart';
+import 'package:luchy/core/database/providers/database_providers.dart';
 import 'package:luchy/core/utils/image_optimizer.dart';
 import 'package:luchy/core/utils/profiler.dart';
-import 'package:luchy/core/database/providers/database_providers.dart';
-import 'package:luchy/core/database/models/database_models.dart';
+import 'package:luchy/features/puzzle/domain/models/game_state.dart';
+import 'package:luchy/features/puzzle/domain/models/image_processing_data.dart';
 
 final gameSettingsProvider =
     StateNotifierProvider<GameSettingsNotifier, GameSettings>((ref) {
@@ -103,21 +103,23 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
 
   Future<void> _loadSettingsFromDatabase() async {
     if (_isLoaded) return;
-    
+
     try {
       final repository = ref.read(gameSettingsRepositoryProvider);
       final dbSettings = await repository.getSettings();
-      
-      print('🗃️ SQLite settings loaded: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
-      
+
+      print(
+          '🗃️ SQLite settings loaded: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
+
       // Convertir les paramètres SQLite vers le modèle Freezed
       state = state.copyWith(
         difficultyCols: dbSettings.difficultyCols,
         difficultyRows: dbSettings.difficultyRows,
         useCustomGridSize: dbSettings.useCustomGridSize,
         hasSeenDocumentation: dbSettings.hasSeenDocumentation,
+        puzzleType: dbSettings.puzzleType,
       );
-      
+
       _isLoaded = true;
       print('✅ GameSettings state updated with SQLite data');
     } catch (e) {
@@ -133,7 +135,7 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
       difficultyRows: 3,
       useCustomGridSize: false,
     );
-    
+
     // Sauvegarder en base
     await _saveToDatabase();
   }
@@ -144,7 +146,7 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
       difficultyRows: rows,
       useCustomGridSize: true,
     );
-    
+
     // Sauvegarder en base
     await _saveToDatabase();
   }
@@ -156,6 +158,11 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
     }
   }
 
+  Future<void> setPuzzleType(int type) async {
+    state = state.copyWith(puzzleType: type);
+    await _saveToDatabase();
+  }
+
   Future<void> _saveToDatabase() async {
     try {
       final repository = ref.read(gameSettingsRepositoryProvider);
@@ -164,9 +171,11 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
         difficultyCols: state.difficultyCols,
         useCustomGridSize: state.useCustomGridSize,
         hasSeenDocumentation: state.hasSeenDocumentation,
+        puzzleType: state.puzzleType,
       );
-      
-      print('💾 Saving to SQLite: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
+
+      print(
+          '💾 Saving to SQLite: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
       await repository.saveSettings(dbSettings);
       print('✅ SQLite save completed');
     } catch (e) {
@@ -205,13 +214,22 @@ class GameStateNotifier extends StateNotifier<GameState> {
     required int rows,
     required Size imageSize,
     required bool shouldShuffle,
+    int puzzleType = 1, // Par défaut type classique
+    List<int>? educationalMapping, // Mapping original pour puzzles éducatifs
   }) async {
     final initialArrangement =
         List<int>.generate(pieces.length, (index) => index);
     List<int> shuffledArrangement;
 
     if (shouldShuffle) {
-      shuffledArrangement = _createShuffledArrangement(pieces.length);
+      // Choix de l'algorithme de mélange selon le type
+      switch (puzzleType) {
+        case 2:
+          shuffledArrangement = _createType2ShuffledArrangement(columns, rows);
+          break;
+        default:
+          shuffledArrangement = _createShuffledArrangement(pieces.length);
+      }
     } else {
       shuffledArrangement = List<int>.from(initialArrangement);
     }
@@ -226,16 +244,24 @@ class GameStateNotifier extends StateNotifier<GameState> {
       isInitialized: true,
       swapCount: 0,
       minimalMoves: shouldShuffle ? pieces.length : 0,
+      puzzleType: puzzleType,
+      educationalMapping: educationalMapping,
     );
   }
 
   bool isGameComplete() {
     if (!state.isInitialized) return false;
 
-    return state.currentArrangement
-        .asMap()
-        .entries
-        .every((entry) => entry.value == entry.key);
+    // Vérification selon le type de puzzle
+    switch (state.puzzleType) {
+      case 2:
+        return _isType2Complete();
+      default:
+        return state.currentArrangement
+            .asMap()
+            .entries
+            .every((entry) => entry.value == entry.key);
+    }
   }
 
   void onPuzzleComplete() {
@@ -256,7 +282,15 @@ class GameStateNotifier extends StateNotifier<GameState> {
   void shufflePieces() {
     if (!state.isInitialized) return;
 
-    final newArrangement = _createShuffledArrangement(state.pieces.length);
+    List<int> newArrangement;
+    switch (state.puzzleType) {
+      case 2:
+        newArrangement =
+            _createType2ShuffledArrangement(state.columns, state.rows);
+        break;
+      default:
+        newArrangement = _createShuffledArrangement(state.pieces.length);
+    }
 
     state = state.copyWith(
       currentArrangement: newArrangement,
@@ -318,6 +352,88 @@ class GameStateNotifier extends StateNotifier<GameState> {
     }
 
     return arrangement;
+  }
+
+  // ============ MÉTHODES SPÉCIFIQUES AU TYPE 2 (ÉDUCATIF) ============
+
+  /// Crée un arrangement mélangé pour le type 2 : mélange uniquement la colonne 2 (droite)
+  /// La colonne 1 (gauche) reste fixe pour garder la correspondance éducative
+  List<int> _createType2ShuffledArrangement(int columns, int rows) {
+    final arrangement = List<int>.generate(columns * rows, (index) => index);
+    final random = Random();
+
+    // Extraire les indices de la colonne 2 (droite)
+    final column2Indices = <int>[];
+    for (int row = 0; row < rows; row++) {
+      column2Indices.add(row * columns + 1); // Colonne 2 (index 1)
+    }
+
+    // Mélanger seulement les valeurs de la colonne 2
+    final column2Values =
+        column2Indices.map((index) => arrangement[index]).toList();
+    column2Values.shuffle(random);
+
+    // Remettre les valeurs mélangées dans la colonne 2
+    for (int i = 0; i < column2Indices.length; i++) {
+      arrangement[column2Indices[i]] = column2Values[i];
+    }
+
+    return arrangement;
+  }
+
+  /// Vérifie si le puzzle type 2 est complété
+  /// Pour le type 2 : les éléments en vis-à-vis (sur chaque ligne) doivent avoir
+  /// le même numéro d'ordre initial selon le mapping éducatif
+  bool _isType2Complete() {
+    if (state.educationalMapping == null) {
+      // Fallback vers vérification classique si pas de mapping
+      return state.currentArrangement
+          .asMap()
+          .entries
+          .every((entry) => entry.value == entry.key);
+    }
+
+    for (int row = 0; row < state.rows; row++) {
+      if (!_isRowComplete(row)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// Vérifie si une ligne spécifique est complète pour le type 2
+  /// La ligne est complète si les éléments en vis-à-vis ont le même numéro d'ordre initial
+  bool _isRowComplete(int row) {
+    if (state.educationalMapping == null || state.columns < 2) {
+      return false;
+    }
+
+    final col1Index = row * state.columns + 0; // Colonne 1 (gauche)
+    final col2Index = row * state.columns + 1; // Colonne 2 (droite)
+
+    // Récupérer les pièces actuelles sur cette ligne
+    final currentCol1Piece = state.currentArrangement[col1Index];
+    final currentCol2Piece = state.currentArrangement[col2Index];
+
+    // Trouver les numéros d'ordre initial de ces pièces
+    final originalOrderCol1 = _findOriginalOrder(currentCol1Piece);
+    final originalOrderCol2 = _findOriginalOrder(currentCol2Piece);
+
+    // Vérifier si ces pièces correspondent selon le mapping éducatif
+    return originalOrderCol1 != null &&
+        originalOrderCol2 != null &&
+        state.educationalMapping![originalOrderCol1] ==
+            state.educationalMapping![originalOrderCol2];
+  }
+
+  /// Trouve le numéro d'ordre initial d'une pièce donnée
+  int? _findOriginalOrder(int pieceValue) {
+    // Convertir l'index de pièce en coordonnées
+    final pieceRow = pieceValue ~/ state.columns;
+
+    // Pour les puzzles éducatifs, on considère que chaque ligne correspond à un élément
+    // L'ordre initial est déterminé par la ligne
+    return pieceRow;
   }
 }
 

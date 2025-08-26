@@ -1,27 +1,3 @@
-/**
- * {
- *   "docVersion": "V1.16",
- *   "lastModified": "2024-01-16",
- *   "filePath": "providers/device_config_provider.dart",
- *   "purposes": [
- *     "Gérer l'état de la configuration d'appareil",
- *     "Initialiser la configuration selon le contexte",
- *     "Mettre à jour la configuration dynamiquement",
- *     "Fournir l'accès à la configuration via Riverpod"
- *   ],
- *   "components": {
- *     "deviceConfigProvider": {
- *       "type": "StateNotifierProvider",
- *       "description": "Provider pour la configuration d'appareil"
- *     },
- *     "DeviceConfigNotifier": {
- *       "type": "StateNotifier",
- *       "description": "Gestionnaire d'état pour la configuration d'appareil",
- *       "methods": ["initializeDeviceConfig", "updateOrientation", "updateScreenSize"]
- *     }
- *   }
- * }
- */
 /// <cursor>
 /// LUCHY - Provider de configuration device/appareil
 ///
@@ -65,6 +41,7 @@
 /// - features/puzzle/presentation/screens/puzzle_game_screen.dart: Adaptation UI
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐ (Configuration système critique)
+/// 📅 Dernière modification: 2025-08-25 14:35
 /// </cursor>
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';

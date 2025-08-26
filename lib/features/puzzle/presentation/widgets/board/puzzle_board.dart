@@ -42,13 +42,12 @@
 /// - features/puzzle/presentation/screens/puzzle_game_screen.dart: Intégration
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Interface interaction principale)
+/// 📅 Dernière modification: 2024-12-20 15:47
 /// </cursor>
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:luchy/core/utils/rotation_helper.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
-import 'package:luchy/features/puzzle/presentation/widgets/rotation_suggestion.dart';
 
 class PuzzleBoard extends ConsumerStatefulWidget {
   const PuzzleBoard({super.key});
@@ -60,8 +59,6 @@ class PuzzleBoard extends ConsumerStatefulWidget {
 class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
   final AudioPlayer _player = AudioPlayer();
   bool _hasPlayed = false;
-  bool _showRotationSuggestion = false;
-  bool _rotationSuggestionDismissed = false;
 
   @override
   void initState() {
@@ -126,42 +123,10 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
     }
 
     final screenSize = MediaQuery.of(context).size;
-    final orientation = MediaQuery.of(context).orientation;
     final appBarHeight = AppBar().preferredSize.height;
     final availableHeight = screenSize.height - appBarHeight;
     final imageAspectRatio =
         gameState.imageSize.width / gameState.imageSize.height;
-
-    // Logique de suggestion de rotation avec debug
-    if (!_rotationSuggestionDismissed && !isComplete) {
-      final shouldSuggest = RotationHelper.shouldSuggestRotation(
-        screenSize: screenSize,
-        appBarHeight: appBarHeight,
-        imageAspectRatio: imageAspectRatio,
-        currentOrientation: orientation,
-      );
-
-      // Debug information
-      debugPrint('🔄 Rotation Analysis:');
-      debugPrint('  Image ratio: ${imageAspectRatio.toStringAsFixed(2)}');
-      debugPrint('  Orientation: $orientation');
-      debugPrint('  Should suggest: $shouldSuggest');
-      debugPrint('  Dismissed: $_rotationSuggestionDismissed');
-      debugPrint('  Currently showing: $_showRotationSuggestion');
-
-      if (shouldSuggest && !_showRotationSuggestion) {
-        debugPrint('  → Will show rotation suggestion in 2s');
-        // Délai avant d'afficher la suggestion (laisse le temps de voir l'image)
-        Future.delayed(const Duration(seconds: 2), () {
-          if (mounted && !_rotationSuggestionDismissed) {
-            debugPrint('  → Showing rotation suggestion now!');
-            setState(() {
-              _showRotationSuggestion = true;
-            });
-          }
-        });
-      }
-    }
 
     double puzzleWidth, puzzleHeight;
     if (imageAspectRatio > screenSize.width / availableHeight) {
@@ -235,22 +200,6 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
             left: 20,
             top: 20,
             child: _buildCompletionMessage(context),
-          ),
-        // Suggestion de rotation
-        if (_showRotationSuggestion && !isComplete)
-          Positioned(
-            top: 20,
-            left: 0,
-            right: 0,
-            child: RotationSuggestion(
-              shouldShow: _showRotationSuggestion,
-              onDismiss: () {
-                setState(() {
-                  _showRotationSuggestion = false;
-                  _rotationSuggestionDismissed = true;
-                });
-              },
-            ),
           ),
       ],
     );

@@ -40,9 +40,11 @@
 /// - core/utils/profiler.dart: Monitoring performance
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐ (Performance critique traitement images)
+/// 📅 Dernière modification: 2025-08-25 14:43
 /// </cursor>
 
 import 'dart:typed_data';
+
 import 'package:image/image.dart' as img;
 
 /// Résultat d'optimisation d'image

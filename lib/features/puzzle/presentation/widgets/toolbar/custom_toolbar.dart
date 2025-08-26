@@ -1,73 +1,54 @@
 /// <cursor>
 /// LUCHY - Barre d'outils personnalisée du jeu
 ///
-/// Interface de contrôle principale pour toutes les actions du jeu
-/// de puzzle avec sélection difficulté et sources d'images.
+/// Widget de barre d'outils principal avec contrôles de difficulté,
+/// gestion des images et informations de version.
 ///
 /// COMPOSANTS PRINCIPAUX:
-/// - CustomToolbar: Widget principal barre d'outils
-/// - Difficulty slider: Contrôle niveau difficulté (3x3 à 6x6)
-/// - Image sources: Boutons galerie, caméra, aléatoire
-/// - Game controls: Preview, aide, version
-/// - ToolbarButton: Widget bouton réutilisable
+/// - CustomToolbar: Widget principal barre d'outils responsive
+/// - ToolbarButton: Bouton standardisé avec icône et label
+/// - DifficultySelector: Sélecteur de grille (3x3 à 6x6)
+/// - ImageControls: Boutons galerie, caméra, images prédéfinies
+/// - VersionDisplay: Affichage version app en bas
 ///
 /// ÉTAT ACTUEL:
-/// - Difficultés: 3x3, 4x4, 5x5, 6x6 grilles supportées
-/// - Sources: Galerie, caméra, sélection aléatoire assets
-/// - Interface: Responsive, adaptation automatique écran
-/// - Version: Affichage v1.1.0+3 en temps réel
+/// - Interface: Responsive avec adaptation orientation
+/// - Contrôles: Difficulté, sources images, navigation aide
+/// - Design: Material Design 3 avec thème cohérent
+/// - Fonctionnalités: Complètes et stables
 ///
 /// HISTORIQUE RÉCENT:
-/// - Correction avertissements withOpacity deprecated
-/// - Amélioration responsive design pour petits écrans
-/// - Intégration affichage version dynamique
-/// - Documentation mise à jour format <cursor>
+/// - Optimisation responsive design pour toutes orientations
+/// - Amélioration accessibilité et feedback utilisateur
+/// - Intégration informations version dynamiques
+/// - Suppression compteur mouvements (déplacé vers victory message)
 ///
 /// 🔧 POINTS D'ATTENTION:
-/// - Responsive: Tester sur différentes tailles écran
-/// - State sync: Maintenir cohérence avec game providers
-/// - Performance: Éviter rebuilds inutiles slider
-/// - Permissions: Vérifier accès caméra/galerie
+/// - Responsive: S'adapter automatiquement aux différentes tailles écran
+/// - State management: Utiliser Riverpod pour cohérence avec app
+/// - Performance: Éviter rebuilds inutiles lors changements état
+/// - UX: Feedback visuel clair pour toutes interactions
 ///
 /// 🚀 PROCHAINES ÉTAPES:
-/// - Ajouter grilles asymétriques (4x6, etc.)
-/// - Implémenter preset difficultés nommés
-/// - Améliorer feedback visuel sélections
-/// - Ajouter raccourcis clavier pour desktop
+/// - Ajouter animations de transition entre états
+/// - Améliorer feedback haptique sur boutons
+/// - Optimiser layout pour très petits écrans
+/// - Considérer mode accessibilité étendu
 ///
 /// 🔗 FICHIERS LIÉS:
-/// - features/puzzle/domain/providers/game_providers.dart: État jeu
-/// - features/puzzle/presentation/controllers/image_controller.dart: Actions
-/// - features/puzzle/presentation/screens/help_screen.dart: Navigation aide
+/// - features/puzzle/domain/providers/game_providers.dart: État du jeu
+/// - features/puzzle/presentation/controllers/image_controller.dart: Contrôle images
+/// - features/puzzle/presentation/screens/help_screen.dart: Écran d'aide
+/// - l10n/app_localizations.dart: Système de traduction
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐ (Interface contrôle principale)
+/// 📅 Dernière modification: 2025-08-25 15:01
 /// </cursor>
-/// - CustomToolbar: Main toolbar container
-/// - Level controls
-/// - Action buttons
-///
-/// CONTROL LOGIC:
-/// - Grid size mapping
-/// - Level calculation
-/// - Difficulty management
-/// - Image processing coordination
-///
-/// STATE MANAGEMENT:
-/// - Uses Riverpod consumers
-/// - Manages game settings
-/// - Controls image processing
-/// - Handles UI state
-///
-/// HISTORY:
-/// v1.0 (2024-01-30):
-/// - Initial documentation
-/// - Documented widget structure
-/// - Added control logic section
-///
-/// </claude>
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// Core imports
+import 'package:luchy/core/utils/educational_image_generator.dart';
 // Domain imports
 
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
@@ -214,6 +195,7 @@ class CustomToolbar extends ConsumerWidget {
           rows: rows,
           imageSize: imageState.optimizedImageDimensions,
           shouldShuffle: true,
+          puzzleType: ref.read(gameSettingsProvider).puzzleType,
         );
   }
 
@@ -240,6 +222,14 @@ class CustomToolbar extends ConsumerWidget {
           iconSize: _iconSize,
           onPressed: () => PuzzleGameScreen.showImageSourceDialog(context),
           tooltip: l10n.photoGalleryLabel, // garde l'accessibilité
+          color: Colors.white,
+        ),
+        // Bouton éducation
+        IconButton(
+          icon: const Icon(Icons.school_outlined),
+          iconSize: _iconSize,
+          onPressed: () => _showEducationalDialog(context, ref),
+          tooltip: "Puzzles éducatifs",
           color: Colors.white,
         ),
         // Contrôle du niveau
@@ -300,5 +290,250 @@ class CustomToolbar extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  /// Affiche le dialog de sélection des puzzles éducatifs
+  void _showEducationalDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EducationalPresetDialog(ref: ref);
+      },
+    );
+  }
+}
+
+/// Dialog de sélection des presets éducatifs
+class EducationalPresetDialog extends StatefulWidget {
+  final WidgetRef ref;
+
+  const EducationalPresetDialog({
+    super.key,
+    required this.ref,
+  });
+
+  @override
+  State<EducationalPresetDialog> createState() =>
+      _EducationalPresetDialogState();
+}
+
+class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
+  int _selectedPuzzleType = 1; // 1=classique, 2=éducatif
+
+  @override
+  Widget build(BuildContext context) {
+    final presets = EducationalImageGenerator.getAllPresets();
+
+    return AlertDialog(
+      title: const Row(
+        children: [
+          Icon(Icons.school, color: Colors.blue),
+          SizedBox(width: 8),
+          Text('Puzzles Éducatifs'),
+        ],
+      ),
+      content: SizedBox(
+        width: double.maxFinite,
+        height: 500,
+        child: Column(
+          children: [
+            // Sélecteur de type de puzzle
+            Card(
+              color: Colors.blue.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Type de puzzle :',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Radio<int>(
+                              value: 1,
+                              groupValue: _selectedPuzzleType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedPuzzleType = value!;
+                                });
+                              },
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedPuzzleType = 1;
+                                  });
+                                },
+                                child: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Classique',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      'Toutes les pièces mélangées',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Radio<int>(
+                              value: 2,
+                              groupValue: _selectedPuzzleType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedPuzzleType = value!;
+                                });
+                              },
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedPuzzleType = 2;
+                                  });
+                                },
+                                child: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Éducatif',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      'Mélange colonnes 1-2 uniquement',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Liste des presets
+            Expanded(
+              child: ListView.builder(
+                itemCount: presets.length,
+                itemBuilder: (context, index) {
+                  final preset = presets[index];
+                  return Card(
+                    child: ListTile(
+                      leading: _getPresetIcon(preset.id),
+                      title: Text(preset.name),
+                      subtitle: Text(preset.description),
+                      trailing: Text(
+                        '${preset.leftColumn.length} lignes',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        _generateEducationalImage(context, preset);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Annuler'),
+        ),
+      ],
+    );
+  }
+
+  /// Retourne l'icône appropriée selon le type de preset
+  Widget _getPresetIcon(String presetId) {
+    if (presetId.startsWith('multiplication_')) {
+      return const Icon(Icons.calculate, color: Colors.orange);
+    } else if (presetId.startsWith('vocab_')) {
+      return const Icon(Icons.translate, color: Colors.green);
+    } else if (presetId.startsWith('geo_')) {
+      return const Icon(Icons.public, color: Colors.blue);
+    }
+    return const Icon(Icons.quiz, color: Colors.purple);
+  }
+
+  /// Génère et charge l'image éducative
+  Future<void> _generateEducationalImage(
+    BuildContext context,
+    EducationalPreset preset,
+  ) async {
+    try {
+      // Générer l'image avec mélange éducatif si type 2
+      final applyEducationalShuffle = _selectedPuzzleType == 2;
+      final result = await EducationalImageGenerator.generateFromPreset(
+        preset,
+        cellWidth: 600,
+        cellHeight: 200,
+        applyEducationalShuffle: applyEducationalShuffle,
+      );
+
+      // Mettre à jour le type de puzzle dans les paramètres
+      await widget.ref
+          .read(gameSettingsProvider.notifier)
+          .setPuzzleType(_selectedPuzzleType);
+
+      // Charger l'image dans le jeu avec grille forcée 2 colonnes
+      await widget.ref
+          .read(imageControllerProvider.notifier)
+          .loadEducationalImage(
+            result.pngBytes,
+            rows: result.rows,
+            columns: result.columns,
+            description: result.description,
+            puzzleType: _selectedPuzzleType,
+            educationalMapping: result.originalMapping,
+          );
+
+      // Afficher un message de confirmation
+      if (context.mounted) {
+        final typeLabel = _selectedPuzzleType == 2 ? 'éducatif' : 'classique';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Puzzle $typeLabel "${preset.name}" chargé !'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      // Afficher l'erreur
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

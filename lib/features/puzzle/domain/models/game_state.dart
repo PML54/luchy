@@ -17,6 +17,7 @@
 /// - Performance: Optimisé pour changements fréquents d'état
 ///
 /// HISTORIQUE RÉCENT:
+/// - 2025-01-08: Ajout puzzleType pour types puzzles éducatifs
 /// - Optimisation sérialisation/désérialisation états
 /// - Amélioration gestion mémoire pour grandes grilles
 /// - Intégration meilleure avec providers Riverpod
@@ -29,6 +30,7 @@
 /// - State consistency: Maintenir cohérence entre settings et state
 ///
 /// 🚀 PROCHAINES ÉTAPES:
+/// - Étendre types puzzles (colonnes autres que 1-2)
 /// - Ajouter support grilles asymétriques (ex: 4x6)
 /// - Implémenter compression intelligente pour pieces
 /// - Ajouter métadonnées timing et scoring
@@ -54,6 +56,7 @@ class GameSettings with _$GameSettings {
     required int difficultyRows,
     required bool useCustomGridSize,
     required bool hasSeenDocumentation,
+    required int puzzleType, // 1=classique, 2=éducatif (colonnes 1-2)
   }) = _GameSettings;
 
   factory GameSettings.initial() => const GameSettings(
@@ -61,6 +64,7 @@ class GameSettings with _$GameSettings {
         difficultyRows: 3,
         useCustomGridSize: true,
         hasSeenDocumentation: false,
+        puzzleType: 1,
       );
 }
 
@@ -79,6 +83,8 @@ class GameState with _$GameState {
     required bool isPUZType,
     required String puzzCode,
     required bool isCoded,
+    required int puzzleType, // Type de puzzle : 1=classique, 2=éducatif
+    List<int>? educationalMapping, // Mapping original pour puzzles éducatifs
   }) = _GameState;
 
   factory GameState.initial() => const GameState(
@@ -94,5 +100,7 @@ class GameState with _$GameState {
         isPUZType: false,
         puzzCode: '',
         isCoded: false,
+        puzzleType: 1,
+        educationalMapping: null,
       );
 }

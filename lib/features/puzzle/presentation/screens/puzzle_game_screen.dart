@@ -44,6 +44,7 @@
 /// - features/puzzle/presentation/screens/help_screen.dart: Aide
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Interface principale utilisateur)
+/// 📅 Dernière modification: 2025-08-25 14:38
 /// </cursor>
 
 import 'package:flutter/material.dart';
@@ -147,8 +148,18 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
     final isInitialized = ref.watch(initializationProvider);
     final gameState = ref.watch(gameStateProvider);
     final imageState = ref.watch(imageProcessingProvider);
+    final imageControllerState = ref.watch(imageControllerProvider);
+
+    debugPrint('🎓 DEBUG STATES:');
+    debugPrint('  - isInitialized: $isInitialized');
+    debugPrint('  - imageState.isLoading: ${imageState.isLoading}');
+    debugPrint(
+        '  - imageControllerState.isLoading: ${imageControllerState.isLoading}');
+    debugPrint('  - gameState.isInitialized: ${gameState.isInitialized}');
 
     if (isInitialized == false || imageState.isLoading == true) {
+      debugPrint(
+          '🎓 SHOWING LoadingScaffold because: isInitialized=$isInitialized, imageState.isLoading=${imageState.isLoading}');
       return const _LoadingScaffold();
     }
 
@@ -192,7 +203,6 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
           if (gameState.isInitialized == false) const _InitializationMessage(),
         ],
       ),
-
     );
   }
 
@@ -223,7 +233,8 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
     final gameState = ref.watch(gameStateProvider);
 
     // Calcul des pièces correctement placées
-    final correctPieces = ref.read(gameStateProvider.notifier).countCorrectPieces();
+    final correctPieces =
+        ref.read(gameStateProvider.notifier).countCorrectPieces();
 
     final buttons = [
       // Compteurs

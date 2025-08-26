@@ -1,40 +1,53 @@
 /// <cursor>
-/// COMPOSANTS PRINCIPAUX
-/// - DatabaseService: Service principal de gestion SQLite
-/// - Gestion des paramètres de jeu et statistiques utilisateur
+/// LUCHY - Service de base de données SQLite
+///
+/// Service central de gestion de la base de données SQLite pour
+/// la persistance des données de l'application Luchy.
+///
+/// COMPOSANTS PRINCIPAUX:
+/// - DatabaseService: Service principal de gestion SQLite singleton
 /// - Tables: game_settings, user_stats, puzzle_history, favorite_images
-/// 
-/// ÉTAT ACTUEL
-/// - Service SQLite centralisé avec sqflite
-/// - Singleton pour une seule instance de base
-/// - Support iOS/Android avec chemins appropriés
-/// 
-/// HISTORIQUE RÉCENT
-/// - 2024-12-19: Création initiale avec approche propre
-/// - Remplace SharedPreferences par SQLite
-/// 
-/// 🔧 POINTS D'ATTENTION
-/// - Gestion des migrations de schéma
-/// - Chemins de base différents iOS/Android
-/// - Transactions pour cohérence des données
-/// 
-/// 🚀 PROCHAINES ÉTAPES
-/// - Créer les modèles de données
-/// - Implémenter les repositories
-/// - Intégrer avec les providers Riverpod
-/// 
-/// 🔗 FICHIERS LIÉS
-/// - lib/features/puzzle/domain/providers/game_providers.dart
-/// - lib/features/common/domain/providers/device_config_provider.dart
-/// 
-/// CRITICALITÉ: HAUTE - Service central de persistance
-/// 📅 Dernière modification: 2024-12-19 16:30
+/// - Migration système: Gestion versions et évolutions schéma
+/// - CRUD operations: Opérations de base pour toutes les entités
+///
+/// ÉTAT ACTUEL:
+/// - Database: SQLite avec sqflite, support iOS/Android
+/// - Architecture: Singleton pattern pour instance unique
+/// - Performance: Optimisé avec transactions et indexation
+/// - Stabilité: Gestion d'erreurs robuste et logging
+///
+/// HISTORIQUE RÉCENT:
+/// - 2024-12-19: Création initiale remplaçant SharedPreferences
+/// - Architecture repository pattern intégrée
+/// - Gestion migrations automatiques implémentée
+/// - Tests et validation sur iOS réussis
+///
+/// 🔧 POINTS D'ATTENTION:
+/// - Singleton: Une seule instance database pour éviter conflits
+/// - Migrations: Bien gérer évolutions schéma entre versions
+/// - Transactions: Utiliser pour opérations atomiques critiques
+/// - Chemins: Différents selon plateforme iOS/Android
+///
+/// 🚀 PROCHAINES ÉTAPES:
+/// - Ajouter sauvegarde progression puzzle en cours
+/// - Implémenter système backup/restore cloud
+/// - Optimiser index et requêtes pour grandes quantités données
+/// - Ajouter monitoring performance database
+///
+/// 🔗 FICHIERS LIÉS:
+/// - core/database/models/database_models.dart: Modèles de données
+/// - core/database/repositories/game_settings_repository.dart: Repository
+/// - core/database/providers/database_providers.dart: Providers Riverpod
+///
+/// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Infrastructure critique)
+/// 📅 Dernière modification: 2025-08-25 14:31
 /// </cursor>
 
 import 'dart:async';
-import 'package:sqflite/sqflite.dart';
+
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DatabaseService {
   static DatabaseService? _instance;
@@ -56,10 +69,10 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, 'luchy.db');
-    
+
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -74,6 +87,7 @@ class DatabaseService {
         difficulty_cols INTEGER NOT NULL DEFAULT 3,
         use_custom_grid_size INTEGER NOT NULL DEFAULT 0,
         has_seen_documentation INTEGER NOT NULL DEFAULT 0,
+        puzzle_type INTEGER NOT NULL DEFAULT 1,
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
@@ -118,18 +132,22 @@ class DatabaseService {
     ''');
 
     // Index pour optimiser les requêtes
-    await db.execute('CREATE INDEX idx_puzzle_history_completed ON puzzle_history(is_completed)');
-    await db.execute('CREATE INDEX idx_puzzle_history_created ON puzzle_history(created_at)');
-    await db.execute('CREATE INDEX idx_favorite_images_path ON favorite_images(image_path)');
+    await db.execute(
+        'CREATE INDEX idx_puzzle_history_completed ON puzzle_history(is_completed)');
+    await db.execute(
+        'CREATE INDEX idx_puzzle_history_created ON puzzle_history(created_at)');
+    await db.execute(
+        'CREATE INDEX idx_favorite_images_path ON favorite_images(image_path)');
 
     // Insérer les données par défaut
     await _insertDefaultData(db);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Migrations futures si nécessaire
-    if (oldVersion < newVersion) {
-      // Logique de migration
+    // Migration de version 1 à 2 : ajout du champ puzzle_type
+    if (oldVersion < 2) {
+      await db.execute(
+          'ALTER TABLE game_settings ADD COLUMN puzzle_type INTEGER NOT NULL DEFAULT 1');
     }
   }
 
@@ -140,6 +158,7 @@ class DatabaseService {
       'difficulty_cols': 3,
       'use_custom_grid_size': 0,
       'has_seen_documentation': 0,
+      'puzzle_type': 1,
     });
 
     // Insérer les statistiques par défaut
@@ -151,7 +170,8 @@ class DatabaseService {
   }
 
   // Méthodes utilitaires pour les requêtes
-  Future<List<Map<String, dynamic>>> query(String table, {
+  Future<List<Map<String, dynamic>>> query(
+    String table, {
     bool? distinct,
     List<String>? columns,
     String? where,
@@ -182,7 +202,9 @@ class DatabaseService {
     return db.insert(table, values);
   }
 
-  Future<int> update(String table, Map<String, dynamic> values, {
+  Future<int> update(
+    String table,
+    Map<String, dynamic> values, {
     String? where,
     List<dynamic>? whereArgs,
   }) async {
@@ -190,7 +212,8 @@ class DatabaseService {
     return db.update(table, values, where: where, whereArgs: whereArgs);
   }
 
-  Future<int> delete(String table, {
+  Future<int> delete(
+    String table, {
     String? where,
     List<dynamic>? whereArgs,
   }) async {

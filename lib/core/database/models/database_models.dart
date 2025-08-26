@@ -1,35 +1,47 @@
 /// <cursor>
-/// COMPOSANTS PRINCIPAUX
-/// - GameSettingsDb: Modèle pour les paramètres de jeu en base
-/// - UserStatsDb: Modèle pour les statistiques utilisateur
-/// - PuzzleHistoryDb: Modèle pour l'historique des puzzles
-/// - FavoriteImageDb: Modèle pour les images favorites
-/// 
-/// ÉTAT ACTUEL
-/// - Classes simples pour éviter les conflits Freezed
-/// - Conversion bidirectionnelle vers/depuis Map pour SQLite
-/// - Compatibilité avec les modèles Freezed existants
-/// 
-/// HISTORIQUE RÉCENT
-/// - 2024-12-19: Création avec approche simple et compatible
-/// - Évite les problèmes de génération de code Freezed
-/// 
-/// 🔧 POINTS D'ATTENTION
-/// - Pas de Freezed ici pour éviter les conflits
-/// - Conversion manuelle mais fiable
-/// - Validation des données avant insertion
-/// 
-/// 🚀 PROCHAINES ÉTAPES
-/// - Créer les repositories pour ces modèles
-/// - Intégrer avec les providers Riverpod
-/// - Ajouter méthodes de conversion vers Freezed
-/// 
-/// 🔗 FICHIERS LIÉS
-/// - lib/core/database/database_service.dart
-/// - lib/features/puzzle/domain/models/game_state.dart
-/// 
-/// CRITICALITÉ: MOYENNE - Modèles de données SQLite
-/// 📅 Dernière modification: 2024-12-19 16:35
+/// LUCHY - Modèles de données SQLite
+///
+/// Modèles de données simples pour la persistance SQLite sans
+/// dépendances Freezed pour éviter les conflits de génération.
+///
+/// COMPOSANTS PRINCIPAUX:
+/// - GameSettingsDb: Paramètres jeu (grille, difficulté)
+/// - UserStatsDb: Statistiques utilisateur (temps, réussites)
+/// - PuzzleHistoryDb: Historique puzzles résolus
+/// - FavoriteImageDb: Images favorites utilisateur
+/// - Conversion: Méthodes toMap/fromMap pour SQLite
+///
+/// ÉTAT ACTUEL:
+/// - Architecture: Classes simples sans génération code
+/// - Conversion: Mapping manuel vers/depuis Map SQLite
+/// - Compatibilité: Compatible avec modèles Freezed existants
+/// - Validation: Contrôles basiques intégrés
+///
+/// HISTORIQUE RÉCENT:
+/// - 2024-12-19: Création avec approche simple et fiable
+/// - Évitement conflits Freezed pour stabilité
+/// - Tests validation et conversion réussis
+/// - Intégration avec repositories stable
+///
+/// 🔧 POINTS D'ATTENTION:
+/// - Freezed: Volontairement évité ici pour éviter conflits
+/// - Conversion: Mapping manuel mais testé et fiable
+/// - Validation: Ajouter plus de contrôles si nécessaire
+/// - Nullable: Bien gérer les champs optionnels
+///
+/// 🚀 PROCHAINES ÉTAPES:
+/// - Ajouter validation plus robuste avec contraintes
+/// - Implémenter sérialisation JSON pour backup
+/// - Optimiser performance conversion grandes listes
+/// - Ajouter champs métadonnées (created_at, updated_at)
+///
+/// 🔗 FICHIERS LIÉS:
+/// - core/database/database_service.dart: Service principal
+/// - core/database/repositories/game_settings_repository.dart: Repository
+/// - core/database/providers/database_providers.dart: Providers Riverpod
+///
+/// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Modèles données centraux)
+/// 📅 Dernière modification: 2025-08-25 14:32
 /// </cursor>
 
 class GameSettingsDb {
@@ -38,6 +50,7 @@ class GameSettingsDb {
   final int difficultyCols;
   final bool useCustomGridSize;
   final bool hasSeenDocumentation;
+  final int puzzleType; // 1=classique, 2=éducatif (colonnes 1-2)
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -47,6 +60,7 @@ class GameSettingsDb {
     required this.difficultyCols,
     required this.useCustomGridSize,
     required this.hasSeenDocumentation,
+    required this.puzzleType,
     this.createdAt,
     this.updatedAt,
   });
@@ -58,11 +72,12 @@ class GameSettingsDb {
       difficultyCols: map['difficulty_cols'] ?? 3,
       useCustomGridSize: (map['use_custom_grid_size'] ?? 0) == 1,
       hasSeenDocumentation: (map['has_seen_documentation'] ?? 0) == 1,
-      createdAt: map['created_at'] != null 
-          ? DateTime.tryParse(map['created_at']) 
+      puzzleType: map['puzzle_type'] ?? 1,
+      createdAt: map['created_at'] != null
+          ? DateTime.tryParse(map['created_at'])
           : null,
-      updatedAt: map['updated_at'] != null 
-          ? DateTime.tryParse(map['updated_at']) 
+      updatedAt: map['updated_at'] != null
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }
@@ -74,6 +89,7 @@ class GameSettingsDb {
       'difficulty_cols': difficultyCols,
       'use_custom_grid_size': useCustomGridSize ? 1 : 0,
       'has_seen_documentation': hasSeenDocumentation ? 1 : 0,
+      'puzzle_type': puzzleType,
       'updated_at': DateTime.now().toIso8601String(),
     };
   }
@@ -84,6 +100,7 @@ class GameSettingsDb {
     int? difficultyCols,
     bool? useCustomGridSize,
     bool? hasSeenDocumentation,
+    int? puzzleType,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -93,6 +110,7 @@ class GameSettingsDb {
       difficultyCols: difficultyCols ?? this.difficultyCols,
       useCustomGridSize: useCustomGridSize ?? this.useCustomGridSize,
       hasSeenDocumentation: hasSeenDocumentation ?? this.hasSeenDocumentation,
+      puzzleType: puzzleType ?? this.puzzleType,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -125,11 +143,11 @@ class UserStatsDb {
       totalPlayTimeSeconds: map['total_play_time_seconds'] ?? 0,
       bestCompletionTimeSeconds: map['best_completion_time_seconds'],
       favoriteDifficulty: map['favorite_difficulty'] ?? 3,
-      createdAt: map['created_at'] != null 
-          ? DateTime.tryParse(map['created_at']) 
+      createdAt: map['created_at'] != null
+          ? DateTime.tryParse(map['created_at'])
           : null,
-      updatedAt: map['updated_at'] != null 
-          ? DateTime.tryParse(map['updated_at']) 
+      updatedAt: map['updated_at'] != null
+          ? DateTime.tryParse(map['updated_at'])
           : null,
     );
   }
@@ -139,7 +157,7 @@ class UserStatsDb {
       if (id != null) 'id': id,
       'total_puzzles_completed': totalPuzzlesCompleted,
       'total_play_time_seconds': totalPlayTimeSeconds,
-      if (bestCompletionTimeSeconds != null) 
+      if (bestCompletionTimeSeconds != null)
         'best_completion_time_seconds': bestCompletionTimeSeconds,
       'favorite_difficulty': favoriteDifficulty,
       'updated_at': DateTime.now().toIso8601String(),
@@ -157,9 +175,11 @@ class UserStatsDb {
   }) {
     return UserStatsDb(
       id: id ?? this.id,
-      totalPuzzlesCompleted: totalPuzzlesCompleted ?? this.totalPuzzlesCompleted,
+      totalPuzzlesCompleted:
+          totalPuzzlesCompleted ?? this.totalPuzzlesCompleted,
       totalPlayTimeSeconds: totalPlayTimeSeconds ?? this.totalPlayTimeSeconds,
-      bestCompletionTimeSeconds: bestCompletionTimeSeconds ?? this.bestCompletionTimeSeconds,
+      bestCompletionTimeSeconds:
+          bestCompletionTimeSeconds ?? this.bestCompletionTimeSeconds,
       favoriteDifficulty: favoriteDifficulty ?? this.favoriteDifficulty,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -199,11 +219,11 @@ class PuzzleHistoryDb {
       completionTimeSeconds: map['completion_time_seconds'],
       movesCount: map['moves_count'] ?? 0,
       isCompleted: (map['is_completed'] ?? 0) == 1,
-      createdAt: map['created_at'] != null 
-          ? DateTime.tryParse(map['created_at']) 
+      createdAt: map['created_at'] != null
+          ? DateTime.tryParse(map['created_at'])
           : null,
-      completedAt: map['completed_at'] != null 
-          ? DateTime.tryParse(map['completed_at']) 
+      completedAt: map['completed_at'] != null
+          ? DateTime.tryParse(map['completed_at'])
           : null,
     );
   }
@@ -214,12 +234,11 @@ class PuzzleHistoryDb {
       'image_path': imagePath,
       'difficulty_rows': difficultyRows,
       'difficulty_cols': difficultyCols,
-      if (completionTimeSeconds != null) 
+      if (completionTimeSeconds != null)
         'completion_time_seconds': completionTimeSeconds,
       'moves_count': movesCount,
       'is_completed': isCompleted ? 1 : 0,
-      if (completedAt != null) 
-        'completed_at': completedAt!.toIso8601String(),
+      if (completedAt != null) 'completed_at': completedAt!.toIso8601String(),
     };
   }
 
@@ -239,7 +258,8 @@ class PuzzleHistoryDb {
       imagePath: imagePath ?? this.imagePath,
       difficultyRows: difficultyRows ?? this.difficultyRows,
       difficultyCols: difficultyCols ?? this.difficultyCols,
-      completionTimeSeconds: completionTimeSeconds ?? this.completionTimeSeconds,
+      completionTimeSeconds:
+          completionTimeSeconds ?? this.completionTimeSeconds,
       movesCount: movesCount ?? this.movesCount,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
@@ -266,9 +286,8 @@ class FavoriteImageDb {
       id: map['id'],
       imagePath: map['image_path'] ?? '',
       title: map['title'],
-      addedAt: map['added_at'] != null 
-          ? DateTime.tryParse(map['added_at']) 
-          : null,
+      addedAt:
+          map['added_at'] != null ? DateTime.tryParse(map['added_at']) : null,
     );
   }
 

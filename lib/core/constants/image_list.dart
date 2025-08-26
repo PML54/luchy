@@ -40,24 +40,8 @@
 /// - features/puzzle/domain/providers/game_providers.dart: Sélection aléatoire
 ///
 /// CRITICALITÉ: ⭐⭐⭐ (Contenu central application)
+/// 📅 Dernière modification: 2025-08-25 14:41
 /// </cursor>
-/// - File paths
-/// - Artist attribution
-/// - Artwork titles
-/// - Categorization
-///
-/// IMPLEMENTATION DETAILS:
-/// - Constants for categories
-/// - Data model for images
-/// - List structure
-/// - Asset management
-///
-/// HISTORY:
-/// v1.0 (2024-01-30):
-/// - Initial documentation
-/// - Added content structure section
-///
-/// </claude>
 class ImageCategories {
   // Reste du code...
   static const String vanGogh = "Van Gogh";

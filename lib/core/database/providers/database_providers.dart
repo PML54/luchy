@@ -1,37 +1,50 @@
 /// <cursor>
-/// COMPOSANTS PRINCIPAUX
-/// - Providers Riverpod pour l'injection des services SQLite
-/// - DatabaseService singleton provider
-/// - GameSettingsRepository provider avec injection automatique
-/// 
-/// ÉTAT ACTUEL
-/// - Providers configurés pour injection de dépendances
-/// - Pattern singleton pour DatabaseService
-/// - Repository avec dépendances injectées
-/// 
-/// HISTORIQUE RÉCENT
-/// - 2024-12-19: Création des providers de base SQLite
-/// - Injection propre avec Riverpod
-/// 
-/// 🔧 POINTS D'ATTENTION
-/// - DatabaseService en singleton pour éviter conflits
-/// - Providers async pour gestion de l'initialisation
-/// - Gestion des erreurs d'initialisation
-/// 
-/// 🚀 PROCHAINES ÉTAPES
-/// - Intégrer dans les providers de jeu existants
-/// - Ajouter providers pour stats et history
-/// - Tester l'injection complète
-/// 
-/// 🔗 FICHIERS LIÉS
-/// - lib/features/puzzle/domain/providers/game_providers.dart
-/// - lib/core/database/database_service.dart
-/// 
-/// CRITICALITÉ: HAUTE - Injection de dépendances centrale
-/// 📅 Dernière modification: 2024-12-19 16:45
+/// LUCHY - Providers SQLite pour Riverpod
+///
+/// Configuration des providers Riverpod pour l'injection de dépendances
+/// des services de base de données SQLite dans l'application.
+///
+/// COMPOSANTS PRINCIPAUX:
+/// - databaseServiceProvider: Provider singleton DatabaseService
+/// - gameSettingsRepositoryProvider: Provider repository avec injection
+/// - Future providers: Gestion async initialisation base
+/// - Error handling: Gestion erreurs initialisation database
+///
+/// ÉTAT ACTUEL:
+/// - Architecture: Injection dépendances propre avec Riverpod
+/// - Singleton: DatabaseService unique pour éviter conflits
+/// - Async: Providers Future pour initialisation asynchrone
+/// - Stabilité: Gestion d'erreurs robuste
+///
+/// HISTORIQUE RÉCENT:
+/// - 2024-12-19: Création infrastructure providers SQLite
+/// - Architecture injection dépendances établie
+/// - Pattern singleton implementé pour DatabaseService
+/// - Tests réussis avec game settings repository
+///
+/// 🔧 POINTS D'ATTENTION:
+/// - Singleton: Un seul DatabaseService pour toute l'app
+/// - Async init: Bien gérer les états de chargement
+/// - Error states: Capturer erreurs init database proprement
+/// - Dependencies: Injection correcte entre providers
+///
+/// 🚀 PROCHAINES ÉTAPES:
+/// - Ajouter providers UserStats et PuzzleHistory repositories
+/// - Implémenter cache des données pour performance
+/// - Ajouter monitoring santé database
+/// - Optimiser initialisation pour app startup
+///
+/// 🔗 FICHIERS LIÉS:
+/// - core/database/database_service.dart: Service principal
+/// - core/database/repositories/game_settings_repository.dart: Repository
+/// - core/database/models/database_models.dart: Modèles données
+///
+/// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Infrastructure Riverpod critique)
+/// 📅 Dernière modification: 2025-08-25 14:33
 /// </cursor>
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../database_service.dart';
 import '../repositories/game_settings_repository.dart';
 
@@ -80,6 +93,12 @@ class GameSettingsActions {
   /// Met à jour l'utilisation de grille personnalisée
   Future<void> updateCustomGridUsage(bool useCustom) async {
     await _repository.updateCustomGridUsage(useCustom);
+    _ref.invalidate(currentGameSettingsProvider);
+  }
+
+  /// Met à jour le type de puzzle
+  Future<void> updatePuzzleType(int type) async {
+    await _repository.updatePuzzleType(type);
     _ref.invalidate(currentGameSettingsProvider);
   }
 

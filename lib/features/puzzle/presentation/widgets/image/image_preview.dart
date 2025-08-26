@@ -1,59 +1,47 @@
 /// <cursor>
-/// LUCHY - Widget prévisualisation image complète
+/// LUCHY - Widget de prévisualisation d'image
 ///
-/// Affichage temporaire de l'image complète du puzzle pour
-/// référence pendant la résolution.
+/// Composant d'affichage de la prévisualisation de l'image complète
+/// du puzzle avec contrôle de visibilité dynamique.
 ///
 /// COMPOSANTS PRINCIPAUX:
-/// - ImagePreview: ConsumerWidget pour prévisualisation
-/// - Visibility control: Affichage basé sur état showPreview
-/// - Image display: Affichage centré image optimisée
-/// - Memory management: Gestion efficace mémoire images
+/// - ImagePreview: Widget principal de prévisualisation
+/// - imagePreviewVisibilityProvider: Provider contrôle visibilité
+/// - ImagePreviewControl: Extension pour contrôle programmatique
+/// - Memory image display: Affichage optimisé depuis mémoire
 ///
 /// ÉTAT ACTUEL:
-/// - Affichage: Toggle via bouton preview toolbar
+/// - Display: Image mémoire avec fit contain pour préservation ratio
+/// - Contrôle: Visibilité toggleable via provider
 /// - Performance: Optimisé pour grandes images
-/// - Responsivité: Adaptation automatique taille écran
-/// - État: Géré via gameStateProvider.showPreview
+/// - Responsive: Adaptation automatique taille écran
 ///
 /// HISTORIQUE RÉCENT:
-/// - Optimisation performance pour grandes images
-/// - Amélioration gestion mémoire et cache
-/// - Intégration fluide avec état jeu global
-/// - Documentation mise à jour format <cursor>
+/// - Optimisation affichage grandes images
+/// - Amélioration contrôle visibilité
+/// - Intégration state management avec Riverpod
+/// - Responsive design pour toutes orientations
 ///
 /// 🔧 POINTS D'ATTENTION:
-/// - Memory usage: Dispose correctement images après usage
-/// - Performance: Éviter reloads inutiles image
-/// - State sync: Maintenir cohérence avec providers
-/// - Responsive: Adaptation toutes tailles écran
+/// - Memory usage: Surveiller usage mémoire pour grandes images
+/// - State sync: Maintenir cohérence avec état principal jeu
+/// - Performance: Éviter rebuilds inutiles
+/// - UX: Transition fluide show/hide
 ///
 /// 🚀 PROCHAINES ÉTAPES:
-/// - Ajouter zoom/pan pour grandes images
-/// - Implémenter overlay semi-transparent
-/// - Optimiser pour mode paysage
 /// - Ajouter animations transition show/hide
+/// - Implémenter zoom/pan pour grandes images
+/// - Optimiser rendu pour très hautes résolutions
+/// - Ajouter gesture controls (pinch, double-tap)
 ///
 /// 🔗 FICHIERS LIÉS:
-/// - features/puzzle/domain/providers/game_providers.dart: État showPreview
+/// - features/puzzle/domain/providers/game_providers.dart: État image
 /// - features/puzzle/presentation/screens/puzzle_game_screen.dart: Intégration
-/// - features/puzzle/presentation/widgets/toolbar/custom_toolbar.dart: Toggle
 ///
-/// CRITICALITÉ: ⭐⭐⭐ (Aide utilisateur importante)
+/// CRITICALITÉ: ⭐⭐⭐ (Widget utilitaire)
+/// 📅 Dernière modification: 2024-12-20 15:35
 /// </cursor>
-///
-/// STATE MANAGEMENT:
-/// - Uses StateProvider for visibility
-/// - Handles image state
-/// - Controls preview timing
-///
-/// HISTORY:
-/// v1.0 (2024-01-30):
-/// - Initial documentation
-/// - Documented widget structure
-/// - Added state management section
-///
-/// </claude>
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';

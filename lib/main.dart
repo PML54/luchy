@@ -40,7 +40,7 @@
 /// - l10n/app_localizations.dart: Système de traduction
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Point d'entrée critique)
-/// 📅 Dernière modification: 2024-12-19 17:00
+/// 📅 Dernière modification: 2025-08-25 14:30
 /// </cursor>
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

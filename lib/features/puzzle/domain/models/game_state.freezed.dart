@@ -20,6 +20,7 @@ mixin _$GameSettings {
   int get difficultyRows => throw _privateConstructorUsedError;
   bool get useCustomGridSize => throw _privateConstructorUsedError;
   bool get hasSeenDocumentation => throw _privateConstructorUsedError;
+  int get puzzleType => throw _privateConstructorUsedError;
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -38,7 +39,8 @@ abstract class $GameSettingsCopyWith<$Res> {
       {int difficultyCols,
       int difficultyRows,
       bool useCustomGridSize,
-      bool hasSeenDocumentation});
+      bool hasSeenDocumentation,
+      int puzzleType});
 }
 
 /// @nodoc
@@ -60,6 +62,7 @@ class _$GameSettingsCopyWithImpl<$Res, $Val extends GameSettings>
     Object? difficultyRows = null,
     Object? useCustomGridSize = null,
     Object? hasSeenDocumentation = null,
+    Object? puzzleType = null,
   }) {
     return _then(_value.copyWith(
       difficultyCols: null == difficultyCols
@@ -78,6 +81,10 @@ class _$GameSettingsCopyWithImpl<$Res, $Val extends GameSettings>
           ? _value.hasSeenDocumentation
           : hasSeenDocumentation // ignore: cast_nullable_to_non_nullable
               as bool,
+      puzzleType: null == puzzleType
+          ? _value.puzzleType
+          : puzzleType // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -94,7 +101,8 @@ abstract class _$$GameSettingsImplCopyWith<$Res>
       {int difficultyCols,
       int difficultyRows,
       bool useCustomGridSize,
-      bool hasSeenDocumentation});
+      bool hasSeenDocumentation,
+      int puzzleType});
 }
 
 /// @nodoc
@@ -114,6 +122,7 @@ class __$$GameSettingsImplCopyWithImpl<$Res>
     Object? difficultyRows = null,
     Object? useCustomGridSize = null,
     Object? hasSeenDocumentation = null,
+    Object? puzzleType = null,
   }) {
     return _then(_$GameSettingsImpl(
       difficultyCols: null == difficultyCols
@@ -132,6 +141,10 @@ class __$$GameSettingsImplCopyWithImpl<$Res>
           ? _value.hasSeenDocumentation
           : hasSeenDocumentation // ignore: cast_nullable_to_non_nullable
               as bool,
+      puzzleType: null == puzzleType
+          ? _value.puzzleType
+          : puzzleType // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -143,7 +156,8 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
       {required this.difficultyCols,
       required this.difficultyRows,
       required this.useCustomGridSize,
-      required this.hasSeenDocumentation});
+      required this.hasSeenDocumentation,
+      required this.puzzleType});
 
   @override
   final int difficultyCols;
@@ -153,10 +167,12 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
   final bool useCustomGridSize;
   @override
   final bool hasSeenDocumentation;
+  @override
+  final int puzzleType;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameSettings(difficultyCols: $difficultyCols, difficultyRows: $difficultyRows, useCustomGridSize: $useCustomGridSize, hasSeenDocumentation: $hasSeenDocumentation)';
+    return 'GameSettings(difficultyCols: $difficultyCols, difficultyRows: $difficultyRows, useCustomGridSize: $useCustomGridSize, hasSeenDocumentation: $hasSeenDocumentation, puzzleType: $puzzleType)';
   }
 
   @override
@@ -167,7 +183,8 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
       ..add(DiagnosticsProperty('difficultyCols', difficultyCols))
       ..add(DiagnosticsProperty('difficultyRows', difficultyRows))
       ..add(DiagnosticsProperty('useCustomGridSize', useCustomGridSize))
-      ..add(DiagnosticsProperty('hasSeenDocumentation', hasSeenDocumentation));
+      ..add(DiagnosticsProperty('hasSeenDocumentation', hasSeenDocumentation))
+      ..add(DiagnosticsProperty('puzzleType', puzzleType));
   }
 
   @override
@@ -182,12 +199,14 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
             (identical(other.useCustomGridSize, useCustomGridSize) ||
                 other.useCustomGridSize == useCustomGridSize) &&
             (identical(other.hasSeenDocumentation, hasSeenDocumentation) ||
-                other.hasSeenDocumentation == hasSeenDocumentation));
+                other.hasSeenDocumentation == hasSeenDocumentation) &&
+            (identical(other.puzzleType, puzzleType) ||
+                other.puzzleType == puzzleType));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, difficultyCols, difficultyRows,
-      useCustomGridSize, hasSeenDocumentation);
+      useCustomGridSize, hasSeenDocumentation, puzzleType);
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -203,7 +222,8 @@ abstract class _GameSettings implements GameSettings {
       {required final int difficultyCols,
       required final int difficultyRows,
       required final bool useCustomGridSize,
-      required final bool hasSeenDocumentation}) = _$GameSettingsImpl;
+      required final bool hasSeenDocumentation,
+      required final int puzzleType}) = _$GameSettingsImpl;
 
   @override
   int get difficultyCols;
@@ -213,6 +233,8 @@ abstract class _GameSettings implements GameSettings {
   bool get useCustomGridSize;
   @override
   bool get hasSeenDocumentation;
+  @override
+  int get puzzleType;
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -236,6 +258,9 @@ mixin _$GameState {
   bool get isPUZType => throw _privateConstructorUsedError;
   String get puzzCode => throw _privateConstructorUsedError;
   bool get isCoded => throw _privateConstructorUsedError;
+  int get puzzleType =>
+      throw _privateConstructorUsedError; // Type de puzzle : 1=classique, 2=éducatif
+  List<int>? get educationalMapping => throw _privateConstructorUsedError;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -261,7 +286,9 @@ abstract class $GameStateCopyWith<$Res> {
       Size imageSize,
       bool isPUZType,
       String puzzCode,
-      bool isCoded});
+      bool isCoded,
+      int puzzleType,
+      List<int>? educationalMapping});
 }
 
 /// @nodoc
@@ -291,6 +318,8 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? isPUZType = null,
     Object? puzzCode = null,
     Object? isCoded = null,
+    Object? puzzleType = null,
+    Object? educationalMapping = freezed,
   }) {
     return _then(_value.copyWith(
       isInitialized: null == isInitialized
@@ -341,6 +370,14 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.isCoded
           : isCoded // ignore: cast_nullable_to_non_nullable
               as bool,
+      puzzleType: null == puzzleType
+          ? _value.puzzleType
+          : puzzleType // ignore: cast_nullable_to_non_nullable
+              as int,
+      educationalMapping: freezed == educationalMapping
+          ? _value.educationalMapping
+          : educationalMapping // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ) as $Val);
   }
 }
@@ -365,7 +402,9 @@ abstract class _$$GameStateImplCopyWith<$Res>
       Size imageSize,
       bool isPUZType,
       String puzzCode,
-      bool isCoded});
+      bool isCoded,
+      int puzzleType,
+      List<int>? educationalMapping});
 }
 
 /// @nodoc
@@ -393,6 +432,8 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? isPUZType = null,
     Object? puzzCode = null,
     Object? isCoded = null,
+    Object? puzzleType = null,
+    Object? educationalMapping = freezed,
   }) {
     return _then(_$GameStateImpl(
       isInitialized: null == isInitialized
@@ -443,6 +484,14 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.isCoded
           : isCoded // ignore: cast_nullable_to_non_nullable
               as bool,
+      puzzleType: null == puzzleType
+          ? _value.puzzleType
+          : puzzleType // ignore: cast_nullable_to_non_nullable
+              as int,
+      educationalMapping: freezed == educationalMapping
+          ? _value._educationalMapping
+          : educationalMapping // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ));
   }
 }
@@ -462,10 +511,13 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       required this.imageSize,
       required this.isPUZType,
       required this.puzzCode,
-      required this.isCoded})
+      required this.isCoded,
+      required this.puzzleType,
+      final List<int>? educationalMapping})
       : _pieces = pieces,
         _initialArrangement = initialArrangement,
-        _currentArrangement = currentArrangement;
+        _currentArrangement = currentArrangement,
+        _educationalMapping = educationalMapping;
 
   @override
   final bool isInitialized;
@@ -511,10 +563,24 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
   final String puzzCode;
   @override
   final bool isCoded;
+  @override
+  final int puzzleType;
+// Type de puzzle : 1=classique, 2=éducatif
+  final List<int>? _educationalMapping;
+// Type de puzzle : 1=classique, 2=éducatif
+  @override
+  List<int>? get educationalMapping {
+    final value = _educationalMapping;
+    if (value == null) return null;
+    if (_educationalMapping is EqualUnmodifiableListView)
+      return _educationalMapping;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameState(isInitialized: $isInitialized, pieces: $pieces, columns: $columns, rows: $rows, initialArrangement: $initialArrangement, currentArrangement: $currentArrangement, swapCount: $swapCount, minimalMoves: $minimalMoves, imageSize: $imageSize, isPUZType: $isPUZType, puzzCode: $puzzCode, isCoded: $isCoded)';
+    return 'GameState(isInitialized: $isInitialized, pieces: $pieces, columns: $columns, rows: $rows, initialArrangement: $initialArrangement, currentArrangement: $currentArrangement, swapCount: $swapCount, minimalMoves: $minimalMoves, imageSize: $imageSize, isPUZType: $isPUZType, puzzCode: $puzzCode, isCoded: $isCoded, puzzleType: $puzzleType, educationalMapping: $educationalMapping)';
   }
 
   @override
@@ -533,7 +599,9 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       ..add(DiagnosticsProperty('imageSize', imageSize))
       ..add(DiagnosticsProperty('isPUZType', isPUZType))
       ..add(DiagnosticsProperty('puzzCode', puzzCode))
-      ..add(DiagnosticsProperty('isCoded', isCoded));
+      ..add(DiagnosticsProperty('isCoded', isCoded))
+      ..add(DiagnosticsProperty('puzzleType', puzzleType))
+      ..add(DiagnosticsProperty('educationalMapping', educationalMapping));
   }
 
   @override
@@ -560,7 +628,11 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
                 other.isPUZType == isPUZType) &&
             (identical(other.puzzCode, puzzCode) ||
                 other.puzzCode == puzzCode) &&
-            (identical(other.isCoded, isCoded) || other.isCoded == isCoded));
+            (identical(other.isCoded, isCoded) || other.isCoded == isCoded) &&
+            (identical(other.puzzleType, puzzleType) ||
+                other.puzzleType == puzzleType) &&
+            const DeepCollectionEquality()
+                .equals(other._educationalMapping, _educationalMapping));
   }
 
   @override
@@ -577,7 +649,9 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       imageSize,
       isPUZType,
       puzzCode,
-      isCoded);
+      isCoded,
+      puzzleType,
+      const DeepCollectionEquality().hash(_educationalMapping));
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -601,7 +675,9 @@ abstract class _GameState implements GameState {
       required final Size imageSize,
       required final bool isPUZType,
       required final String puzzCode,
-      required final bool isCoded}) = _$GameStateImpl;
+      required final bool isCoded,
+      required final int puzzleType,
+      final List<int>? educationalMapping}) = _$GameStateImpl;
 
   @override
   bool get isInitialized;
@@ -627,6 +703,10 @@ abstract class _GameState implements GameState {
   String get puzzCode;
   @override
   bool get isCoded;
+  @override
+  int get puzzleType; // Type de puzzle : 1=classique, 2=éducatif
+  @override
+  List<int>? get educationalMapping;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.

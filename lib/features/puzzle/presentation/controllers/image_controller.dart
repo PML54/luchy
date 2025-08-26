@@ -42,24 +42,26 @@
 /// - core/constants/image_list.dart: Liste images prédéfinies
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Cœur logique traitement images)
+/// 📅 Dernière modification: 2025-08-25 15:00
 /// </cursor>
 
 import 'dart:io';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-
-// Domain imports
-
-import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
+// Constants
+import 'package:luchy/core/constants/image_list.dart'; // Il semble que vous utilisiez imageList aussi
 // Core imports
 
 import 'package:luchy/core/utils/profiler.dart'; // Nouvel import
+// Domain imports
 
-// Constants
-import 'package:luchy/core/constants/image_list.dart'; // Il semble que vous utilisiez imageList aussi
+import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 
 /// Provider for the image controller
 ///
@@ -218,6 +220,7 @@ class ImageController extends StateNotifier<ImageControllerState> {
             rows: ref.read(gameSettingsProvider).difficultyRows,
             imageSize: imageState.optimizedImageDimensions,
             shouldShuffle: true,
+            puzzleType: ref.read(gameSettingsProvider).puzzleType,
           );
     }
   }
@@ -226,6 +229,83 @@ class ImageController extends StateNotifier<ImageControllerState> {
   Future<void> _processPickedImage(XFile image) async {
     final Uint8List imageBytes = await image.readAsBytes();
     await _processImageBytes(imageBytes, image.name, false);
+  }
+
+  /// Loads an educational image generated from text content
+  ///
+  /// This method bypasses the usual image processing pipeline since
+  /// educational images are already optimized and ready for puzzle use.
+  Future<void> loadEducationalImage(
+    Uint8List imageBytes, {
+    required int rows,
+    required int columns,
+    required String description,
+    int puzzleType = 1, // Par défaut type classique
+    List<int>? educationalMapping, // Mapping éducatif
+  }) async {
+    profiler.start('educational_image_load');
+    state = state.copyWith(isLoading: true, error: null);
+    debugPrint(
+        '🎓 START: loadEducationalImage - imageController.isLoading = true');
+
+    try {
+      // Décoder l'image pour obtenir les dimensions
+      final img.Image? image = img.decodeImage(imageBytes);
+      if (image == null) {
+        throw Exception('Impossible de décoder l\'image éducative');
+      }
+
+      final imageSize = Size(image.width.toDouble(), image.height.toDouble());
+
+      // Mettre à jour l'état de traitement d'image avec l'image complète
+      final imageProcessingNotifier =
+          ref.read(imageProcessingProvider.notifier);
+      imageProcessingNotifier.state = imageProcessingNotifier.state.copyWith(
+        fullImage: imageBytes,
+        optimizedImageDimensions: imageSize,
+        isLoading: true, // Garder loading pendant createPuzzlePieces
+      );
+      debugPrint('🎓 imageProcessingProvider.isLoading = true');
+
+      // Créer les pièces du puzzle avec la grille forcée
+      final pieces = await ref
+          .read(imageProcessingProvider.notifier)
+          .createPuzzlePieces(imageBytes, columns, rows);
+
+      // S'assurer que l'état loading est à false après createPuzzlePieces
+      imageProcessingNotifier.state = imageProcessingNotifier.state.copyWith(
+        isLoading: false,
+      );
+      debugPrint('🎓 imageProcessingProvider.isLoading = false');
+
+      // Forcer les paramètres de difficulté selon la grille éducative
+      ref.read(gameSettingsProvider.notifier).setDifficulty(columns, rows);
+
+      // Initialiser le puzzle avec les paramètres éducatifs
+      await ref.read(gameStateProvider.notifier).initializePuzzle(
+            imageBytes: imageBytes,
+            pieces: pieces,
+            columns: columns,
+            rows: rows,
+            imageSize: imageSize,
+            shouldShuffle: true,
+            puzzleType: puzzleType,
+            educationalMapping: educationalMapping,
+          );
+
+      profiler.end('educational_image_load');
+      debugPrint('🎓 Image éducative chargée: $description (${columns}x$rows)');
+
+      state = state.copyWith(isLoading: false);
+      debugPrint('🎓 END: imageController.isLoading = false');
+    } catch (e) {
+      profiler.end('educational_image_load');
+      debugPrint('❌ Erreur chargement image éducative: $e');
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Erreur lors du chargement de l\'image éducative: $e',
+      );
+    }
   }
 }
 

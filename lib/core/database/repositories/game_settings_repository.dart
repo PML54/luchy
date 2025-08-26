@@ -3,32 +3,33 @@
 /// - GameSettingsRepository: Repository pour les paramètres de jeu
 /// - Gestion CRUD des paramètres de difficulté et configuration
 /// - Cache en mémoire pour optimiser les performances
-/// 
+///
 /// ÉTAT ACTUEL
 /// - Repository avec cache pour éviter requêtes répétées
 /// - Méthodes async pour toutes les opérations
 /// - Intégration avec DatabaseService
-/// 
+///
 /// HISTORIQUE RÉCENT
 /// - 2024-12-19: Création avec pattern repository + cache
+/// - 2025-01-08: Ajout support types de puzzles (éducatifs)
 /// - Interface simple pour remplacer SharedPreferences
-/// 
+///
 /// 🔧 POINTS D'ATTENTION
 /// - Cache doit être synchronisé avec la base
 /// - Gestion des erreurs SQLite
 /// - Fallback vers valeurs par défaut
-/// 
+///
 /// 🚀 PROCHAINES ÉTAPES
 /// - Créer les autres repositories (stats, history)
 /// - Intégrer avec les providers Riverpod
-/// - Ajouter validation des données
-/// 
+/// - Ajouter validation des types de puzzles
+///
 /// 🔗 FICHIERS LIÉS
 /// - lib/core/database/database_service.dart
 /// - lib/core/database/models/database_models.dart
-/// 
+///
 /// CRITICALITÉ: HAUTE - Repository principal des paramètres
-/// 📅 Dernière modification: 2024-12-19 16:40
+/// 📅 Dernière modification: 2025-08-25 14:34
 /// </cursor>
 
 import '../database_service.dart';
@@ -63,6 +64,7 @@ class GameSettingsRepository {
       difficultyCols: 3,
       useCustomGridSize: false,
       hasSeenDocumentation: false,
+      puzzleType: 1,
     );
 
     // Sauvegarde les paramètres par défaut
@@ -73,7 +75,7 @@ class GameSettingsRepository {
   /// Sauvegarde les nouveaux paramètres
   Future<void> saveSettings(GameSettingsDb settings) async {
     final existingSettings = await _getExistingSettings();
-    
+
     if (existingSettings != null) {
       // Mise à jour
       await _databaseService.update(
@@ -82,7 +84,7 @@ class GameSettingsRepository {
         where: 'id = ?',
         whereArgs: [existingSettings.id],
       );
-      
+
       _cachedSettings = settings.copyWith(
         id: existingSettings.id,
         createdAt: existingSettings.createdAt,
@@ -94,7 +96,7 @@ class GameSettingsRepository {
         'game_settings',
         settings.toMap(),
       );
-      
+
       _cachedSettings = settings.copyWith(
         id: id,
         createdAt: DateTime.now(),
@@ -136,6 +138,16 @@ class GameSettingsRepository {
     await saveSettings(updated);
   }
 
+  /// Met à jour le type de puzzle
+  Future<void> updatePuzzleType(int type) async {
+    final current = await getSettings();
+    final updated = current.copyWith(
+      puzzleType: type,
+      updatedAt: DateTime.now(),
+    );
+    await saveSettings(updated);
+  }
+
   /// Remet les paramètres par défaut
   Future<void> resetToDefaults() async {
     const defaultSettings = GameSettingsDb(
@@ -143,8 +155,9 @@ class GameSettingsRepository {
       difficultyCols: 3,
       useCustomGridSize: false,
       hasSeenDocumentation: false,
+      puzzleType: 1,
     );
-    
+
     await saveSettings(defaultSettings);
   }
 

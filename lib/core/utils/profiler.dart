@@ -41,6 +41,7 @@
 /// - core/utils/image_optimizer.dart: Mesures optimisation
 ///
 /// CRITICALITÉ: ⭐⭐⭐ (Outil development et optimisation)
+/// 📅 Dernière modification: 2025-08-25 14:44
 /// </cursor>
 final profiler = Profiler();
 
