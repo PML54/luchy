@@ -18,10 +18,10 @@
 /// - Fonctionnalités: Complètes et stables
 ///
 /// HISTORIQUE RÉCENT:
+/// - Simplification dialogue éducatif: suppression choix type (toujours éducatif)
 /// - Optimisation responsive design pour toutes orientations
 /// - Amélioration accessibilité et feedback utilisateur
 /// - Intégration informations version dynamiques
-/// - Suppression compteur mouvements (déplacé vers victory message)
 ///
 /// 🔧 POINTS D'ATTENTION:
 /// - Responsive: S'adapter automatiquement aux différentes tailles écran
@@ -318,7 +318,8 @@ class EducationalPresetDialog extends StatefulWidget {
 }
 
 class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
-  int _selectedPuzzleType = 1; // 1=classique, 2=éducatif
+  // Toujours type éducatif (2) - pas de choix utilisateur
+  static const int _puzzleType = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -337,104 +338,7 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
         height: 500,
         child: Column(
           children: [
-            // Sélecteur de type de puzzle
-            Card(
-              color: Colors.blue.shade50,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Type de puzzle :',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Radio<int>(
-                              value: 1,
-                              groupValue: _selectedPuzzleType,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedPuzzleType = value!;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedPuzzleType = 1;
-                                  });
-                                },
-                                child: const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Classique',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Text(
-                                      'Toutes les pièces mélangées',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Radio<int>(
-                              value: 2,
-                              groupValue: _selectedPuzzleType,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedPuzzleType = value!;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedPuzzleType = 2;
-                                  });
-                                },
-                                child: const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Éducatif',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Text(
-                                      'Mélange colonnes 1-2 uniquement',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Liste des presets
+            // Liste des presets (sélecteur de type supprimé)
             Expanded(
               child: ListView.builder(
                 itemCount: presets.length,
@@ -488,19 +392,18 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
     EducationalPreset preset,
   ) async {
     try {
-      // Générer l'image avec mélange éducatif si type 2
-      final applyEducationalShuffle = _selectedPuzzleType == 2;
+      // Toujours générer avec mélange éducatif (type 2)
       final result = await EducationalImageGenerator.generateFromPreset(
         preset,
         cellWidth: 600,
         cellHeight: 200,
-        applyEducationalShuffle: applyEducationalShuffle,
+        applyEducationalShuffle: true, // Toujours éducatif
       );
 
-      // Mettre à jour le type de puzzle dans les paramètres
+      // Mettre à jour le type de puzzle dans les paramètres (toujours type 2)
       await widget.ref
           .read(gameSettingsProvider.notifier)
-          .setPuzzleType(_selectedPuzzleType);
+          .setPuzzleType(_puzzleType);
 
       // Charger l'image dans le jeu avec grille forcée 2 colonnes
       await widget.ref
@@ -510,16 +413,15 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
             rows: result.rows,
             columns: result.columns,
             description: result.description,
-            puzzleType: _selectedPuzzleType,
+            puzzleType: _puzzleType,
             educationalMapping: result.originalMapping,
           );
 
       // Afficher un message de confirmation
       if (context.mounted) {
-        final typeLabel = _selectedPuzzleType == 2 ? 'éducatif' : 'classique';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Puzzle $typeLabel "${preset.name}" chargé !'),
+            content: Text('Puzzle éducatif "${preset.name}" chargé !'),
             backgroundColor: Colors.green,
           ),
         );

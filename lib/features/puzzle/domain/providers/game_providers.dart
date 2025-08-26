@@ -200,6 +200,24 @@ class GameStateNotifier extends StateNotifier<GameState> {
         .length;
   }
 
+  /// Compte le nombre de correspondances éducatives correctes (pour puzzles type 2)
+  /// Retourne le nombre de lignes où les éléments des colonnes 1 et 2 correspondent
+  int countCorrectEducationalCorrespondences() {
+    if (!state.isInitialized ||
+        state.puzzleType != 2 ||
+        state.educationalMapping == null) {
+      return 0;
+    }
+
+    int correctCorrespondences = 0;
+    for (int row = 0; row < state.rows; row++) {
+      if (_isRowComplete(row)) {
+        correctCorrespondences++;
+      }
+    }
+    return correctCorrespondences;
+  }
+
   double getCompletionPercentage() {
     if (!state.isInitialized) return 0.0;
 

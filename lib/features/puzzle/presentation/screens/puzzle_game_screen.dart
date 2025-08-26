@@ -20,9 +20,9 @@
 /// - Navigation: Intégrée avec écran d'aide
 ///
 /// HISTORIQUE RÉCENT:
-/// - Suppression message bienvenue au lancement (causait problèmes)
-/// - Amélioration gestion erreurs et états de chargement
-/// - Optimisation performance et fluidité interface
+/// - Ajout AppBar éducative conditionnelle (puzzleType==2) avec boutons spécialisés
+/// - Suppression boutons flottants en mode éducatif (résout débordement iPhone)
+/// - Interface adaptative: AppBar normale vs éducative selon contexte
 /// - Documentation mise à jour format <cursor>
 ///
 /// 🔧 POINTS D'ATTENTION:
@@ -41,10 +41,11 @@
 /// - features/puzzle/domain/providers/game_providers.dart: État du jeu
 /// - features/puzzle/presentation/controllers/image_controller.dart: Contrôle images
 /// - features/puzzle/presentation/widgets/board/puzzle_board.dart: Plateau
+/// - features/puzzle/presentation/widgets/toolbar/educational_appbar.dart: AppBar éducative
 /// - features/puzzle/presentation/screens/help_screen.dart: Aide
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Interface principale utilisateur)
-/// 📅 Dernière modification: 2025-08-25 14:38
+/// 📅 Dernière modification: 2025-01-27 17:20
 /// </cursor>
 
 import 'package:flutter/material.dart';
@@ -56,6 +57,7 @@ import 'package:luchy/features/puzzle/presentation/screens/help_screen.dart';
 import 'package:luchy/features/puzzle/presentation/widgets/board/puzzle_board.dart';
 import 'package:luchy/features/puzzle/presentation/widgets/image/image_preview.dart';
 import 'package:luchy/features/puzzle/presentation/widgets/toolbar/custom_toolbar.dart';
+import 'package:luchy/features/puzzle/presentation/widgets/toolbar/educational_appbar.dart';
 import 'package:luchy/l10n/app_localizations.dart';
 
 class PuzzleGameScreen extends ConsumerStatefulWidget {
@@ -169,12 +171,15 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
 
     return Scaffold(
       backgroundColor: Colors.blue,
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: const CustomToolbar(key: Key('toolbar')),
-      ),
+      appBar: gameState.puzzleType == 2
+          ? const EducationalAppBar()
+              as PreferredSizeWidget // AppBar éducative pour puzzles éducatifs
+          : AppBar(
+              backgroundColor: Colors.blue,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              title: const CustomToolbar(key: Key('toolbar')),
+            ) as PreferredSizeWidget,
       body: Column(
         children: [
           Expanded(
@@ -190,12 +195,13 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
                     const Center(
                       child: CircularProgressIndicator(color: Colors.white),
                     ),
-                  // FloatingActionButtons maintenant flottants au-dessus de l'image
-                  Positioned(
-                    right: 16,
-                    bottom: 16,
-                    child: _buildFloatingActionButtons(context),
-                  ),
+                  // FloatingActionButtons seulement en mode puzzle normal (pas éducatif)
+                  if (gameState.puzzleType != 2)
+                    Positioned(
+                      right: 16,
+                      bottom: 16,
+                      child: _buildFloatingActionButtons(context),
+                    ),
                 ],
               ),
             ),
