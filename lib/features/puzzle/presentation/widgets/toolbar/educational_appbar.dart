@@ -49,6 +49,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luchy/core/utils/educational_image_generator.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
+import 'package:luchy/features/puzzle/presentation/widgets/dialogs/verification_results_dialog.dart';
 
 /// AppBar spécialisée pour les puzzles éducatifs
 class EducationalAppBar extends ConsumerWidget implements PreferredSizeWidget {
@@ -60,11 +61,6 @@ class EducationalAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameStateProvider);
-
-    // Pour les puzzles éducatifs : compter les correspondances, pas les pièces
-    final correctCorrespondences = ref
-        .read(gameStateProvider.notifier)
-        .countCorrectEducationalCorrespondences();
     final totalQuestions =
         gameState.rows; // Nombre de lignes = nombre de questions
 
@@ -81,25 +77,21 @@ class EducationalAppBar extends ConsumerWidget implements PreferredSizeWidget {
             onPressed: () => _quitEducationalMode(ref),
           ),
 
-                    // Icône éducative (sans titre pour économiser l'espace)
+          // Icône éducative (sans titre pour économiser l'espace)
           const Icon(Icons.school, color: Colors.white, size: 20),
-          
+
           const Spacer(), // Prend l'espace disponible
 
-          // Compteur de correspondances éducatives (compact)
+          // Bouton de vérification des réponses
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.green.withOpacity(0.8),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              '$correctCorrespondences/$totalQuestions',
-              style: const TextStyle(
-                color: Colors.greenAccent,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+            child: IconButton(
+              icon: const Icon(Icons.check_circle, color: Colors.white),
+              tooltip: 'Vérifier les réponses',
+              onPressed: () => _verifyAnswers(context, ref, totalQuestions),
             ),
           ),
 
@@ -114,6 +106,38 @@ class EducationalAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ],
       ),
     );
+  }
+
+  /// Vérifier les réponses et afficher les résultats
+  Future<void> _verifyAnswers(
+      BuildContext context, WidgetRef ref, int totalQuestions) async {
+    try {
+      // Compter les bonnes réponses
+      final correctAnswers = ref
+          .read(gameStateProvider.notifier)
+          .countCorrectEducationalCorrespondences();
+
+      // Récupérer le temps écoulé depuis le début du puzzle
+      final elapsedTime = ref.read(gameStateProvider.notifier).getElapsedTime();
+
+      // Afficher le dialog des résultats
+      final result = await showDialog<String>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => VerificationResultsDialog(
+          correctAnswers: correctAnswers,
+          totalQuestions: totalQuestions,
+          elapsedTime: elapsedTime,
+        ),
+      );
+
+      // Gérer les actions du dialog
+      if (result == 'restart') {
+        await _generateRandomEducationalQuiz(ref);
+      }
+    } catch (e) {
+      debugPrint('Erreur lors de la vérification: $e');
+    }
   }
 
   /// Quitter le mode éducatif et revenir au mode puzzle normal

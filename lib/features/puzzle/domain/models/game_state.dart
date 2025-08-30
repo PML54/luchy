@@ -56,7 +56,8 @@ class GameSettings with _$GameSettings {
     required int difficultyRows,
     required bool useCustomGridSize,
     required bool hasSeenDocumentation,
-    required int puzzleType, // 1=classique, 2=éducatif (colonnes 1-2)
+    required int
+        puzzleType, // 1=classique, 2=éducatif (colonnes 1-2), 3=combinaisons
   }) = _GameSettings;
 
   factory GameSettings.initial() => const GameSettings(
@@ -83,8 +84,10 @@ class GameState with _$GameState {
     required bool isPUZType,
     required String puzzCode,
     required bool isCoded,
-    required int puzzleType, // Type de puzzle : 1=classique, 2=éducatif
+    required int
+        puzzleType, // Type de puzzle : 1=classique, 2=éducatif, 3=combinaisons
     List<int>? educationalMapping, // Mapping original pour puzzles éducatifs
+    DateTime? startTime, // Heure de début pour chronométrage puzzles éducatifs
   }) = _GameState;
 
   factory GameState.initial() => const GameState(
@@ -102,5 +105,6 @@ class GameState with _$GameState {
         isCoded: false,
         puzzleType: 1,
         educationalMapping: null,
+        startTime: null,
       );
 }

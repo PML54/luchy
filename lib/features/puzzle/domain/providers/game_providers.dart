@@ -200,12 +200,11 @@ class GameStateNotifier extends StateNotifier<GameState> {
         .length;
   }
 
-  /// Compte le nombre de correspondances éducatives correctes (pour puzzles type 2)
+  /// Compte le nombre de correspondances éducatives correctes (pour puzzles type 2 et 3)
   /// Retourne le nombre de lignes où les éléments des colonnes 1 et 2 correspondent
   int countCorrectEducationalCorrespondences() {
     if (!state.isInitialized ||
-        state.puzzleType != 2 ||
-        state.educationalMapping == null) {
+        (state.puzzleType != 2 && state.puzzleType != 3)) {
       return 0;
     }
 
@@ -216,6 +215,14 @@ class GameStateNotifier extends StateNotifier<GameState> {
       }
     }
     return correctCorrespondences;
+  }
+
+  /// Calcule le temps écoulé depuis le début du puzzle éducatif
+  Duration getElapsedTime() {
+    if (state.startTime == null) {
+      return Duration.zero;
+    }
+    return DateTime.now().difference(state.startTime!);
   }
 
   double getCompletionPercentage() {
@@ -245,12 +252,19 @@ class GameStateNotifier extends StateNotifier<GameState> {
         case 2:
           shuffledArrangement = _createType2ShuffledArrangement(columns, rows);
           break;
+        case 3: // Puzzles de combinaisons
+          shuffledArrangement = _createType2ShuffledArrangement(columns, rows);
+          break;
         default:
           shuffledArrangement = _createShuffledArrangement(pieces.length);
       }
     } else {
       shuffledArrangement = List<int>.from(initialArrangement);
     }
+
+    // Démarrer le chronométrage pour les puzzles éducatifs
+    final startTime =
+        (puzzleType == 2 || puzzleType == 3) ? DateTime.now() : null;
 
     state = state.copyWith(
       pieces: pieces,
@@ -264,6 +278,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       minimalMoves: shouldShuffle ? pieces.length : 0,
       puzzleType: puzzleType,
       educationalMapping: educationalMapping,
+      startTime: startTime,
     );
   }
 
@@ -273,6 +288,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
     // Vérification selon le type de puzzle
     switch (state.puzzleType) {
       case 2:
+        return _isType2Complete();
+      case 3: // Puzzles de combinaisons - même logique que type 2
         return _isType2Complete();
       default:
         return state.currentArrangement
@@ -403,14 +420,6 @@ class GameStateNotifier extends StateNotifier<GameState> {
   /// Pour le type 2 : les éléments en vis-à-vis (sur chaque ligne) doivent avoir
   /// le même numéro d'ordre initial selon le mapping éducatif
   bool _isType2Complete() {
-    if (state.educationalMapping == null) {
-      // Fallback vers vérification classique si pas de mapping
-      return state.currentArrangement
-          .asMap()
-          .entries
-          .every((entry) => entry.value == entry.key);
-    }
-
     for (int row = 0; row < state.rows; row++) {
       if (!_isRowComplete(row)) {
         return false;
@@ -422,26 +431,34 @@ class GameStateNotifier extends StateNotifier<GameState> {
   /// Vérifie si une ligne spécifique est complète pour le type 2
   /// La ligne est complète si les éléments en vis-à-vis ont le même numéro d'ordre initial
   bool _isRowComplete(int row) {
-    if (state.educationalMapping == null || state.columns < 2) {
+    if (state.columns < 2) {
       return false;
     }
 
     final col1Index = row * state.columns + 0; // Colonne 1 (gauche)
     final col2Index = row * state.columns + 1; // Colonne 2 (droite)
 
-    // Récupérer les pièces actuelles sur cette ligne
-    final currentCol1Piece = state.currentArrangement[col1Index];
-    final currentCol2Piece = state.currentArrangement[col2Index];
+    // Si nous avons un mapping éducatif, l'utiliser
+    if (state.educationalMapping != null) {
+      // Récupérer les pièces actuelles sur cette ligne
+      final currentCol1Piece = state.currentArrangement[col1Index];
+      final currentCol2Piece = state.currentArrangement[col2Index];
 
-    // Trouver les numéros d'ordre initial de ces pièces
-    final originalOrderCol1 = _findOriginalOrder(currentCol1Piece);
-    final originalOrderCol2 = _findOriginalOrder(currentCol2Piece);
+      // Trouver les numéros d'ordre initial de ces pièces
+      final originalOrderCol1 = _findOriginalOrder(currentCol1Piece);
+      final originalOrderCol2 = _findOriginalOrder(currentCol2Piece);
 
-    // Vérifier si ces pièces correspondent selon le mapping éducatif
-    return originalOrderCol1 != null &&
-        originalOrderCol2 != null &&
-        state.educationalMapping![originalOrderCol1] ==
-            state.educationalMapping![originalOrderCol2];
+      // Vérifier si ces pièces correspondent selon le mapping éducatif
+      return originalOrderCol1 != null &&
+          originalOrderCol2 != null &&
+          state.educationalMapping![originalOrderCol1] ==
+              state.educationalMapping![originalOrderCol2];
+    } else {
+      // Pour les puzzles éducatifs simples sans mapping,
+      // vérifier que les pièces sont simplement à leur position correcte
+      return state.currentArrangement[col1Index] == col1Index &&
+          state.currentArrangement[col2Index] == col2Index;
+    }
   }
 
   /// Trouve le numéro d'ordre initial d'une pièce donnée
@@ -489,26 +506,59 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
   Future<List<Uint8List>> createPuzzlePieces(
     Uint8List imageBytes,
     int columns,
-    int rows,
-  ) async {
+    int rows, {
+    double? ratioLargeurColonnes, // Ratio pour largeurs dynamiques
+  }) async {
     try {
       final image = img.decodeImage(imageBytes);
       if (image == null) throw Exception("Impossible de décoder l'image");
 
-      final pieceWidth = image.width ~/ columns;
-      final pieceHeight = image.height ~/ rows;
       final pieces = <Uint8List>[];
+      final pieceHeight = image.height ~/ rows;
 
-      for (var y = 0; y < rows; y++) {
-        for (var x = 0; x < columns; x++) {
-          final piece = img.copyCrop(
+      // Calcul des largeurs selon le ratio (pour puzzles éducatifs)
+      if (ratioLargeurColonnes != null && columns == 2) {
+        // Largeurs dynamiques pour puzzles éducatifs
+        final leftWidth = (image.width * ratioLargeurColonnes).round();
+        final rightWidth = image.width - leftWidth;
+
+        for (var y = 0; y < rows; y++) {
+          // Colonne gauche (largeur dynamique)
+          final leftPiece = img.copyCrop(
             image,
-            x: x * pieceWidth,
+            x: 0,
             y: y * pieceHeight,
-            width: pieceWidth,
+            width: leftWidth,
             height: pieceHeight,
           );
-          pieces.add(Uint8List.fromList(img.encodeJpg(piece, quality: 85)));
+          pieces.add(Uint8List.fromList(img.encodeJpg(leftPiece, quality: 85)));
+
+          // Colonne droite (largeur dynamique)
+          final rightPiece = img.copyCrop(
+            image,
+            x: leftWidth,
+            y: y * pieceHeight,
+            width: rightWidth,
+            height: pieceHeight,
+          );
+          pieces
+              .add(Uint8List.fromList(img.encodeJpg(rightPiece, quality: 85)));
+        }
+      } else {
+        // Découpage uniforme classique
+        final pieceWidth = image.width ~/ columns;
+
+        for (var y = 0; y < rows; y++) {
+          for (var x = 0; x < columns; x++) {
+            final piece = img.copyCrop(
+              image,
+              x: x * pieceWidth,
+              y: y * pieceHeight,
+              width: pieceWidth,
+              height: pieceHeight,
+            );
+            pieces.add(Uint8List.fromList(img.encodeJpg(piece, quality: 85)));
+          }
         }
       }
 

@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "luchy",
-      "version": "1.0.0+10",
+      "version": "1.0.0+28",
       "dependencies": [
         "audioplayers",
         "collection",
@@ -16,6 +16,7 @@
         "flutter_exif_rotation",
         "flutter_localizations",
         "flutter_markdown",
+        "flutter_math_fork",
         "flutter_riverpod",
         "freezed_annotation",
         "git",
@@ -426,6 +427,18 @@
         "archive",
         "meta",
         "xml"
+      ]
+    },
+    {
+      "name": "flutter_math_fork",
+      "version": "0.7.4",
+      "dependencies": [
+        "collection",
+        "flutter",
+        "flutter_svg",
+        "meta",
+        "provider",
+        "tuple"
       ]
     },
     {
@@ -1539,6 +1552,31 @@
       ]
     },
     {
+      "name": "tuple",
+      "version": "2.0.2",
+      "dependencies": []
+    },
+    {
+      "name": "provider",
+      "version": "6.1.5+1",
+      "dependencies": [
+        "collection",
+        "flutter",
+        "nested"
+      ]
+    },
+    {
+      "name": "flutter_svg",
+      "version": "2.2.0",
+      "dependencies": [
+        "flutter",
+        "http",
+        "vector_graphics",
+        "vector_graphics_codec",
+        "vector_graphics_compiler"
+      ]
+    },
+    {
       "name": "fading_edge_scrollview",
       "version": "4.1.1",
       "dependencies": [
@@ -1819,6 +1857,39 @@
       ]
     },
     {
+      "name": "nested",
+      "version": "1.0.0",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "version": "1.1.19",
+      "dependencies": [
+        "args",
+        "meta",
+        "path",
+        "path_parsing",
+        "vector_graphics_codec",
+        "xml"
+      ]
+    },
+    {
+      "name": "vector_graphics_codec",
+      "version": "1.1.13",
+      "dependencies": []
+    },
+    {
+      "name": "vector_graphics",
+      "version": "1.1.19",
+      "dependencies": [
+        "flutter",
+        "http",
+        "vector_graphics_codec"
+      ]
+    },
+    {
       "name": "custom_lint_visitor",
       "version": "1.0.0+7.7.0",
       "dependencies": [
@@ -1835,6 +1906,14 @@
         "path",
         "pub_semver",
         "yaml"
+      ]
+    },
+    {
+      "name": "path_parsing",
+      "version": "1.1.0",
+      "dependencies": [
+        "meta",
+        "vector_math"
       ]
     }
   ],

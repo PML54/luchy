@@ -318,12 +318,16 @@ class EducationalPresetDialog extends StatefulWidget {
 }
 
 class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
-  // Toujours type éducatif (2) - pas de choix utilisateur
-  static const int _puzzleType = 2;
+  // Détermine le type de puzzle selon le questionnaire
+  int _getPuzzleType(QuestionnairePreset questionnaire) {
+    return questionnaire.typeDeJeu == TypeDeJeu.combinaisonsMatematiques
+        ? 3
+        : 2;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final presets = EducationalImageGenerator.getAllPresets();
+    final questionnaires = EducationalImageGenerator.getAllQuestionnaires();
 
     return AlertDialog(
       title: const Row(
@@ -341,21 +345,22 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
             // Liste des presets (sélecteur de type supprimé)
             Expanded(
               child: ListView.builder(
-                itemCount: presets.length,
+                itemCount: questionnaires.length,
                 itemBuilder: (context, index) {
-                  final preset = presets[index];
+                  final questionnaire = questionnaires[index];
                   return Card(
                     child: ListTile(
-                      leading: _getPresetIcon(preset.id),
-                      title: Text(preset.name),
-                      subtitle: Text(preset.description),
+                      leading: _getQuestionnaireIcon(questionnaire),
+                      title: Text(questionnaire.nom),
+                      subtitle: Text(
+                          '${questionnaire.niveau.nom} - ${questionnaire.categorie.emoji} ${questionnaire.categorie.nom}${questionnaire.sousTheme != null ? ' - ${questionnaire.sousTheme}' : ''}'),
                       trailing: Text(
-                        '${preset.leftColumn.length} lignes',
+                        '${questionnaire.colonneGauche.length} lignes',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       onTap: () {
                         Navigator.of(context).pop();
-                        _generateEducationalImage(context, preset);
+                        _generateQuestionnaireImage(context, questionnaire);
                       },
                     ),
                   );
@@ -374,38 +379,63 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
     );
   }
 
-  /// Retourne l'icône appropriée selon le type de preset
-  Widget _getPresetIcon(String presetId) {
-    if (presetId.startsWith('multiplication_')) {
-      return const Icon(Icons.calculate, color: Colors.orange);
-    } else if (presetId.startsWith('vocab_')) {
-      return const Icon(Icons.translate, color: Colors.green);
-    } else if (presetId.startsWith('geo_')) {
-      return const Icon(Icons.public, color: Colors.blue);
+  /// Retourne l'icône appropriée selon le questionnaire
+  Widget _getQuestionnaireIcon(QuestionnairePreset questionnaire) {
+    IconData iconData;
+    switch (questionnaire.typeDeJeu) {
+      case TypeDeJeu.ordreChronologique:
+        iconData = Icons.access_time;
+        break;
+      case TypeDeJeu.combinaisonsMatematiques:
+        iconData = Icons.calculate;
+        break;
+      default:
+        iconData = Icons.quiz;
     }
-    return const Icon(Icons.quiz, color: Colors.purple);
+
+    return Icon(
+      iconData,
+      color: _getColorForLevel(questionnaire.niveau),
+    );
   }
 
-  /// Génère et charge l'image éducative
-  Future<void> _generateEducationalImage(
+  Color _getColorForLevel(NiveauEducatif niveau) {
+    switch (niveau) {
+      case NiveauEducatif.primaire:
+        return Colors.green;
+      case NiveauEducatif.college:
+        return Colors.blue;
+      case NiveauEducatif.lycee:
+        return Colors.orange;
+      case NiveauEducatif.prepa:
+        return Colors.purple;
+      case NiveauEducatif.superieur:
+        return Colors.red;
+    }
+  }
+
+  /// Génère et charge l'image questionnaire avec largeurs dynamiques
+  Future<void> _generateQuestionnaireImage(
     BuildContext context,
-    EducationalPreset preset,
+    QuestionnairePreset questionnaire,
   ) async {
     try {
-      // Toujours générer avec mélange éducatif (type 2)
-      final result = await EducationalImageGenerator.generateFromPreset(
-        preset,
+      // Générer avec la nouvelle méthode qui supporte les largeurs dynamiques
+      final result =
+          await EducationalImageGenerator.generateFromQuestionnairePreset(
+        questionnaire,
         cellWidth: 600,
         cellHeight: 200,
-        applyEducationalShuffle: true, // Toujours éducatif
+        applyEducationalShuffle: true,
       );
 
-      // Mettre à jour le type de puzzle dans les paramètres (toujours type 2)
+      // Mettre à jour le type de puzzle dans les paramètres
+      final puzzleType = _getPuzzleType(questionnaire);
       await widget.ref
           .read(gameSettingsProvider.notifier)
-          .setPuzzleType(_puzzleType);
+          .setPuzzleType(puzzleType);
 
-      // Charger l'image dans le jeu avec grille forcée 2 colonnes
+      // Charger l'image dans le jeu
       await widget.ref
           .read(imageControllerProvider.notifier)
           .loadEducationalImage(
@@ -413,7 +443,7 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
             rows: result.rows,
             columns: result.columns,
             description: result.description,
-            puzzleType: _puzzleType,
+            puzzleType: puzzleType,
             educationalMapping: result.originalMapping,
           );
 
@@ -421,7 +451,7 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Puzzle éducatif "${preset.name}" chargé !'),
+            content: Text('Questionnaire "${questionnaire.nom}" chargé !'),
             backgroundColor: Colors.green,
           ),
         );

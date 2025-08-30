@@ -171,9 +171,9 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
 
     return Scaffold(
       backgroundColor: Colors.blue,
-      appBar: gameState.puzzleType == 2
+      appBar: (gameState.puzzleType == 2 || gameState.puzzleType == 3)
           ? const EducationalAppBar()
-              as PreferredSizeWidget // AppBar éducative pour puzzles éducatifs
+              as PreferredSizeWidget // AppBar éducative pour puzzles éducatifs et combinaisons
           : AppBar(
               backgroundColor: Colors.blue,
               elevation: 0,
@@ -191,12 +191,12 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
                     const ImagePreview()
                   else
                     const PuzzleBoard(),
-                  if (imageState.isLoading == true)
-                    const Center(
-                      child: CircularProgressIndicator(color: Colors.white),
-                    ),
-                  // FloatingActionButtons seulement en mode puzzle normal (pas éducatif)
-                  if (gameState.puzzleType != 2)
+                    if (imageState.isLoading == true)
+                      const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                                      // FloatingActionButtons seulement en mode puzzle normal (pas éducatif/combinaisons)
+                  if (gameState.puzzleType == 1)
                     Positioned(
                       right: 16,
                       bottom: 16,

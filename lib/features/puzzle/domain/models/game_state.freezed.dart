@@ -259,8 +259,10 @@ mixin _$GameState {
   String get puzzCode => throw _privateConstructorUsedError;
   bool get isCoded => throw _privateConstructorUsedError;
   int get puzzleType =>
-      throw _privateConstructorUsedError; // Type de puzzle : 1=classique, 2=éducatif
-  List<int>? get educationalMapping => throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; // Type de puzzle : 1=classique, 2=éducatif, 3=combinaisons
+  List<int>? get educationalMapping =>
+      throw _privateConstructorUsedError; // Mapping original pour puzzles éducatifs
+  DateTime? get startTime => throw _privateConstructorUsedError;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -288,7 +290,8 @@ abstract class $GameStateCopyWith<$Res> {
       String puzzCode,
       bool isCoded,
       int puzzleType,
-      List<int>? educationalMapping});
+      List<int>? educationalMapping,
+      DateTime? startTime});
 }
 
 /// @nodoc
@@ -320,6 +323,7 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? isCoded = null,
     Object? puzzleType = null,
     Object? educationalMapping = freezed,
+    Object? startTime = freezed,
   }) {
     return _then(_value.copyWith(
       isInitialized: null == isInitialized
@@ -378,6 +382,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.educationalMapping
           : educationalMapping // ignore: cast_nullable_to_non_nullable
               as List<int>?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -404,7 +412,8 @@ abstract class _$$GameStateImplCopyWith<$Res>
       String puzzCode,
       bool isCoded,
       int puzzleType,
-      List<int>? educationalMapping});
+      List<int>? educationalMapping,
+      DateTime? startTime});
 }
 
 /// @nodoc
@@ -434,6 +443,7 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? isCoded = null,
     Object? puzzleType = null,
     Object? educationalMapping = freezed,
+    Object? startTime = freezed,
   }) {
     return _then(_$GameStateImpl(
       isInitialized: null == isInitialized
@@ -492,6 +502,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value._educationalMapping
           : educationalMapping // ignore: cast_nullable_to_non_nullable
               as List<int>?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -513,7 +527,8 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       required this.puzzCode,
       required this.isCoded,
       required this.puzzleType,
-      final List<int>? educationalMapping})
+      final List<int>? educationalMapping,
+      this.startTime})
       : _pieces = pieces,
         _initialArrangement = initialArrangement,
         _currentArrangement = currentArrangement,
@@ -565,9 +580,9 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
   final bool isCoded;
   @override
   final int puzzleType;
-// Type de puzzle : 1=classique, 2=éducatif
+// Type de puzzle : 1=classique, 2=éducatif, 3=combinaisons
   final List<int>? _educationalMapping;
-// Type de puzzle : 1=classique, 2=éducatif
+// Type de puzzle : 1=classique, 2=éducatif, 3=combinaisons
   @override
   List<int>? get educationalMapping {
     final value = _educationalMapping;
@@ -578,9 +593,13 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
     return EqualUnmodifiableListView(value);
   }
 
+// Mapping original pour puzzles éducatifs
+  @override
+  final DateTime? startTime;
+
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameState(isInitialized: $isInitialized, pieces: $pieces, columns: $columns, rows: $rows, initialArrangement: $initialArrangement, currentArrangement: $currentArrangement, swapCount: $swapCount, minimalMoves: $minimalMoves, imageSize: $imageSize, isPUZType: $isPUZType, puzzCode: $puzzCode, isCoded: $isCoded, puzzleType: $puzzleType, educationalMapping: $educationalMapping)';
+    return 'GameState(isInitialized: $isInitialized, pieces: $pieces, columns: $columns, rows: $rows, initialArrangement: $initialArrangement, currentArrangement: $currentArrangement, swapCount: $swapCount, minimalMoves: $minimalMoves, imageSize: $imageSize, isPUZType: $isPUZType, puzzCode: $puzzCode, isCoded: $isCoded, puzzleType: $puzzleType, educationalMapping: $educationalMapping, startTime: $startTime)';
   }
 
   @override
@@ -601,7 +620,8 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       ..add(DiagnosticsProperty('puzzCode', puzzCode))
       ..add(DiagnosticsProperty('isCoded', isCoded))
       ..add(DiagnosticsProperty('puzzleType', puzzleType))
-      ..add(DiagnosticsProperty('educationalMapping', educationalMapping));
+      ..add(DiagnosticsProperty('educationalMapping', educationalMapping))
+      ..add(DiagnosticsProperty('startTime', startTime));
   }
 
   @override
@@ -632,7 +652,9 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
             (identical(other.puzzleType, puzzleType) ||
                 other.puzzleType == puzzleType) &&
             const DeepCollectionEquality()
-                .equals(other._educationalMapping, _educationalMapping));
+                .equals(other._educationalMapping, _educationalMapping) &&
+            (identical(other.startTime, startTime) ||
+                other.startTime == startTime));
   }
 
   @override
@@ -651,7 +673,8 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       puzzCode,
       isCoded,
       puzzleType,
-      const DeepCollectionEquality().hash(_educationalMapping));
+      const DeepCollectionEquality().hash(_educationalMapping),
+      startTime);
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -677,7 +700,8 @@ abstract class _GameState implements GameState {
       required final String puzzCode,
       required final bool isCoded,
       required final int puzzleType,
-      final List<int>? educationalMapping}) = _$GameStateImpl;
+      final List<int>? educationalMapping,
+      final DateTime? startTime}) = _$GameStateImpl;
 
   @override
   bool get isInitialized;
@@ -704,9 +728,11 @@ abstract class _GameState implements GameState {
   @override
   bool get isCoded;
   @override
-  int get puzzleType; // Type de puzzle : 1=classique, 2=éducatif
+  int get puzzleType; // Type de puzzle : 1=classique, 2=éducatif, 3=combinaisons
   @override
-  List<int>? get educationalMapping;
+  List<int>? get educationalMapping; // Mapping original pour puzzles éducatifs
+  @override
+  DateTime? get startTime;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
