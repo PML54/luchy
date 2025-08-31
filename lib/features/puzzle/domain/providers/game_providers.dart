@@ -53,8 +53,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
-import 'package:luchy/core/database/models/database_models.dart';
-import 'package:luchy/core/database/providers/database_providers.dart';
+
 import 'package:luchy/core/utils/image_optimizer.dart';
 import 'package:luchy/core/utils/profiler.dart';
 import 'package:luchy/features/puzzle/domain/models/game_state.dart';

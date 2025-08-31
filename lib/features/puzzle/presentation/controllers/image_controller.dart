@@ -170,9 +170,13 @@ class ImageController extends StateNotifier<ImageControllerState> {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         await _processPickedImage(image, context);
+      } else {
+        // L'utilisateur a annulé la sélection
+        debugPrint('Sélection d\'image annulée par l\'utilisateur');
       }
       state = ImageControllerState(isLoading: false);
     } catch (e) {
+      debugPrint('Erreur lors de la sélection d\'image: $e');
       state = ImageControllerState(isLoading: false, error: e.toString());
       rethrow;
     }
@@ -202,9 +206,13 @@ class ImageController extends StateNotifier<ImageControllerState> {
         final String imageName =
             'Photo_${DateTime.now().toIso8601String()}.jpg';
         await _processImageBytes(rotatedBytes, imageName, false, context);
+      } else {
+        // L'utilisateur a annulé la prise de photo
+        debugPrint('Prise de photo annulée par l\'utilisateur');
       }
       state = ImageControllerState(isLoading: false);
     } catch (e) {
+      debugPrint('Erreur lors de la prise de photo: $e');
       state = ImageControllerState(isLoading: false, error: e.toString());
       rethrow;
     }
@@ -221,6 +229,17 @@ class ImageController extends StateNotifier<ImageControllerState> {
       Uint8List imageBytes, String imageName, bool isAsset,
       [BuildContext? context]) async {
     try {
+      // Vérification que les données d'entrée sont valides
+      if (imageBytes.isEmpty) {
+        throw Exception('Les données d\'image sont vides');
+      }
+
+      if (imageName.isEmpty) {
+        throw Exception('Le nom de l\'image est vide');
+      }
+
+      debugPrint('Traitement de l\'image: $imageName (${imageBytes.length} bytes)');
+
       await ref.read(imageProcessingProvider.notifier).processImage(
             imageBytes,
             imageName,
@@ -228,8 +247,12 @@ class ImageController extends StateNotifier<ImageControllerState> {
             context,
           );
 
+      debugPrint('Image traitée avec succès, initialisation du jeu...');
       await _initializeGameWithProcessedImage();
+      debugPrint('Jeu initialisé avec succès');
+
     } catch (e) {
+      debugPrint('Erreur dans _processImageBytes: $e');
       rethrow;
     }
   }
@@ -244,11 +267,17 @@ class ImageController extends StateNotifier<ImageControllerState> {
     final fullImage = imageState.fullImage;
     final dimensions = imageState.optimizedImageDimensions;
 
-    // Les vérifications null ont déjà été faites plus haut
+    if (fullImage == null) {
+      throw Exception('Image non disponible pour l\'initialisation du jeu après traitement');
+    }
+
+    if (dimensions == Size.zero || dimensions.width <= 0 || dimensions.height <= 0) {
+      throw Exception('Dimensions d\'image invalides pour l\'initialisation du jeu');
+    }
 
     final pieces =
         await ref.read(imageProcessingProvider.notifier).createPuzzlePieces(
-              fullImage!,
+              fullImage,
               ref.read(gameSettingsProvider).difficultyCols,
               ref.read(gameSettingsProvider).difficultyRows,
             );
@@ -267,8 +296,20 @@ class ImageController extends StateNotifier<ImageControllerState> {
 
   /// Processes a picked image file and prepares it for the puzzle.
   Future<void> _processPickedImage(XFile image, [BuildContext? context]) async {
-    final Uint8List imageBytes = await image.readAsBytes();
-    await _processImageBytes(imageBytes, image.name, false, context);
+    try {
+      debugPrint('Lecture des bytes de l\'image: ${image.name}');
+      final Uint8List imageBytes = await image.readAsBytes();
+
+      if (imageBytes.isEmpty) {
+        throw Exception('L\'image sélectionnée est vide');
+      }
+
+      debugPrint('Bytes lus avec succès: ${imageBytes.length} bytes');
+      await _processImageBytes(imageBytes, image.name, false, context);
+    } catch (e) {
+      debugPrint('Erreur lors de la lecture de l\'image sélectionnée: $e');
+      rethrow;
+    }
   }
 
   /// Loads an educational image generated from text content
