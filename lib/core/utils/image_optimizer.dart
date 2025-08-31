@@ -91,9 +91,19 @@ Future<OptimizationResult> smartOptimizeImage(
   int quality = 85,
   bool enableSmartCrop = true,
 }) async {
+  // Vérification des données d'entrée
+  if (imageBytes.isEmpty) {
+    throw Exception('Les données d\'image à optimiser sont vides');
+  }
+
   final image = img.decodeImage(imageBytes);
   if (image == null) {
-    throw Exception("Impossible de décoder l'image");
+    throw Exception("Impossible de décoder l'image - format non supporté ou données corrompues");
+  }
+
+  // Vérification des dimensions de base
+  if (image.width <= 0 || image.height <= 0) {
+    throw Exception('Dimensions d\'image invalides après décodage');
   }
 
   final originalWidth = image.width;
@@ -148,8 +158,20 @@ Future<OptimizationResult> smartOptimizeImage(
 
 /// Version simple sans recadrage intelligent (legacy)
 Future<Uint8List> simpleOptimizeImage(Uint8List imageBytes) async {
+  // Vérification des données d'entrée
+  if (imageBytes.isEmpty) {
+    throw Exception('Les données d\'image à optimiser sont vides');
+  }
+
   final image = img.decodeImage(imageBytes);
-  if (image == null) throw Exception("Impossible de décoder l'image");
+  if (image == null) {
+    throw Exception("Impossible de décoder l'image - format non supporté ou données corrompues");
+  }
+
+  // Vérification des dimensions de l'image décodée
+  if (image.width <= 0 || image.height <= 0) {
+    throw Exception('Dimensions d\'image invalides après décodage');
+  }
 
   // Ne redimensionner que si nécessaire, en préservant le ratio
   final processedImage =
@@ -157,6 +179,11 @@ Future<Uint8List> simpleOptimizeImage(Uint8List imageBytes) async {
 
   final optimizedBytes =
       Uint8List.fromList(img.encodeJpg(processedImage, quality: 85));
+
+  // Vérification que l'encodage a produit des données
+  if (optimizedBytes.isEmpty) {
+    throw Exception('L\'encodage JPEG a produit des données vides');
+  }
 
   return optimizedBytes;
 }

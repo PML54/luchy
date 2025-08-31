@@ -594,6 +594,13 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
     profiler.reset(); // Réinitialiser le profiler
 
     try {
+      // Vérification des données d'entrée
+      if (imageBytes.isEmpty) {
+        throw Exception('Les données d\'image sont vides');
+      }
+
+      debugPrint('🔄 Début traitement image: $imageName (${imageBytes.length} bytes)');
+
       // Mesurer l'optimisation de l'image
       profiler.start('image_optimization');
 
@@ -602,27 +609,44 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
 
       if (context != null) {
         // Utiliser le recadrage intelligent si contexte disponible
+        debugPrint('🧠 Utilisation optimisation intelligente');
         final result = await smartOptimizeImage(imageBytes, context);
         optimizedBytes = result.imageBytes;
         optimizationInfo = result.optimizationInfo;
         debugPrint('🔧 Smart Optimization: $optimizationInfo');
       } else {
         // Fallback vers optimisation simple
+        debugPrint('🔧 Utilisation optimisation simple (pas de contexte)');
         optimizedBytes = await simpleOptimizeImage(imageBytes);
         optimizationInfo = 'Optimisation simple (pas de contexte)';
         debugPrint('🔧 Simple Optimization: Legacy mode');
       }
 
+      // Vérification que l'optimisation a produit des données valides
+      if (optimizedBytes.isEmpty) {
+        throw Exception('L\'optimisation de l\'image a produit des données vides');
+      }
+
       profiler.end('image_optimization');
+      debugPrint('✅ Optimisation terminée: ${optimizedBytes.length} bytes');
 
       // Mesurer le décodage de l'image
       profiler.start('image_decoding');
+      debugPrint('🔄 Début décodage image');
       final image = img.decodeImage(optimizedBytes);
-      if (image == null) throw Exception("Impossible de décoder l'image");
+      if (image == null) {
+        throw Exception("Impossible de décoder l'image optimisée - format non supporté ou données corrompues");
+      }
       profiler.end('image_decoding');
+      debugPrint('✅ Décodage réussi: ${image.width}x${image.height}');
 
       final optimizedDimensions =
           Size(image.width.toDouble(), image.height.toDouble());
+
+      // Vérification des dimensions
+      if (optimizedDimensions.width <= 0 || optimizedDimensions.height <= 0) {
+        throw Exception('Dimensions d\'image invalides après optimisation');
+      }
 
       state = state.copyWith(
         fullImage: optimizedBytes,
@@ -635,6 +659,7 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
       debugPrint(
           '✅ Image optimisée: ${optimizedDimensions.width}x${optimizedDimensions.height}');
     } catch (e) {
+      debugPrint('❌ Erreur dans processImage: $e');
       state = state.copyWith(
         error: e.toString(),
         isLoading: false,
