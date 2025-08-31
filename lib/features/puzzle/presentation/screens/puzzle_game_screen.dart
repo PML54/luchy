@@ -159,13 +159,19 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
         '  - imageControllerState.isLoading: ${imageControllerState.isLoading}');
     debugPrint('  - gameState.isInitialized: ${gameState.isInitialized}');
 
-    if (isInitialized == false || imageState.isLoading == true) {
+    // Protection contre les états incohérents
+    if (isInitialized == false ||
+        imageState.isLoading == true ||
+        imageControllerState.isLoading == true ||
+        gameState.isInitialized == false) {
       debugPrint(
-          '🎓 SHOWING LoadingScaffold because: isInitialized=$isInitialized, imageState.isLoading=${imageState.isLoading}');
+          '🎓 SHOWING LoadingScaffold because: isInitialized=$isInitialized, imageState.isLoading=${imageState.isLoading}, imageControllerState.isLoading=${imageControllerState.isLoading}, gameState.isInitialized=${gameState.isInitialized}');
       return const _LoadingScaffold();
     }
 
-    if (imageState.error?.isNotEmpty ?? false) {
+    // Les vérifications précédentes garantissent que les données sont non-null
+
+    if (imageState.error != null && imageState.error!.isNotEmpty) {
       return _ErrorScaffold(error: imageState.error!);
     }
 
@@ -221,17 +227,27 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
   @override
   void initState() {
     super.initState();
-    _initializationFuture = _initialize();
-    _previewController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
+    debugPrint('🚀 PuzzleGameScreen: initState appelé');
 
-    _initializationFuture.then((_) {
-      if (mounted) {
-        // Application initialisée
-      }
-    });
+    // Éviter les initialisations multiples
+    if (_initializationFuture == null) {
+      debugPrint('📋 Démarrage initialisation...');
+      _initializationFuture = _initialize();
+      _previewController = AnimationController(
+        duration: const Duration(milliseconds: 300),
+        vsync: this,
+      );
+
+      _initializationFuture.then((_) {
+        if (mounted) {
+          debugPrint('✅ Initialisation terminée dans initState');
+        }
+      }).catchError((e) {
+        debugPrint('❌ Erreur dans initState: $e');
+      });
+    } else {
+      debugPrint('⚠️ Initialisation déjà en cours, ignorée');
+    }
   }
 
   Widget _buildFloatingActionButtons(BuildContext context) {
@@ -279,6 +295,9 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
   }
 
   Widget _buildCountersWidget(GameState gameState, int correctPieces) {
+    // Protection contre les valeurs null
+    final totalPieces = gameState.pieces?.length ?? 0;
+
     // Afficher seulement le compteur de pièces (sans compteur de coups)
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -287,7 +306,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
         borderRadius: BorderRadius.circular(15), // Arrondi complet
       ),
       child: Text(
-        '$correctPieces/${gameState.pieces.length}',
+        '$correctPieces/$totalPieces',
         style: const TextStyle(
           fontSize: 16,
           color: Colors.greenAccent,
@@ -299,18 +318,26 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
 
   Future<void> _initialize() async {
     try {
+      debugPrint('🎯 DÉBUT INITIALISATION');
       ref.read(initializationProvider.notifier).state = false;
 
       // 🗃️ ATTENDRE le chargement SQLite AVANT de continuer
-      print('🔄 Attente chargement paramètres SQLite...');
+      debugPrint('🔄 Attente chargement paramètres SQLite...');
       await ref.read(gameSettingsProvider.notifier).ensureLoaded();
-      print('✅ Paramètres SQLite chargés !');
+      debugPrint('✅ Paramètres SQLite chargés !');
 
+      debugPrint('🖼️ Chargement image d\'ouverture...');
       await ref.read(imageControllerProvider.notifier).loadOpeningImage();
+      debugPrint('✅ Image d\'ouverture chargée');
+
       if (mounted) {
+        debugPrint('🎉 Initialisation terminée avec succès');
         ref.read(initializationProvider.notifier).state = true;
+      } else {
+        debugPrint('⚠️ Widget non monté après initialisation');
       }
     } catch (e) {
+      debugPrint('❌ ERREUR INITIALISATION: $e');
       if (mounted) {
         ref.read(initializationProvider.notifier).state = false;
       }
@@ -319,7 +346,18 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
   }
 
   void _showImageSourceDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      // Fallback en cas de problème de localisation
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text('Source d\'image'),
+          content: Text('Erreur de localisation'),
+        ),
+      );
+      return;
+    }
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

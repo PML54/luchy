@@ -156,6 +156,15 @@ class MyApp extends ConsumerWidget {
       final deviceConfig = ref.watch(deviceConfigProvider);
       final appConfig = ref.watch(configProvider);
 
+      // Déterminer le mode sombre de manière sécurisée
+      Brightness brightness = Brightness.light;
+      try {
+        brightness = Theme.of(context).brightness;
+      } catch (_) {
+        // En cas d'erreur, utiliser le mode clair par défaut
+        brightness = Brightness.light;
+      }
+
       return MaterialApp(
         title: appConfig.appName,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -164,7 +173,7 @@ class MyApp extends ConsumerWidget {
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.blue,
             brightness: deviceConfig.capabilities.supportsDarkMode
-                ? Theme.of(context).brightness
+                ? brightness
                 : Brightness.light,
           ),
           useMaterial3: true,
