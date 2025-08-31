@@ -541,8 +541,9 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
 
       final image = img.decodeImage(imageBytes);
       if (image == null) {
-        throw Exception("Impossible de décoder l'image pour créer les pièces");
+        throw Exception("Impossible de décoder l'image pour créer les pièces - format non supporté");
       }
+      debugPrint('✅ Image décodée pour pièces: ${image.width}x${image.height}');
 
       // Vérifications des dimensions de l'image
       if (image.width <= 0 || image.height <= 0) {
@@ -676,7 +677,8 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
         throw Exception('Les données d\'image sont vides');
       }
 
-      debugPrint('🔄 Début traitement image: $imageName (${imageBytes.length} bytes)');
+      final sourceType = isAsset ? 'ASSET' : 'USER';
+      debugPrint('🔄 [$sourceType] Début traitement image: $imageName (${imageBytes.length} bytes)');
 
       // Mesurer l'optimisation de l'image
       profiler.start('image_optimization');
@@ -686,17 +688,17 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
 
       if (context != null) {
         // Utiliser le recadrage intelligent si contexte disponible
-        debugPrint('🧠 Utilisation optimisation intelligente');
+        debugPrint('🧠 [$sourceType] Utilisation optimisation intelligente');
         final result = await smartOptimizeImage(imageBytes, context);
         optimizedBytes = result.imageBytes;
         optimizationInfo = result.optimizationInfo;
-        debugPrint('🔧 Smart Optimization: $optimizationInfo');
+        debugPrint('🔧 [$sourceType] Smart Optimization: $optimizationInfo');
       } else {
         // Fallback vers optimisation simple
-        debugPrint('🔧 Utilisation optimisation simple (pas de contexte)');
+        debugPrint('🔧 [$sourceType] Utilisation optimisation simple (pas de contexte)');
         optimizedBytes = await simpleOptimizeImage(imageBytes);
         optimizationInfo = 'Optimisation simple (pas de contexte)';
-        debugPrint('🔧 Simple Optimization: Legacy mode');
+        debugPrint('🔧 [$sourceType] Simple Optimization: Legacy mode');
       }
 
       // Vérification que l'optimisation a produit des données valides
@@ -709,13 +711,13 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
 
       // Mesurer le décodage de l'image
       profiler.start('image_decoding');
-      debugPrint('🔄 Début décodage image');
+      debugPrint('🔄 [$sourceType] Début décodage image (${optimizedBytes.length} bytes)');
       final image = img.decodeImage(optimizedBytes);
       if (image == null) {
-        throw Exception("Impossible de décoder l'image optimisée - format non supporté ou données corrompues");
+        throw Exception("[$sourceType] Impossible de décoder l'image optimisée - format non supporté ou données corrompues");
       }
       profiler.end('image_decoding');
-      debugPrint('✅ Décodage réussi: ${image.width}x${image.height}');
+      debugPrint('✅ [$sourceType] Décodage réussi: ${image.width}x${image.height}');
 
       final optimizedDimensions =
           Size(image.width.toDouble(), image.height.toDouble());

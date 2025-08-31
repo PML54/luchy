@@ -167,16 +167,18 @@ class ImageController extends StateNotifier<ImageControllerState> {
     state = ImageControllerState(isLoading: true);
 
     try {
+      debugPrint('📱 Ouverture de la galerie...');
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
+        debugPrint('📸 Image sélectionnée: ${image.name}, taille: ${await image.length()} bytes');
         await _processPickedImage(image, context);
       } else {
         // L'utilisateur a annulé la sélection
-        debugPrint('Sélection d\'image annulée par l\'utilisateur');
+        debugPrint('❌ Sélection d\'image annulée par l\'utilisateur');
       }
       state = ImageControllerState(isLoading: false);
     } catch (e) {
-      debugPrint('Erreur lors de la sélection d\'image: $e');
+      debugPrint('💥 Erreur lors de la sélection d\'image: $e');
       state = ImageControllerState(isLoading: false, error: e.toString());
       rethrow;
     }
