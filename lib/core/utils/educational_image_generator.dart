@@ -567,65 +567,65 @@ class EducationalImageGenerator {
     );
   }
 
-  /// Vocabulaire français-anglais : animaux
-  static const EducationalPreset vocabularyAnimals = EducationalPreset(
-    id: 'vocab_animals',
+  /// Vocabulaire anglais collège : économie de base
+  static const EducationalPreset vocabularyEconomyBasic = EducationalPreset(
+    id: 'vocab_economy_basic',
     name: 'Anglais',
-    description: '',
+    description: 'Vocabulaire économique niveau collège',
     leftColumn: [
-      'Chat',
-      'Chien',
-      'Oiseau',
-      'Poisson',
-      'Cheval',
-      'Vache',
-      'Cochon',
-      'Mouton',
-      'Lapin',
-      'Souris'
+      'Entreprise',
+      'Travail',
+      'Argent',
+      'Prix',
+      'Vente',
+      'Achat',
+      'Marché',
+      'Client',
+      'Patron',
+      'Emploi'
     ],
     rightColumn: [
-      'Cat',
-      'Dog',
-      'Bird',
-      'Fish',
-      'Horse',
-      'Cow',
-      'Pig',
-      'Sheep',
-      'Rabbit',
-      'Mouse'
+      'Company',
+      'Work',
+      'Money',
+      'Price',
+      'Sale',
+      'Purchase',
+      'Market',
+      'Customer',
+      'Boss',
+      'Job'
     ],
   );
 
-  /// Vocabulaire français-anglais : couleurs
-  static const EducationalPreset vocabularyColors = EducationalPreset(
-    id: 'vocab_colors',
+  /// Vocabulaire anglais lycée : commerce
+  static const EducationalPreset vocabularyCommerce = EducationalPreset(
+    id: 'vocab_commerce',
     name: 'Anglais',
-    description: '',
+    description: 'Vocabulaire commercial niveau lycée',
     leftColumn: [
-      'Rouge',
-      'Bleu',
-      'Vert',
-      'Jaune',
-      'Orange',
-      'Violet',
-      'Rose',
-      'Noir',
-      'Blanc',
-      'Gris'
+      'Bénéfice',
+      'Investissement',
+      'Banque',
+      'Crédit',
+      'Concurrence',
+      'Publicité',
+      'Innovation',
+      'Qualité',
+      'Service',
+      'Exportation'
     ],
     rightColumn: [
-      'Red',
-      'Blue',
-      'Green',
-      'Yellow',
-      'Orange',
-      'Purple',
-      'Pink',
-      'Black',
-      'White',
-      'Gray'
+      'Profit',
+      'Investment',
+      'Bank',
+      'Credit',
+      'Competition',
+      'Advertising',
+      'Innovation',
+      'Quality',
+      'Service',
+      'Export'
     ],
   );
 
@@ -812,6 +812,131 @@ class EducationalImageGenerator {
       ],
     ),
 
+    // === VOCABULAIRE ECG UNIFIÉ ===
+    QuestionnairePreset(
+      id: 'prepa_anglais_vocabulaire_ecg',
+      nom: 'Anglais',
+      titre: 'VOCABULAIRE ECG - CONCOURS PRÉPA',
+      niveau: NiveauEducatif.prepa,
+      categorie: CategorieMatiere.anglais,
+      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
+      sousTheme: 'Économie & Commerce',
+      colonneGauche: [
+        // ÉCONOMIE GÉNÉRALE (10 termes)
+        'Produit intérieur brut',
+        'Croissance économique',
+        'Récession',
+        'Inflation',
+        'Chômage',
+        'Politique monétaire',
+        'Politique budgétaire',
+        'Banque centrale',
+        'Taux d\'intérêt',
+        'Masse monétaire',
+        // FINANCE D'ENTREPRISE (10 termes)
+        'Bilan',
+        'Compte de résultat',
+        'Chiffre d\'affaires',
+        'Bénéfice',
+        'Fonds propres',
+        'Actif',
+        'Passif',
+        'Flux de trésorerie',
+        'Amortissement',
+        'Capitalisation boursière',
+        // COMMERCE INTERNATIONAL (10 termes)
+        'Commerce international',
+        'Exportation',
+        'Importation',
+        'Mondialisation',
+        'Multinationale',
+        'Délocalisation',
+        'Taux de change',
+        'Balance commerciale',
+        'Zone de libre-échange',
+        'Droits de douane',
+        // MARKETING & STRATÉGIE (10 termes)
+        'Étude de marché',
+        'Segmentation',
+        'Positionnement',
+        'Marque',
+        'Part de marché',
+        'Avantage concurrentiel',
+        'Innovation',
+        'Recherche et développement',
+        'Cycle de vie produit',
+        'Commerce électronique',
+        // INSTITUTIONS & GOUVERNANCE (10 termes)
+        'Réglementation',
+        'Déréglementation',
+        'Conformité',
+        'Gouvernance d\'entreprise',
+        'Impôt sur les sociétés',
+        'Taxe sur la valeur ajoutée',
+        'Paradis fiscal',
+        'Blanchiment d\'argent',
+        'Gestion des risques',
+        'Responsabilité sociale',
+      ],
+      colonneDroite: [
+        // ÉCONOMIE GÉNÉRALE
+        'Gross Domestic Product (GDP)',
+        'Economic growth',
+        'Recession',
+        'Inflation',
+        'Unemployment',
+        'Monetary policy',
+        'Fiscal policy',
+        'Central bank',
+        'Interest rate',
+        'Money supply',
+        // FINANCE D'ENTREPRISE
+        'Balance sheet',
+        'Income statement',
+        'Revenue',
+        'Profit',
+        'Equity',
+        'Assets',
+        'Liabilities',
+        'Cash flow',
+        'Depreciation',
+        'Market capitalization',
+        // COMMERCE INTERNATIONAL
+        'International trade',
+        'Export',
+        'Import',
+        'Globalization',
+        'Multinational corporation',
+        'Offshoring',
+        'Exchange rate',
+        'Trade balance',
+        'Free trade area',
+        'Tariffs',
+        // MARKETING & STRATÉGIE
+        'Market research',
+        'Segmentation',
+        'Positioning',
+        'Brand',
+        'Market share',
+        'Competitive advantage',
+        'Innovation',
+        'Research and Development',
+        'Product life cycle',
+        'E-commerce',
+        // INSTITUTIONS & GOUVERNANCE
+        'Regulation',
+        'Deregulation',
+        'Compliance',
+        'Corporate governance',
+        'Corporate tax',
+        'Value Added Tax (VAT)',
+        'Tax haven',
+        'Money laundering',
+        'Risk management',
+        'Corporate Social Responsibility',
+      ],
+    ),
+
     // === COLLÈGE ===
     QuestionnairePreset(
       id: 'college_histoire_chronologie',
@@ -861,10 +986,10 @@ class EducationalImageGenerator {
     // Table de multiplication aléatoire unique
     presets.add(generateRandomMultiplicationTable());
 
-    // Vocabulaire - ancien format
+    // Vocabulaire - format progressif
     presets.addAll([
-      vocabularyAnimals,
-      vocabularyColors,
+      vocabularyEconomyBasic,
+      vocabularyCommerce,
       geographyEurope,
     ]);
 

@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "luchy",
-      "version": "1.0.0+33",
+      "version": "1.0.0+35",
       "dependencies": [
         "audioplayers",
         "collection",
