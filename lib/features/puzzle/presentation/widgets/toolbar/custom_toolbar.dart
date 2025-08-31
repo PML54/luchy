@@ -55,7 +55,9 @@ import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 // Feature imports
 import 'package:luchy/features/puzzle/presentation/screens/binome_formules_screen.dart';
+import 'package:luchy/features/puzzle/presentation/screens/figures_style_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/puzzle_game_screen.dart';
+import 'package:luchy/features/puzzle/presentation/screens/sommes_formules_screen.dart';
 import 'package:luchy/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -390,6 +392,9 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
       case TypeDeJeu.combinaisonsMatematiques:
         iconData = Icons.calculate;
         break;
+      case TypeDeJeu.figuresDeStyle:
+        iconData = Icons.text_fields;
+        break;
       default:
         iconData = Icons.quiz;
     }
@@ -422,9 +427,32 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
   ) {
     // Si c'est un formulaire LaTeX, naviguer vers l'écran dédié
     if (questionnaire.typeDeJeu == TypeDeJeu.formulairesLatex) {
+      // Déterminer quel écran LaTeX utiliser selon l'ID
+      if (questionnaire.id == 'prepa_math_binome') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const BinomeFormulesScreen(),
+          ),
+        );
+      } else if (questionnaire.id == 'prepa_math_sommes') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const SommesFormulesScreen(),
+          ),
+        );
+      } else {
+        // Par défaut, utiliser l'écran binôme pour les autres
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const BinomeFormulesScreen(),
+          ),
+        );
+      }
+    } else if (questionnaire.typeDeJeu == TypeDeJeu.figuresDeStyle) {
+      // Si c'est figures de style, naviguer vers l'écran dédié
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const BinomeFormulesScreen(),
+          builder: (context) => const FiguresStyleScreen(),
         ),
       );
     } else {

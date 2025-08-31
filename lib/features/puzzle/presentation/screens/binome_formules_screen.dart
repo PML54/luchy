@@ -47,29 +47,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 
-/// Données complètes - Formules LaTeX séparées en parties gauche et droite
+/// Données complètes - Formules LaTeX séparées en parties gauche et droite (variables mélangées)
 final List<String> _binomeLatexGaucheComplete = [
-  r'(a+b)^n',
-  r'\binom{n}{k}',
-  r'\binom{n}{n-k}',
-  r'\binom{n-1}{k-1}',
-  r'\sum_{k=0}^{n} \binom{n}{k}',
-  r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
-  r'\sum_{k=r}^{n} \binom{k}{r}',
-  r'(1+x)^n',
-  r'\binom{n}{0}',
-  r'\binom{n}{n}',
+  r'(a+b)^p',
+  r'\binom{k}{n}',
+  r'\binom{p}{p-n}',
+  r'\binom{k-1}{n-1}',
+  r'\sum_{n=0}^{k} \binom{k}{n}',
+  r'\sum_{p=0}^{k} (-1)^p \binom{k}{p}',
+  r'\sum_{n=r}^{p} \binom{n}{r}',
+  r'(1+x)^k',
+  r'\binom{p}{0}',
+  r'\binom{k}{k}',
 ];
 
 final List<String> _binomeLatexDroiteComplete = [
-  r'\sum_{k=0}^{n} \binom{n}{k} a^{\,n-k} b^{\,k}',
-  r'\frac{n!}{k!\,(n-k)!}',
-  r'\binom{n}{k}',
-  r'\binom{n-1}{k} + \binom{n-1}{k-1}',
-  r'2^{n}',
-  r'0 \quad (n\ge 1)',
-  r'\binom{n+1}{r+1} \quad (r\le n)',
-  r'\sum_{k=0}^{n} \binom{n}{k} x^{k}',
+  r'\sum_{n=0}^{p} \binom{p}{n} a^{\,p-n} b^{\,n}',
+  r'\frac{k!}{n!\,(k-n)!}',
+  r'\binom{p}{n}',
+  r'\binom{k-1}{n} + \binom{k-1}{n-1}',
+  r'2^{k}',
+  r'0 \quad (k\ge 1)',
+  r'\binom{p+1}{r+1} \quad (r\le p)',
+  r'\sum_{n=0}^{k} \binom{k}{n} x^{n}',
   r'1',
   r'1',
 ];
@@ -117,12 +117,14 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
   late int _itemCount;
   int?
       _showingDefinitionIndex; // Index de la cellule gauche qui affiche la définition
+  DateTime? _startTime; // Heure de début du puzzle
 
   @override
   void initState() {
     super.initState();
     _initializeQuestions();
     _initializePuzzle();
+    _startTime = DateTime.now(); // Démarrer le chronométrage
   }
 
   void _initializeQuestions() {
@@ -155,7 +157,55 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     setState(() {
       _initializeQuestions();
       _initializePuzzle();
+      _startTime = DateTime.now(); // Redémarrer le chronométrage
     });
+  }
+
+  /// Calcule le temps écoulé depuis le début du puzzle
+  Duration _getElapsedTime() {
+    if (_startTime == null) {
+      return Duration.zero;
+    }
+    return DateTime.now().difference(_startTime!);
+  }
+
+  /// Calcule la taille de police adaptée selon la taille de l'écran
+  double _getAdaptiveFontSize(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isTablet = screenWidth > 600 || screenHeight > 800;
+
+    if (isTablet) {
+      // Tailles beaucoup plus grandes pour tablettes
+      if (screenWidth >= 1200) {
+        return 32.0; // Très grande tablette/desktop
+      } else if (screenWidth >= 900) {
+        return 28.0; // Grande tablette
+      } else {
+        return 24.0; // Tablette moyenne
+      }
+    } else {
+      // Taille standard pour smartphones
+      return 16.0; // Légèrement augmentée aussi
+    }
+  }
+
+  /// Calcule la hauteur adaptée des cellules selon l'écran
+  double _getAdaptiveCellHeight(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth > 600;
+
+    if (isTablet) {
+      if (screenWidth >= 1200) {
+        return 120.0; // Très grande tablette
+      } else if (screenWidth >= 900) {
+        return 100.0; // Grande tablette
+      } else {
+        return 90.0; // Tablette moyenne
+      }
+    } else {
+      return 70.0; // Smartphone
+    }
   }
 
   /// Quitter le puzzle LaTeX et revenir au mode puzzle normal 3x3
@@ -163,13 +213,13 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     try {
       // Remettre la difficulté par défaut 3x3
       await ref.read(gameSettingsProvider.notifier).setDifficulty(3, 3);
-      
+
       // Passer en mode puzzle normal (type 1)
       await ref.read(gameSettingsProvider.notifier).setPuzzleType(1);
 
       // Charger une image aléatoire normale
       await ref.read(imageControllerProvider.notifier).loadRandomImage();
-      
+
       // Revenir à l'écran précédent
       if (mounted) {
         Navigator.pop(context);
@@ -232,222 +282,244 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
         return false; // Empêcher le pop automatique car on l'a géré manuellement
       },
       child: Scaffold(
-      backgroundColor: Colors.blue,
-      appBar: AppBar(
         backgroundColor: Colors.blue,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: _quitToNormalPuzzle,
-        ),
-        title: Text(
-          'Binôme Newton (${_getCorrectCount()}/$_itemCount)',
-          style: const TextStyle(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check_circle, color: Colors.white),
-            onPressed: () {
-              final correctCount = _getCorrectCount();
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Résultats'),
-                  content: Text(
-                    'Bonnes réponses : $correctCount/$_itemCount\n'
-                    '${correctCount == _itemCount ? "🎉 Parfait !" : "Continuez !"}',
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-              );
-            },
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: _quitToNormalPuzzle,
           ),
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: _renewQuestions,
+          title: const Text(
+            'Binôme de Newton',
+            style: TextStyle(color: Colors.white),
           ),
-        ],
-      ),
-      body: Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Stack(
-          children: [
-            // Grille du puzzle
-            GridView.builder(
-              padding: const EdgeInsets.all(8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 colonnes
-                childAspectRatio: 2.0, // Ratio largeur/hauteur
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
-              ),
-              itemCount: _itemCount * 2, // 2 colonnes
-              itemBuilder: (context, index) {
-                final row = index ~/ 2;
-                final col = index % 2;
+          iconTheme: const IconThemeData(color: Colors.white),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.check_circle, color: Colors.white),
+              onPressed: () {
+                final correctCount = _getCorrectCount();
+                final elapsedTime = _getElapsedTime();
+                final minutes = elapsedTime.inMinutes;
+                final seconds = elapsedTime.inSeconds % 60;
+                final timeString =
+                    minutes > 0 ? '${minutes}min ${seconds}s' : '${seconds}s';
 
-                if (col == 0) {
-                  // Colonne gauche : formules LaTeX gauche (fixes, cliquables)
-                  return GestureDetector(
-                    onTap: () => _toggleDefinition(row),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[300]!),
-                        borderRadius: BorderRadius.circular(8),
-                        color: _showingDefinitionIndex == row
-                            ? Colors
-                                .orange[100] // Surligné si définition affichée
-                            : Colors.blue[50],
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Résultats'),
+                    content: Text(
+                      'Bonnes réponses : $correctCount/$_itemCount\n'
+                      'Temps écoulé : $timeString\n'
+                      '${correctCount == _itemCount ? "🎉 Parfait !" : "Continuez !"}',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('OK'),
                       ),
-                      padding: const EdgeInsets.all(4),
-                      child: Stack(
-                        children: [
-                          // Formule LaTeX principale
-                          Center(
-                            child: Math.tex(
-                              binomeLatexGauche[_leftArrangement[row]],
-                              textStyle: const TextStyle(fontSize: 14),
+                    ],
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              onPressed: _renewQuestions,
+            ),
+          ],
+        ),
+        body: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Stack(
+            children: [
+              // Grille du puzzle
+              GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // 2 colonnes
+                  childAspectRatio: MediaQuery.of(context).size.width > 600
+                      ? 3.0
+                      : 2.0, // Plus large sur tablette
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                ),
+                itemCount: _itemCount * 2, // 2 colonnes
+                itemBuilder: (context, index) {
+                  final row = index ~/ 2;
+                  final col = index % 2;
+
+                  if (col == 0) {
+                    // Colonne gauche : formules LaTeX gauche (fixes, cliquables)
+                    return GestureDetector(
+                      onTap: () => _toggleDefinition(row),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[300]!),
+                          borderRadius: BorderRadius.circular(8),
+                          color: _showingDefinitionIndex == row
+                              ? Colors.orange[
+                                  100] // Surligné si définition affichée
+                              : Colors.blue[50],
+                        ),
+                        padding: EdgeInsets.all(
+                            MediaQuery.of(context).size.width > 600
+                                ? 12.0
+                                : 6.0),
+                        child: Stack(
+                          children: [
+                            // Formule LaTeX principale
+                            Center(
+                              child: Math.tex(
+                                binomeLatexGauche[_leftArrangement[row]],
+                                textStyle: TextStyle(
+                                    fontSize: _getAdaptiveFontSize(context)),
+                              ),
                             ),
-                          ),
-                          // Overlay avec définition si activé
-                          if (_showingDefinitionIndex == row)
-                            Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withAlpha(230),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                padding: const EdgeInsets.all(4),
-                                child: Center(
-                                  child: Text(
-                                    binomeUsage2Mots[_leftArrangement[row]],
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
+                            // Overlay avec définition si activé
+                            if (_showingDefinitionIndex == row)
+                              Positioned.fill(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withAlpha(230),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: Center(
+                                    child: Text(
+                                      binomeUsage2Mots[_leftArrangement[row]],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  // Colonne droite : formules LaTeX (déplaçables)
-                  final formulaIndex = _rightArrangement[row];
-                  return DragTarget<int>(
-                    onAcceptWithDetails: (details) {
-                      _swapRightItems(row, details.data);
-                    },
-                    builder: (context, candidateData, rejectedData) {
-                      return Draggable<int>(
-                        data: row,
-                        feedback: Material(
-                          child: Container(
-                            width: 180,
-                            height: 90,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.blue, width: 2),
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.white,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 4,
-                                  offset: Offset(2, 2),
+                    );
+                  } else {
+                    // Colonne droite : formules LaTeX (déplaçables)
+                    final formulaIndex = _rightArrangement[row];
+                    return DragTarget<int>(
+                      onAcceptWithDetails: (details) {
+                        _swapRightItems(row, details.data);
+                      },
+                      builder: (context, candidateData, rejectedData) {
+                        return Draggable<int>(
+                          data: row,
+                          feedback: Material(
+                            child: Container(
+                              width: 180,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.blue, width: 2),
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 4,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+                              padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width > 600
+                                      ? 12.0
+                                      : 6.0),
+                              child: Center(
+                                child: Math.tex(
+                                  binomeLatexDroite[formulaIndex],
+                                  textStyle: TextStyle(
+                                      fontSize: _getAdaptiveFontSize(context)),
                                 ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: Center(
-                              child: Math.tex(
-                                binomeLatexDroite[formulaIndex],
-                                textStyle: const TextStyle(fontSize: 14),
                               ),
                             ),
                           ),
-                        ),
-                        childWhenDragging: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[300]!),
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.grey[200],
-                          ),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey[300]!,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                          ),
-                          padding: const EdgeInsets.all(4),
-                          child: Center(
-                            child: Math.tex(
-                              binomeLatexDroite[formulaIndex],
-                              textStyle: const TextStyle(fontSize: 14),
+                          childWhenDragging: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey[300]!),
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey[200],
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey[300]!,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.width > 600
+                                    ? 12.0
+                                    : 6.0),
+                            child: Center(
+                              child: Math.tex(
+                                binomeLatexDroite[formulaIndex],
+                                textStyle: TextStyle(
+                                    fontSize: _getAdaptiveFontSize(context)),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
 
-            // Message de completion
-            if (isComplete)
-              Positioned(
-                left: 20,
-                top: 20,
-                child: AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: const Duration(milliseconds: 500),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.orange
-                          .withAlpha(200), // Couleur Epicerie Luchy
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: const Text(
-                      "Epicerie Luchy",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+              // Message de completion
+              if (isComplete)
+                Positioned(
+                  left: 20,
+                  top: 20,
+                  child: AnimatedOpacity(
+                    opacity: 1.0,
+                    duration: const Duration(milliseconds: 500),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.orange
+                            .withAlpha(200), // Couleur Epicerie Luchy
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Text(
+                        "Epicerie Luchy",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _renewQuestions,
+          backgroundColor: Colors.orange,
+          child: const Icon(Icons.refresh, color: Colors.white),
+          tooltip: 'Nouvelles questions',
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _renewQuestions,
-        backgroundColor: Colors.orange,
-        child: const Icon(Icons.refresh, color: Colors.white),
-        tooltip: 'Nouvelles questions',
-      ),
-    ),
     );
   }
 }

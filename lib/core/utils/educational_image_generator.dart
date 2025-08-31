@@ -57,7 +57,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:luchy/core/utils/latex_to_image_converter.dart';
 
 /// Résultat de génération d'image éducative
 class EducationalImageResult {
@@ -131,7 +130,9 @@ enum TypeDeJeu {
   combinaisonsMatematiques('Combinaisons mathématiques',
       'Associer formules de combinaisons avec leurs résultats'),
   formulairesLatex('Formulaires LaTeX',
-      'Consultation de formules mathématiques avec rendu LaTeX');
+      'Consultation de formules mathématiques avec rendu LaTeX'),
+  figuresDeStyle('Figures de Style',
+      'Associer figures de style avec leurs exemples');
 
   const TypeDeJeu(this.nom, this.description);
   final String nom;
@@ -470,49 +471,7 @@ class EducationalImageGenerator {
     );
   }
 
-  /// Détecte si une chaîne contient du code LaTeX
-  static bool _containsLatex(String text) {
-    return text.contains(r'\') ||
-        text.contains(r'{') ||
-        text.contains(r'}') ||
-        text.contains('binom') ||
-        text.contains('sum') ||
-        text.contains('frac');
-  }
 
-  /// Traite une liste de textes en convertissant le LaTeX en images si nécessaire
-  static Future<List<String>> _processLatexTexts(
-    List<String> texts, {
-    double fontSize = 18,
-  }) async {
-    final List<String> processedTexts = [];
-
-    for (final text in texts) {
-      if (_containsLatex(text)) {
-        try {
-          // Convertir le LaTeX en image et l'encoder en base64
-          final imageBytes = await LatexToImageConverter.renderLatexToImage(
-            text,
-            fontSize: fontSize,
-            textColor: Colors.black,
-            backgroundColor: Colors.white,
-            padding: 4,
-          );
-
-          // Pour l'instant, on garde le texte LaTeX brut
-          // TODO: Intégrer l'image dans le système de génération
-          processedTexts.add(text);
-        } catch (e) {
-          // En cas d'erreur, garder le texte original
-          processedTexts.add(text);
-        }
-      } else {
-        processedTexts.add(text);
-      }
-    }
-
-    return processedTexts;
-  }
 
   /// Génère un puzzle de combinaisons mathématiques
   /// Crée des couples (n,p) avec n >= p et n < 6, en s'assurant que tous les résultats sont uniques
@@ -768,6 +727,62 @@ class EducationalImageGenerator {
     ),
 
     QuestionnairePreset(
+      id: 'prepa_math_sommes',
+      nom: 'Calcul',
+      titre: 'FORMULES DE SOMMES - PRÉPA',
+      niveau: NiveauEducatif.prepa,
+      categorie: CategorieMatiere.mathematiques,
+      typeDeJeu: TypeDeJeu.formulairesLatex,
+      sousTheme: 'Sommes classiques',
+      colonneGauche: [
+        r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
+        r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
+        r'\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2',
+        r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q} \quad (q \neq 1)',
+        r'\sum_{k=1}^{n} k \cdot q^k = \frac{q(1-(n+1)q^n + nq^{n+1})}{(1-q)^2}',
+        r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} \quad (|q| < 1)',
+        r'\sum_{k=1}^{\infty} k \cdot q^{k-1} = \frac{1}{(1-q)^2} \quad (|q| < 1)',
+        r'\sum_{k=0}^{n} 1 = n+1',
+      ],
+      colonneDroite: [
+        'somme entiers',
+        'somme carrés',
+        'somme cubes',
+        'série géométrique finie',
+        'série arithmético-géométrique',
+        'série géométrique infinie',
+        'dérivée série géométrique',
+        'comptage éléments',
+      ],
+    ),
+
+    QuestionnairePreset(
+      id: 'lycee_francais_figures_style',
+      nom: 'Français',
+      titre: 'FIGURES DE STYLE - LYCÉE',
+      niveau: NiveauEducatif.lycee,
+      categorie: CategorieMatiere.francais,
+      typeDeJeu: TypeDeJeu.figuresDeStyle,
+      sousTheme: 'Rhétorique',
+      colonneGauche: [
+        'Métaphore',
+        'Comparaison',
+        'Hyperbole',
+        'Litote',
+        'Oxymore',
+        'Antithèse',
+      ],
+      colonneDroite: [
+        'mer de blé',
+        'fort comme lion',
+        'faim de loup',
+        'pas mauvais',
+        'silence assourdissant',
+        'ombre et lumière',
+      ],
+    ),
+
+    QuestionnairePreset(
       id: 'prepa_eco_concepts',
       nom: 'Économie',
       titre: 'ÉCONOMIE GÉNÉRALE - PRÉPA ECG',
@@ -798,37 +813,6 @@ class EducationalImageGenerator {
     ),
 
     // === COLLÈGE ===
-    QuestionnairePreset(
-      id: 'college_francais_conjugaison',
-      nom: 'Français',
-      titre: 'PASSÉ COMPOSÉ - COLLÈGE',
-      niveau: NiveauEducatif.college,
-      categorie: CategorieMatiere.francais,
-      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-      sousTheme: 'Temps composés',
-      colonneGauche: [
-        'Je (finir)',
-        'Tu (venir)',
-        'Il (prendre)',
-        'Nous (aller)',
-        'Vous (faire)',
-        'Elles (partir)',
-        'On (voir)',
-        'Je (être)',
-      ],
-      colonneDroite: [
-        'J\'ai fini',
-        'Tu es venu(e)',
-        'Il a pris',
-        'Nous sommes allé(e)s',
-        'Vous avez fait',
-        'Elles sont parties',
-        'On a vu',
-        'J\'ai été',
-      ],
-    ),
-
-    // === EXEMPLE FUTUR : ORDRE CHRONOLOGIQUE ===
     QuestionnairePreset(
       id: 'college_histoire_chronologie',
       nom: 'Histoire',
