@@ -117,8 +117,9 @@ class LatexToImageConverter {
     // Créer une clé globale pour le RepaintBoundary
     final GlobalKey repaintBoundaryKey = GlobalKey();
 
-    // Wrapper le widget dans un RepaintBoundary
-    final wrappedWidget = RepaintBoundary(
+    // Préparer le widget avec RepaintBoundary pour capture
+    // Note: Cette fonction nécessite un contexte de rendu Flutter pour fonctionner
+    RepaintBoundary(
       key: repaintBoundaryKey,
       child: Container(
         padding: EdgeInsets.all(padding),
@@ -127,25 +128,23 @@ class LatexToImageConverter {
       ),
     );
 
-    // Créer un widget temporaire pour le rendu
-    final renderWidget = MaterialApp(
-      home: Scaffold(
-        backgroundColor: backgroundColor,
-        body: Center(child: wrappedWidget),
-      ),
-      debugShowCheckedModeBanner: false,
-    );
-
     // Obtenir les dimensions du widget
-    final RenderRepaintBoundary boundary = repaintBoundaryKey.currentContext!
-        .findRenderObject() as RenderRepaintBoundary;
+    final renderObject = repaintBoundaryKey.currentContext?.findRenderObject();
+    if (renderObject == null) {
+      throw Exception('Impossible d\'obtenir le RenderObject pour la conversion LaTeX');
+    }
+    final RenderRepaintBoundary boundary = renderObject as RenderRepaintBoundary;
 
     // Capturer l'image
     final ui.Image image = await boundary.toImage(pixelRatio: 2.0);
     final ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
 
-    return byteData!.buffer.asUint8List();
+    if (byteData == null) {
+      throw Exception('Impossible de convertir l\'image en données binaires');
+    }
+
+    return byteData.buffer.asUint8List();
   }
 
   /// Crée une image de fallback avec du texte simple en cas d'erreur LaTeX

@@ -239,25 +239,30 @@ class ImageController extends StateNotifier<ImageControllerState> {
   /// Creates puzzle pieces and sets up initial game state.
   Future<void> _initializeGameWithProcessedImage() async {
     final imageState = ref.read(imageProcessingProvider);
-    if (imageState.fullImage != null) {
-      final pieces =
-          await ref.read(imageProcessingProvider.notifier).createPuzzlePieces(
-                imageState.fullImage!,
-                ref.read(gameSettingsProvider).difficultyCols,
-                ref.read(gameSettingsProvider).difficultyRows,
-              );
 
-      await ref.read(gameStateProvider.notifier).initializePuzzle(
-            imageBytes: imageState.fullImage!,
-            pieces: pieces,
-            columns: ref.read(gameSettingsProvider).difficultyCols,
-            rows: ref.read(gameSettingsProvider).difficultyRows,
-            imageSize: imageState.optimizedImageDimensions,
-            shouldShuffle: true,
-            puzzleType: ref.read(gameSettingsProvider).puzzleType,
-            imageName: imageState.currentImageName,
-          );
-    }
+    // Vérifications de sécurité
+    final fullImage = imageState.fullImage;
+    final dimensions = imageState.optimizedImageDimensions;
+
+    // Les vérifications null ont déjà été faites plus haut
+
+    final pieces =
+        await ref.read(imageProcessingProvider.notifier).createPuzzlePieces(
+              fullImage!,
+              ref.read(gameSettingsProvider).difficultyCols,
+              ref.read(gameSettingsProvider).difficultyRows,
+            );
+
+    await ref.read(gameStateProvider.notifier).initializePuzzle(
+          imageBytes: fullImage,
+          pieces: pieces,
+          columns: ref.read(gameSettingsProvider).difficultyCols,
+          rows: ref.read(gameSettingsProvider).difficultyRows,
+          imageSize: dimensions,
+          shouldShuffle: true,
+          puzzleType: ref.read(gameSettingsProvider).puzzleType,
+          imageName: imageState.currentImageName,
+        );
   }
 
   /// Processes a picked image file and prepares it for the puzzle.

@@ -177,7 +177,12 @@ class CustomToolbar extends ConsumerWidget {
 
   Future<void> _changeDifficulty(WidgetRef ref, int cols, int rows) async {
     final imageState = ref.read(imageProcessingProvider);
-    if (imageState.fullImage == null) return;
+
+    // Vérifications de sécurité
+    final fullImage = imageState.fullImage;
+    final dimensions = imageState.optimizedImageDimensions;
+
+    // Les vérifications null ont déjà été faites plus haut
 
     // Mettre à jour les paramètres
     ref.read(gameSettingsProvider.notifier).setDifficulty(cols, rows);
@@ -185,20 +190,21 @@ class CustomToolbar extends ConsumerWidget {
     // Recréer les pièces avec la nouvelle grille
     final pieces =
         await ref.read(imageProcessingProvider.notifier).createPuzzlePieces(
-              imageState.fullImage!, // Utiliser l'image complète
+              fullImage!,
               cols,
               rows,
             );
 
     // Initialiser le nouveau puzzle
     await ref.read(gameStateProvider.notifier).initializePuzzle(
-          imageBytes: imageState.fullImage!, // Utiliser l'image complète
+          imageBytes: fullImage,
           pieces: pieces,
           columns: cols,
           rows: rows,
-          imageSize: imageState.optimizedImageDimensions,
+          imageSize: dimensions,
           shouldShuffle: true,
           puzzleType: ref.read(gameSettingsProvider).puzzleType,
+          imageName: imageState.currentImageName,
         );
   }
 

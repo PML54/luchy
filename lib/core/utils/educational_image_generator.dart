@@ -131,8 +131,8 @@ enum TypeDeJeu {
       'Associer formules de combinaisons avec leurs résultats'),
   formulairesLatex('Formulaires LaTeX',
       'Consultation de formules mathématiques avec rendu LaTeX'),
-  figuresDeStyle('Figures de Style',
-      'Associer figures de style avec leurs exemples');
+  figuresDeStyle(
+      'Figures de Style', 'Associer figures de style avec leurs exemples');
 
   const TypeDeJeu(this.nom, this.description);
   final String nom;
@@ -433,8 +433,12 @@ class EducationalImageGenerator {
     final img = await picture.toImage(width.toInt(), height.toInt());
     final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
 
+    if (byteData == null) {
+      throw Exception('Impossible de générer les données d\'image éducative');
+    }
+
     return EducationalImageResult(
-      pngBytes: byteData!.buffer.asUint8List(),
+      pngBytes: byteData.buffer.asUint8List(),
       rows: n,
       columns: 2,
       description: description,
@@ -470,8 +474,6 @@ class EducationalImageGenerator {
       rightColumn: right,
     );
   }
-
-
 
   /// Génère un puzzle de combinaisons mathématiques
   /// Crée des couples (n,p) avec n >= p et n < 6, en s'assurant que tous les résultats sont uniques
@@ -822,118 +824,22 @@ class EducationalImageGenerator {
       typeDeJeu: TypeDeJeu.correspondanceVisAVis,
       sousTheme: 'Économie & Commerce',
       colonneGauche: [
-        // ÉCONOMIE GÉNÉRALE (10 termes)
         'Produit intérieur brut',
         'Croissance économique',
         'Récession',
-        'Inflation',
-        'Chômage',
-        'Politique monétaire',
-        'Politique budgétaire',
-        'Banque centrale',
-        'Taux d\'intérêt',
-        'Masse monétaire',
-        // FINANCE D'ENTREPRISE (10 termes)
         'Bilan',
-        'Compte de résultat',
         'Chiffre d\'affaires',
-        'Bénéfice',
-        'Fonds propres',
-        'Actif',
-        'Passif',
-        'Flux de trésorerie',
-        'Amortissement',
-        'Capitalisation boursière',
-        // COMMERCE INTERNATIONAL (10 termes)
         'Commerce international',
-        'Exportation',
-        'Importation',
         'Mondialisation',
-        'Multinationale',
-        'Délocalisation',
-        'Taux de change',
-        'Balance commerciale',
-        'Zone de libre-échange',
-        'Droits de douane',
-        // MARKETING & STRATÉGIE (10 termes)
-        'Étude de marché',
-        'Segmentation',
-        'Positionnement',
-        'Marque',
-        'Part de marché',
-        'Avantage concurrentiel',
-        'Innovation',
-        'Recherche et développement',
-        'Cycle de vie produit',
-        'Commerce électronique',
-        // INSTITUTIONS & GOUVERNANCE (10 termes)
-        'Réglementation',
-        'Déréglementation',
-        'Conformité',
-        'Gouvernance d\'entreprise',
-        'Impôt sur les sociétés',
-        'Taxe sur la valeur ajoutée',
-        'Paradis fiscal',
-        'Blanchiment d\'argent',
-        'Gestion des risques',
-        'Responsabilité sociale',
       ],
       colonneDroite: [
-        // ÉCONOMIE GÉNÉRALE
         'Gross Domestic Product (GDP)',
         'Economic growth',
         'Recession',
-        'Inflation',
-        'Unemployment',
-        'Monetary policy',
-        'Fiscal policy',
-        'Central bank',
-        'Interest rate',
-        'Money supply',
-        // FINANCE D'ENTREPRISE
         'Balance sheet',
-        'Income statement',
         'Revenue',
-        'Profit',
-        'Equity',
-        'Assets',
-        'Liabilities',
-        'Cash flow',
-        'Depreciation',
-        'Market capitalization',
-        // COMMERCE INTERNATIONAL
         'International trade',
-        'Export',
-        'Import',
         'Globalization',
-        'Multinational corporation',
-        'Offshoring',
-        'Exchange rate',
-        'Trade balance',
-        'Free trade area',
-        'Tariffs',
-        // MARKETING & STRATÉGIE
-        'Market research',
-        'Segmentation',
-        'Positioning',
-        'Brand',
-        'Market share',
-        'Competitive advantage',
-        'Innovation',
-        'Research and Development',
-        'Product life cycle',
-        'E-commerce',
-        // INSTITUTIONS & GOUVERNANCE
-        'Regulation',
-        'Deregulation',
-        'Compliance',
-        'Corporate governance',
-        'Corporate tax',
-        'Value Added Tax (VAT)',
-        'Tax haven',
-        'Money laundering',
-        'Risk management',
-        'Corporate Social Responsibility',
       ],
     ),
 
