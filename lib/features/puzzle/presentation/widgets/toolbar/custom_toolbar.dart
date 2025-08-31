@@ -54,6 +54,7 @@ import 'package:luchy/core/utils/educational_image_generator.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 // Feature imports
+import 'package:luchy/features/puzzle/presentation/screens/binome_formules_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/puzzle_game_screen.dart';
 import 'package:luchy/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -320,9 +321,14 @@ class EducationalPresetDialog extends StatefulWidget {
 class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
   // Détermine le type de puzzle selon le questionnaire
   int _getPuzzleType(QuestionnairePreset questionnaire) {
-    return questionnaire.typeDeJeu == TypeDeJeu.combinaisonsMatematiques
-        ? 3
-        : 2;
+    switch (questionnaire.typeDeJeu) {
+      case TypeDeJeu.combinaisonsMatematiques:
+        return 3;
+      case TypeDeJeu.formulairesLatex:
+        return 4; // Type spécial pour formulaires LaTeX
+      default:
+        return 2;
+    }
   }
 
   @override
@@ -352,15 +358,10 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
                     child: ListTile(
                       leading: _getQuestionnaireIcon(questionnaire),
                       title: Text(questionnaire.nom),
-                      subtitle: Text(
-                          '${questionnaire.niveau.nom} - ${questionnaire.categorie.emoji} ${questionnaire.categorie.nom}${questionnaire.sousTheme != null ? ' - ${questionnaire.sousTheme}' : ''}'),
-                      trailing: Text(
-                        '${questionnaire.colonneGauche.length} lignes',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+                      subtitle: Text('${questionnaire.niveau.nom}'),
                       onTap: () {
                         Navigator.of(context).pop();
-                        _generateQuestionnaireImage(context, questionnaire);
+                        _handleQuestionnaireSelection(context, questionnaire);
                       },
                     ),
                   );
@@ -411,6 +412,24 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
         return Colors.purple;
       case NiveauEducatif.superieur:
         return Colors.red;
+    }
+  }
+
+  /// Gère la sélection d'un questionnaire (puzzle normal ou formulaire LaTeX)
+  void _handleQuestionnaireSelection(
+    BuildContext context,
+    QuestionnairePreset questionnaire,
+  ) {
+    // Si c'est un formulaire LaTeX, naviguer vers l'écran dédié
+    if (questionnaire.typeDeJeu == TypeDeJeu.formulairesLatex) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const BinomeFormulesScreen(),
+        ),
+      );
+    } else {
+      // Sinon, générer l'image de puzzle éducatif classique
+      _generateQuestionnaireImage(context, questionnaire);
     }
   }
 

@@ -191,11 +191,11 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
                     const ImagePreview()
                   else
                     const PuzzleBoard(),
-                    if (imageState.isLoading == true)
-                      const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
-                      ),
-                                      // FloatingActionButtons seulement en mode puzzle normal (pas éducatif/combinaisons)
+                  if (imageState.isLoading == true)
+                    const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                  // FloatingActionButtons seulement en mode puzzle normal (pas éducatif/combinaisons)
                   if (gameState.puzzleType == 1)
                     Positioned(
                       right: 16,
@@ -306,7 +306,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
       await ref.read(gameSettingsProvider.notifier).ensureLoaded();
       print('✅ Paramètres SQLite chargés !');
 
-      await ref.read(imageControllerProvider.notifier).loadRandomImage();
+      await ref.read(imageControllerProvider.notifier).loadOpeningImage();
       if (mounted) {
         ref.read(initializationProvider.notifier).state = true;
       }
@@ -335,7 +335,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
                 Navigator.pop(context);
                 ref
                     .read(imageControllerProvider.notifier)
-                    .pickImageFromGallery();
+                    .pickImageFromGallery(context);
               },
             ),
             ListTile(
@@ -343,7 +343,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
               title: Text(l10n.cameraOption),
               onTap: () {
                 Navigator.pop(context);
-                ref.read(imageControllerProvider.notifier).takePhoto();
+                ref.read(imageControllerProvider.notifier).takePhoto(context);
               },
             ),
           ],

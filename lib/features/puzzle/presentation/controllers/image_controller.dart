@@ -88,6 +88,37 @@ class ImageController extends StateNotifier<ImageControllerState> {
 
   ImageController(this.ref) : super(ImageControllerState());
 
+  /// Loads the opening image (Mathieu Sailor Man) with 2x2 puzzle
+  Future<void> loadOpeningImage() async {
+    state = ImageControllerState(isLoading: true);
+
+    try {
+      profiler.reset();
+      profiler.start('loadOpeningImage');
+
+      // Charger l'image d'ouverture spécifique
+      const String assetPath = 'assets/mathieu_chanceux.png';
+      final ByteData data = await rootBundle.load(assetPath);
+      final imageBytes = data.buffer.asUint8List();
+
+      // Forcer la difficulté à 2x2 pour l'image d'ouverture
+      ref.read(gameSettingsProvider.notifier).setDifficulty(2, 2);
+
+      // Process image and initialize game
+      await ref
+          .read(imageProcessingProvider.notifier)
+          .processImage(imageBytes, 'Mathieu Chanceux', true);
+
+      await _initializeGameWithProcessedImage();
+
+      profiler.end('loadOpeningImage');
+      state = ImageControllerState(isLoading: false);
+    } catch (e) {
+      state = ImageControllerState(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
   /// Loads a random image from the assets and prepares it for the puzzle.
   ///
   /// Process includes:
@@ -132,13 +163,13 @@ class ImageController extends StateNotifier<ImageControllerState> {
   /// * Gallery image picker launch
   /// * Selected image processing
   /// * Game initialization with selected image
-  Future<void> pickImageFromGallery() async {
+  Future<void> pickImageFromGallery([BuildContext? context]) async {
     state = ImageControllerState(isLoading: true);
 
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        await _processPickedImage(image);
+        await _processPickedImage(image, context);
       }
       state = ImageControllerState(isLoading: false);
     } catch (e) {
@@ -153,7 +184,7 @@ class ImageController extends StateNotifier<ImageControllerState> {
   /// * Image capture with quality settings
   /// * Automatic EXIF rotation handling
   /// * Image optimization for puzzle use
-  Future<void> takePhoto() async {
+  Future<void> takePhoto([BuildContext? context]) async {
     state = ImageControllerState(isLoading: true);
 
     try {
@@ -170,7 +201,7 @@ class ImageController extends StateNotifier<ImageControllerState> {
         final Uint8List rotatedBytes = await rotatedImage.readAsBytes();
         final String imageName =
             'Photo_${DateTime.now().toIso8601String()}.jpg';
-        await _processImageBytes(rotatedBytes, imageName, false);
+        await _processImageBytes(rotatedBytes, imageName, false, context);
       }
       state = ImageControllerState(isLoading: false);
     } catch (e) {
@@ -185,13 +216,16 @@ class ImageController extends StateNotifier<ImageControllerState> {
   /// * [imageBytes] - Raw image data to process
   /// * [imageName] - Name/identifier for the image
   /// * [isAsset] - Whether the image is from assets or user selected
+  /// * [context] - Build context for smart cropping (optional)
   Future<void> _processImageBytes(
-      Uint8List imageBytes, String imageName, bool isAsset) async {
+      Uint8List imageBytes, String imageName, bool isAsset,
+      [BuildContext? context]) async {
     try {
       await ref.read(imageProcessingProvider.notifier).processImage(
             imageBytes,
             imageName,
             isAsset,
+            context,
           );
 
       await _initializeGameWithProcessedImage();
@@ -221,14 +255,15 @@ class ImageController extends StateNotifier<ImageControllerState> {
             imageSize: imageState.optimizedImageDimensions,
             shouldShuffle: true,
             puzzleType: ref.read(gameSettingsProvider).puzzleType,
+            imageName: imageState.currentImageName,
           );
     }
   }
 
   /// Processes a picked image file and prepares it for the puzzle.
-  Future<void> _processPickedImage(XFile image) async {
+  Future<void> _processPickedImage(XFile image, [BuildContext? context]) async {
     final Uint8List imageBytes = await image.readAsBytes();
-    await _processImageBytes(imageBytes, image.name, false);
+    await _processImageBytes(imageBytes, image.name, false, context);
   }
 
   /// Loads an educational image generated from text content
@@ -291,6 +326,7 @@ class ImageController extends StateNotifier<ImageControllerState> {
             shouldShuffle: true,
             puzzleType: puzzleType,
             educationalMapping: educationalMapping,
+            imageName: description,
           );
 
       profiler.end('educational_image_load');

@@ -83,23 +83,33 @@ class _PuzzleBoardState extends ConsumerState<PuzzleBoard> {
   Widget _buildCompletionMessage(BuildContext context) {
     final gameState = ref.watch(gameStateProvider);
 
+    // Message personnalisé pour l'image d'ouverture Mathieu
+    final bool isMathieuImage =
+        gameState.currentImageName == 'Mathieu Chanceux';
+    final String message = isMathieuImage
+        ? "Epicerie Luchy"
+        : "👍 en ${gameState.swapCount} coups";
+
     return AnimatedOpacity(
       opacity: 1.0,
       duration: const Duration(milliseconds: 2000),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.green.withAlpha(200), // Fond vert victoire
+          color: isMathieuImage
+              ? Colors.orange.withAlpha(200) // Couleur spéciale pour Mathieu
+              : Colors.green.withAlpha(200), // Fond vert victoire standard
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.white, width: 2),
         ),
         child: Text(
-          "👍 en ${gameState.swapCount} coups",
+          message,
           style: const TextStyle(
             fontSize: 24,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

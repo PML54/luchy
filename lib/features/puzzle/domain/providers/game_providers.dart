@@ -104,6 +104,15 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
   Future<void> _loadSettingsFromDatabase() async {
     if (_isLoaded) return;
 
+    // ⚠️ CHARGEMENT BASE DE DONNÉES TEMPORAIREMENT DÉSACTIVÉ
+    print('⏸️ Chargement SQLite désactivé - utilisation valeurs par défaut');
+    
+    // Utiliser les valeurs par défaut de GameSettings.initial()
+    _isLoaded = true;
+    print('✅ GameSettings initialisés avec valeurs par défaut');
+    
+    // Code de chargement SQLite commenté
+    /*
     try {
       final repository = ref.read(gameSettingsRepositoryProvider);
       final dbSettings = await repository.getSettings();
@@ -127,6 +136,7 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
       print('❌ Erreur chargement paramètres SQLite: $e');
       _isLoaded = true; // Marquer comme chargé même en cas d'erreur
     }
+    */
   }
 
   Future<void> resetToDefaultDifficulty() async {
@@ -164,6 +174,12 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
   }
 
   Future<void> _saveToDatabase() async {
+    // ⚠️ SAUVEGARDE TEMPORAIREMENT DÉSACTIVÉE
+    print('⏸️ Sauvegarde désactivée temporairement');
+    return;
+
+    // Code de sauvegarde commenté
+    /*
     try {
       final repository = ref.read(gameSettingsRepositoryProvider);
       final dbSettings = GameSettingsDb(
@@ -181,6 +197,7 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
     } catch (e) {
       print('❌ Erreur sauvegarde paramètres SQLite: $e');
     }
+    */
   }
 }
 
@@ -241,6 +258,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
     required bool shouldShuffle,
     int puzzleType = 1, // Par défaut type classique
     List<int>? educationalMapping, // Mapping original pour puzzles éducatifs
+    String? imageName, // Nom de l'image pour messages personnalisés
   }) async {
     final initialArrangement =
         List<int>.generate(pieces.length, (index) => index);
@@ -279,6 +297,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       puzzleType: puzzleType,
       educationalMapping: educationalMapping,
       startTime: startTime,
+      currentImageName: imageName,
     );
   }
 
@@ -570,14 +589,31 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
   }
 
   Future<void> processImage(
-      Uint8List imageBytes, String imageName, bool isAsset) async {
+      Uint8List imageBytes, String imageName, bool isAsset,
+      [BuildContext? context]) async {
     state = state.copyWith(isLoading: true);
     profiler.reset(); // Réinitialiser le profiler
 
     try {
       // Mesurer l'optimisation de l'image
       profiler.start('image_optimization');
-      final optimizedBytes = await simpleOptimizeImage(imageBytes);
+
+      Uint8List optimizedBytes;
+      String optimizationInfo = '';
+
+      if (context != null) {
+        // Utiliser le recadrage intelligent si contexte disponible
+        final result = await smartOptimizeImage(imageBytes, context);
+        optimizedBytes = result.imageBytes;
+        optimizationInfo = result.optimizationInfo;
+        debugPrint('🔧 Smart Optimization: $optimizationInfo');
+      } else {
+        // Fallback vers optimisation simple
+        optimizedBytes = await simpleOptimizeImage(imageBytes);
+        optimizationInfo = 'Optimisation simple (pas de contexte)';
+        debugPrint('🔧 Simple Optimization: Legacy mode');
+      }
+
       profiler.end('image_optimization');
 
       // Mesurer le décodage de l'image
@@ -596,6 +632,9 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
         currentImageTitle: imageName,
         isLoading: false,
       );
+
+      debugPrint(
+          '✅ Image optimisée: ${optimizedDimensions.width}x${optimizedDimensions.height}');
     } catch (e) {
       state = state.copyWith(
         error: e.toString(),

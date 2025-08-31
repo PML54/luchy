@@ -52,10 +52,12 @@
 /// 📅 Dernière modification: 2025-01-27 20:05
 /// </cursor>
 
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:luchy/core/utils/latex_to_image_converter.dart';
 
 /// Résultat de génération d'image éducative
 class EducationalImageResult {
@@ -127,7 +129,9 @@ enum TypeDeJeu {
   groupement('Groupement', 'Rassembler les éléments par catégories'),
   sequenceLogique('Séquence logique', 'Compléter une suite logique'),
   combinaisonsMatematiques('Combinaisons mathématiques',
-      'Associer formules de combinaisons avec leurs résultats');
+      'Associer formules de combinaisons avec leurs résultats'),
+  formulairesLatex('Formulaires LaTeX',
+      'Consultation de formules mathématiques avec rendu LaTeX');
 
   const TypeDeJeu(this.nom, this.description);
   final String nom;
@@ -436,23 +440,78 @@ class EducationalImageGenerator {
     );
   }
 
-  /// Génère une table de multiplication
-  static EducationalPreset generateMultiplicationTable(int table) {
+  /// Génère une table de multiplication aléatoire
+  static EducationalPreset generateRandomMultiplicationTable() {
     final left = <String>[];
     final right = <String>[];
 
-    for (int i = 1; i <= 10; i++) {
-      left.add('$table × $i =');
-      right.add('${table * i}');
+    // Générer 8 multiplications aléatoires uniques
+    final usedPairs = <String>{};
+    final random = math.Random();
+
+    while (left.length < 8) {
+      final a = 2 + random.nextInt(8); // 2 à 9
+      final b = 2 + random.nextInt(8); // 2 à 9
+      final pairKey = '${math.min(a, b)}_${math.max(a, b)}';
+
+      if (!usedPairs.contains(pairKey)) {
+        usedPairs.add(pairKey);
+        left.add('$a × $b');
+        right.add('${a * b}');
+      }
     }
 
     return EducationalPreset(
-      id: 'multiplication_$table',
-      name: '$table',
-      description: '',
+      id: 'multiplication_random',
+      name: 'Calcul',
+      description: 'Multiplications aléatoires',
       leftColumn: left,
       rightColumn: right,
     );
+  }
+
+  /// Détecte si une chaîne contient du code LaTeX
+  static bool _containsLatex(String text) {
+    return text.contains(r'\') ||
+        text.contains(r'{') ||
+        text.contains(r'}') ||
+        text.contains('binom') ||
+        text.contains('sum') ||
+        text.contains('frac');
+  }
+
+  /// Traite une liste de textes en convertissant le LaTeX en images si nécessaire
+  static Future<List<String>> _processLatexTexts(
+    List<String> texts, {
+    double fontSize = 18,
+  }) async {
+    final List<String> processedTexts = [];
+
+    for (final text in texts) {
+      if (_containsLatex(text)) {
+        try {
+          // Convertir le LaTeX en image et l'encoder en base64
+          final imageBytes = await LatexToImageConverter.renderLatexToImage(
+            text,
+            fontSize: fontSize,
+            textColor: Colors.black,
+            backgroundColor: Colors.white,
+            padding: 4,
+          );
+
+          // Pour l'instant, on garde le texte LaTeX brut
+          // TODO: Intégrer l'image dans le système de génération
+          processedTexts.add(text);
+        } catch (e) {
+          // En cas d'erreur, garder le texte original
+          processedTexts.add(text);
+        }
+      } else {
+        processedTexts.add(text);
+      }
+    }
+
+    return processedTexts;
   }
 
   /// Génère un puzzle de combinaisons mathématiques
@@ -552,7 +611,7 @@ class EducationalImageGenerator {
   /// Vocabulaire français-anglais : animaux
   static const EducationalPreset vocabularyAnimals = EducationalPreset(
     id: 'vocab_animals',
-    name: 'Animaux FR-EN',
+    name: 'Anglais',
     description: '',
     leftColumn: [
       'Chat',
@@ -583,7 +642,7 @@ class EducationalImageGenerator {
   /// Vocabulaire français-anglais : couleurs
   static const EducationalPreset vocabularyColors = EducationalPreset(
     id: 'vocab_colors',
-    name: 'Couleurs FR-EN',
+    name: 'Anglais',
     description: '',
     leftColumn: [
       'Rouge',
@@ -614,7 +673,7 @@ class EducationalImageGenerator {
   /// Géographie : capitales européennes
   static const EducationalPreset geographyEurope = EducationalPreset(
     id: 'geo_europe',
-    name: 'Capitales Europe',
+    name: 'Histoire',
     description: '',
     leftColumn: [
       'France',
@@ -649,7 +708,7 @@ class EducationalImageGenerator {
     // === PRIMAIRE ===
     QuestionnairePreset(
       id: 'primaire_math_multiplication',
-      nom: 'Calcul Mental',
+      nom: 'Calcul',
       titre: '',
       niveau: NiveauEducatif.primaire,
       categorie: CategorieMatiere.mathematiques,
@@ -679,38 +738,38 @@ class EducationalImageGenerator {
 
     // === PRÉPA ECG ===
     QuestionnairePreset(
-      id: 'prepa_math_combinatoire',
-      nom: 'Analyse combinatoire',
-      titre: 'FORMULES - ANALYSE COMBINATOIRE',
+      id: 'prepa_math_binome',
+      nom: 'Calcul',
+      titre: 'BINÔME DE NEWTON - FORMULES',
       niveau: NiveauEducatif.prepa,
       categorie: CategorieMatiere.mathematiques,
-      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-      sousTheme: 'Dénombrement',
+      typeDeJeu: TypeDeJeu.formulairesLatex,
+      sousTheme: 'Binôme Newton',
       colonneGauche: [
-        'Arrangements p parmi n',
-        'Combinaisons \\binom{n}{p}',
-        'Permutations de n',
-        'Applications E→F',
-        'Surjections E→F',
-        'Principe tiroirs',
-        'Inclusion-exclusion',
-        'Dérangements Dₙ',
+        r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{\,n-k} b^{\,k}',
+        r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
+        r'\binom{n}{k} = \binom{n}{n-k}',
+        r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
+        r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
+        r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n\ge 1)',
+        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} \quad (r\le n)',
+        r'(1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
       ],
       colonneDroite: [
-        'A_n^p = n!/(n-p)!',
-        '\\binom{n}{p} = n!/[p!(n-p)!]',
-        'n!',
-        '|F|^n',
-        'p! × S(n,p)',
-        '⌈n/k⌉ ≥ 1',
-        '|A∪B| = |A|+|B|-|A∩B|',
-        '≈ n!/e',
+        'développement puissance',
+        'calcul coefficient',
+        'symétrie coefficients',
+        'relation Pascal',
+        'comptage sous-ensembles',
+        'alternance nulle',
+        'somme oblique',
+        'série génératrice',
       ],
     ),
 
     QuestionnairePreset(
       id: 'prepa_eco_concepts',
-      nom: 'Concepts économiques',
+      nom: 'Économie',
       titre: 'ÉCONOMIE GÉNÉRALE - PRÉPA ECG',
       niveau: NiveauEducatif.prepa,
       categorie: CategorieMatiere.economie,
@@ -741,7 +800,7 @@ class EducationalImageGenerator {
     // === COLLÈGE ===
     QuestionnairePreset(
       id: 'college_francais_conjugaison',
-      nom: 'Conjugaison',
+      nom: 'Français',
       titre: 'PASSÉ COMPOSÉ - COLLÈGE',
       niveau: NiveauEducatif.college,
       categorie: CategorieMatiere.francais,
@@ -772,7 +831,7 @@ class EducationalImageGenerator {
     // === EXEMPLE FUTUR : ORDRE CHRONOLOGIQUE ===
     QuestionnairePreset(
       id: 'college_histoire_chronologie',
-      nom: 'Chronologie médiévale',
+      nom: 'Histoire',
       titre: 'ORDRE CHRONOLOGIQUE - MOYEN ÂGE',
       niveau: NiveauEducatif.college,
       categorie: CategorieMatiere.histoire,
@@ -802,17 +861,8 @@ class EducationalImageGenerator {
   ];
 
   /// Liste de tous les questionnaires disponibles (format moderne)
-  /// Inclut automatiquement un puzzle de combinaisons généré aléatoirement
-  static List<QuestionnairePreset> getAllQuestionnaires(
-      {bool includeCombinations = true}) {
-    final allQuestionnaires = List<QuestionnairePreset>.from(questionnaires);
-
-    // Ajouter le puzzle de combinaisons généré aléatoirement
-    if (includeCombinations) {
-      allQuestionnaires.add(generateCombinationsPuzzle());
-    }
-
-    return allQuestionnaires;
+  static List<QuestionnairePreset> getAllQuestionnaires() {
+    return List<QuestionnairePreset>.from(questionnaires);
   }
 
   /// Liste de tous les presets disponibles (ancien format)
@@ -824,10 +874,8 @@ class EducationalImageGenerator {
       presets.add(questionnaire.toEducationalPreset());
     }
 
-    // Tables de multiplication (2 à 9) - ancien format
-    for (int i = 2; i <= 9; i++) {
-      presets.add(generateMultiplicationTable(i));
-    }
+    // Table de multiplication aléatoire unique
+    presets.add(generateRandomMultiplicationTable());
 
     // Vocabulaire - ancien format
     presets.addAll([

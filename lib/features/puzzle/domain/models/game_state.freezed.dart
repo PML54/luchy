@@ -262,7 +262,9 @@ mixin _$GameState {
       throw _privateConstructorUsedError; // Type de puzzle : 1=classique, 2=éducatif, 3=combinaisons
   List<int>? get educationalMapping =>
       throw _privateConstructorUsedError; // Mapping original pour puzzles éducatifs
-  DateTime? get startTime => throw _privateConstructorUsedError;
+  DateTime? get startTime =>
+      throw _privateConstructorUsedError; // Heure de début pour chronométrage puzzles éducatifs
+  String? get currentImageName => throw _privateConstructorUsedError;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -291,7 +293,8 @@ abstract class $GameStateCopyWith<$Res> {
       bool isCoded,
       int puzzleType,
       List<int>? educationalMapping,
-      DateTime? startTime});
+      DateTime? startTime,
+      String? currentImageName});
 }
 
 /// @nodoc
@@ -324,6 +327,7 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? puzzleType = null,
     Object? educationalMapping = freezed,
     Object? startTime = freezed,
+    Object? currentImageName = freezed,
   }) {
     return _then(_value.copyWith(
       isInitialized: null == isInitialized
@@ -386,6 +390,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      currentImageName: freezed == currentImageName
+          ? _value.currentImageName
+          : currentImageName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -413,7 +421,8 @@ abstract class _$$GameStateImplCopyWith<$Res>
       bool isCoded,
       int puzzleType,
       List<int>? educationalMapping,
-      DateTime? startTime});
+      DateTime? startTime,
+      String? currentImageName});
 }
 
 /// @nodoc
@@ -444,6 +453,7 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? puzzleType = null,
     Object? educationalMapping = freezed,
     Object? startTime = freezed,
+    Object? currentImageName = freezed,
   }) {
     return _then(_$GameStateImpl(
       isInitialized: null == isInitialized
@@ -506,6 +516,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      currentImageName: freezed == currentImageName
+          ? _value.currentImageName
+          : currentImageName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -528,7 +542,8 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       required this.isCoded,
       required this.puzzleType,
       final List<int>? educationalMapping,
-      this.startTime})
+      this.startTime,
+      this.currentImageName})
       : _pieces = pieces,
         _initialArrangement = initialArrangement,
         _currentArrangement = currentArrangement,
@@ -596,10 +611,13 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
 // Mapping original pour puzzles éducatifs
   @override
   final DateTime? startTime;
+// Heure de début pour chronométrage puzzles éducatifs
+  @override
+  final String? currentImageName;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameState(isInitialized: $isInitialized, pieces: $pieces, columns: $columns, rows: $rows, initialArrangement: $initialArrangement, currentArrangement: $currentArrangement, swapCount: $swapCount, minimalMoves: $minimalMoves, imageSize: $imageSize, isPUZType: $isPUZType, puzzCode: $puzzCode, isCoded: $isCoded, puzzleType: $puzzleType, educationalMapping: $educationalMapping, startTime: $startTime)';
+    return 'GameState(isInitialized: $isInitialized, pieces: $pieces, columns: $columns, rows: $rows, initialArrangement: $initialArrangement, currentArrangement: $currentArrangement, swapCount: $swapCount, minimalMoves: $minimalMoves, imageSize: $imageSize, isPUZType: $isPUZType, puzzCode: $puzzCode, isCoded: $isCoded, puzzleType: $puzzleType, educationalMapping: $educationalMapping, startTime: $startTime, currentImageName: $currentImageName)';
   }
 
   @override
@@ -621,7 +639,8 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       ..add(DiagnosticsProperty('isCoded', isCoded))
       ..add(DiagnosticsProperty('puzzleType', puzzleType))
       ..add(DiagnosticsProperty('educationalMapping', educationalMapping))
-      ..add(DiagnosticsProperty('startTime', startTime));
+      ..add(DiagnosticsProperty('startTime', startTime))
+      ..add(DiagnosticsProperty('currentImageName', currentImageName));
   }
 
   @override
@@ -654,7 +673,9 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
             const DeepCollectionEquality()
                 .equals(other._educationalMapping, _educationalMapping) &&
             (identical(other.startTime, startTime) ||
-                other.startTime == startTime));
+                other.startTime == startTime) &&
+            (identical(other.currentImageName, currentImageName) ||
+                other.currentImageName == currentImageName));
   }
 
   @override
@@ -674,7 +695,8 @@ class _$GameStateImpl with DiagnosticableTreeMixin implements _GameState {
       isCoded,
       puzzleType,
       const DeepCollectionEquality().hash(_educationalMapping),
-      startTime);
+      startTime,
+      currentImageName);
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -701,7 +723,8 @@ abstract class _GameState implements GameState {
       required final bool isCoded,
       required final int puzzleType,
       final List<int>? educationalMapping,
-      final DateTime? startTime}) = _$GameStateImpl;
+      final DateTime? startTime,
+      final String? currentImageName}) = _$GameStateImpl;
 
   @override
   bool get isInitialized;
@@ -732,7 +755,10 @@ abstract class _GameState implements GameState {
   @override
   List<int>? get educationalMapping; // Mapping original pour puzzles éducatifs
   @override
-  DateTime? get startTime;
+  DateTime?
+      get startTime; // Heure de début pour chronométrage puzzles éducatifs
+  @override
+  String? get currentImageName;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.

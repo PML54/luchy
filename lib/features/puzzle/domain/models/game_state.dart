@@ -88,6 +88,7 @@ class GameState with _$GameState {
         puzzleType, // Type de puzzle : 1=classique, 2=éducatif, 3=combinaisons
     List<int>? educationalMapping, // Mapping original pour puzzles éducatifs
     DateTime? startTime, // Heure de début pour chronométrage puzzles éducatifs
+    String? currentImageName, // Nom de l'image actuelle pour messages personnalisés
   }) = _GameState;
 
   factory GameState.initial() => const GameState(
@@ -106,5 +107,6 @@ class GameState with _$GameState {
         puzzleType: 1,
         educationalMapping: null,
         startTime: null,
+        currentImageName: null,
       );
 }

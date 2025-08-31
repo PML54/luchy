@@ -11,15 +11,16 @@
 /// - Public domain: Focus sur œuvres domaine public
 ///
 /// ÉTAT ACTUEL:
-/// - Collection: 14 œuvres sélectionnées (Pissarro, Van Gogh, classiques, BD)
+/// - Collection: 15 œuvres sélectionnées (Pissarro, Van Gogh, classiques, BD)
+/// - Image d'ouverture: Mathieu The Sailor Man (découpage 2x2)
 /// - Métadonnées: Artiste, titre, année, style, localisation assets
 /// - Qualité: Images haute résolution optimisées puzzle
 /// - Organisation: Structure claire par artiste et catégorie
 ///
 /// HISTORIQUE RÉCENT:
-/// - Ajout nouvelles images : Dubout et Popeye (collection → 14 œuvres)
+/// - Ajout image d'ouverture : Mathieu The Sailor Man (puzzle 2x2)
+/// - Désactivation temporaire sauvegarde des découpages
 /// - Diversification : art classique + illustrations modernes/BD
-/// - Amélioration noms et catégories pour Pissarro
 /// - Documentation mise à jour format <curseur>
 ///
 /// 🔧 POINTS D'ATTENTION:
@@ -116,5 +117,10 @@ List<Map<String, String>> imageList = [
     "file": "popeye.jpg",
     "name": "Popeye le marin",
     "categ": "Bandes dessinées"
+  },
+  {
+    "file": "mathieu_chanceux.png",
+    "name": "Mathieu Chanceux",
+    "categ": "Présentation"
   },
 ];

@@ -143,6 +143,9 @@ class EducationalAppBar extends ConsumerWidget implements PreferredSizeWidget {
   /// Quitter le mode éducatif et revenir au mode puzzle normal
   Future<void> _quitEducationalMode(WidgetRef ref) async {
     try {
+      // Remettre la difficulté par défaut 3x3
+      await ref.read(gameSettingsProvider.notifier).setDifficulty(3, 3);
+      
       // Passer en mode puzzle normal (type 1)
       await ref.read(gameSettingsProvider.notifier).setPuzzleType(1);
 
