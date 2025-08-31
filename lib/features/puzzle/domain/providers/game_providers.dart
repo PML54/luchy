@@ -528,58 +528,135 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
     double? ratioLargeurColonnes, // Ratio pour largeurs dynamiques
   }) async {
     try {
+      // Vérifications des paramètres d'entrée
+      if (imageBytes.isEmpty) {
+        throw Exception('Les données d\'image pour créer les pièces sont vides');
+      }
+
+      if (columns <= 0 || rows <= 0) {
+        throw Exception('Nombre de colonnes ($columns) ou lignes ($rows) invalide');
+      }
+
+      debugPrint('🔄 Création des pièces: ${columns}x$rows pièces');
+
       final image = img.decodeImage(imageBytes);
-      if (image == null) throw Exception("Impossible de décoder l'image");
+      if (image == null) {
+        throw Exception("Impossible de décoder l'image pour créer les pièces");
+      }
+
+      // Vérifications des dimensions de l'image
+      if (image.width <= 0 || image.height <= 0) {
+        throw Exception('Dimensions d\'image invalides: ${image.width}x${image.height}');
+      }
+
+      if (image.width < columns || image.height < rows) {
+        throw Exception('Image trop petite pour ${columns}x${rows} pièces');
+      }
 
       final pieces = <Uint8List>[];
       final pieceHeight = image.height ~/ rows;
 
+      debugPrint('📐 Dimensions calculées: hauteur pièce = $pieceHeight');
+
       // Calcul des largeurs selon le ratio (pour puzzles éducatifs)
       if (ratioLargeurColonnes != null && columns == 2) {
+        // Vérification du ratio
+        if (ratioLargeurColonnes <= 0 || ratioLargeurColonnes >= 1) {
+          throw Exception('Ratio de largeur invalide: $ratioLargeurColonnes');
+        }
+
         // Largeurs dynamiques pour puzzles éducatifs
         final leftWidth = (image.width * ratioLargeurColonnes).round();
         final rightWidth = image.width - leftWidth;
 
+        // Vérifications des largeurs calculées
+        if (leftWidth <= 0 || rightWidth <= 0) {
+          throw Exception('Largeurs calculées invalides: gauche=$leftWidth, droite=$rightWidth');
+        }
+
+        debugPrint('📐 Largeurs calculées: gauche=$leftWidth, droite=$rightWidth');
+
         for (var y = 0; y < rows; y++) {
+          // Vérification des coordonnées de découpe
+          final cropY = y * pieceHeight;
+          if (cropY + pieceHeight > image.height) {
+            throw Exception('Coordonnées de découpe invalides pour ligne $y');
+          }
+
           // Colonne gauche (largeur dynamique)
           final leftPiece = img.copyCrop(
             image,
             x: 0,
-            y: y * pieceHeight,
+            y: cropY,
             width: leftWidth,
             height: pieceHeight,
           );
-          pieces.add(Uint8List.fromList(img.encodeJpg(leftPiece, quality: 85)));
+
+          final leftEncoded = img.encodeJpg(leftPiece, quality: 85);
+          if (leftEncoded.isEmpty) {
+            throw Exception('Échec encodage pièce gauche ligne $y');
+          }
+          pieces.add(Uint8List.fromList(leftEncoded));
 
           // Colonne droite (largeur dynamique)
           final rightPiece = img.copyCrop(
             image,
             x: leftWidth,
-            y: y * pieceHeight,
+            y: cropY,
             width: rightWidth,
             height: pieceHeight,
           );
-          pieces
-              .add(Uint8List.fromList(img.encodeJpg(rightPiece, quality: 85)));
+
+          final rightEncoded = img.encodeJpg(rightPiece, quality: 85);
+          if (rightEncoded.isEmpty) {
+            throw Exception('Échec encodage pièce droite ligne $y');
+          }
+          pieces.add(Uint8List.fromList(rightEncoded));
         }
       } else {
         // Découpage uniforme classique
         final pieceWidth = image.width ~/ columns;
 
+        // Vérifications des dimensions calculées
+        if (pieceWidth <= 0) {
+          throw Exception('Largeur de pièce invalide: $pieceWidth');
+        }
+
+        if (pieceHeight <= 0) {
+          throw Exception('Hauteur de pièce invalide: $pieceHeight');
+        }
+
+        debugPrint('📐 Dimensions uniformes: largeur=$pieceWidth, hauteur=$pieceHeight');
+
         for (var y = 0; y < rows; y++) {
           for (var x = 0; x < columns; x++) {
+            // Vérification des coordonnées de découpe
+            final cropX = x * pieceWidth;
+            final cropY = y * pieceHeight;
+
+            if (cropX + pieceWidth > image.width || cropY + pieceHeight > image.height) {
+              throw Exception('Coordonnées de découpe invalides: x=$cropX, y=$cropY pour pièce ($x,$y)');
+            }
+
             final piece = img.copyCrop(
               image,
-              x: x * pieceWidth,
-              y: y * pieceHeight,
+              x: cropX,
+              y: cropY,
               width: pieceWidth,
               height: pieceHeight,
             );
-            pieces.add(Uint8List.fromList(img.encodeJpg(piece, quality: 85)));
+
+            final encoded = img.encodeJpg(piece, quality: 85);
+            if (encoded.isEmpty) {
+              throw Exception('Échec encodage pièce ($x,$y)');
+            }
+
+            pieces.add(Uint8List.fromList(encoded));
           }
         }
       }
 
+      debugPrint('✅ Création pièces terminée: ${pieces.length} pièces');
       return pieces;
     } catch (e) {
       state = state.copyWith(error: e.toString());
