@@ -141,12 +141,18 @@ class _LoadingScaffold extends StatelessWidget {
 
 class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
     with SingleTickerProviderStateMixin {
-  late Future<void> _initializationFuture;
+  Future<void>? _initializationFuture;
   bool _showingFullImage = false;
-  late AnimationController _previewController;
+  AnimationController? _previewController;
 
   @override
   Widget build(BuildContext context) {
+    // Vérification si l'initialisation n'a pas encore commencé
+    if (_initializationFuture == null) {
+      debugPrint('🎓 Initialisation non démarrée, affichage LoadingScaffold');
+      return const _LoadingScaffold();
+    }
+
     final isInitialized = ref.watch(initializationProvider);
     final gameState = ref.watch(gameStateProvider);
     final imageState = ref.watch(imageProcessingProvider);
@@ -220,7 +226,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
 
   @override
   void dispose() {
-    _previewController.dispose();
+    _previewController?.dispose();
     super.dispose();
   }
 
@@ -238,7 +244,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
         vsync: this,
       );
 
-      _initializationFuture.then((_) {
+      _initializationFuture!.then((_) {
         if (mounted) {
           debugPrint('✅ Initialisation terminée dans initState');
         }
@@ -297,6 +303,8 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
   Widget _buildCountersWidget(GameState gameState, int correctPieces) {
     // Protection contre les valeurs null
     final totalPieces = gameState.pieces?.length ?? 0;
+    // Note: L'avertissement indique que pieces ne peut pas être null ici,
+    // mais on garde la protection pour la sécurité
 
     // Afficher seulement le compteur de pièces (sans compteur de coups)
     return Container(
