@@ -190,24 +190,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     }
   }
 
-  /// Calcule la hauteur adaptée des cellules selon l'écran
-  double _getAdaptiveCellHeight(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
-
-    if (isTablet) {
-      if (screenWidth >= 1200) {
-        return 120.0; // Très grande tablette
-      } else if (screenWidth >= 900) {
-        return 100.0; // Grande tablette
-      } else {
-        return 90.0; // Tablette moyenne
-      }
-    } else {
-      return 70.0; // Smartphone
-    }
-  }
-
   /// Quitter le puzzle LaTeX et revenir au mode puzzle normal 3x3
   Future<void> _quitToNormalPuzzle() async {
     try {

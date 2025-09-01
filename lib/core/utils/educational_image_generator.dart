@@ -5,7 +5,7 @@
 /// 2 colonnes (questions/réponses, français/anglais, etc.).
 ///
 /// COMPOSANTS PRINCIPAUX:
-/// - generateNamesGridImagqe(): Génération image grille 2 colonnes
+/// - generateNamesGridImagq@e(): Génération image grille 2 colonnes
 /// - generateMultiplicationTable(): Preset tables de multiplication
 /// - getVocabularyList(): Preset vocabulaire français-anglais
 /// - Educational presets: Collections prêtes à utiliser
@@ -29,6 +29,7 @@
 /// - Structure: id, nom, titre, niveau, catégorie, colonnes, sousThème
 /// - Couleurs par niveau: Vert→Bleu→Orange→Violet→Rouge
 /// - Compatibilité: Conversion automatique vers ancien format
+/// - 2025-09-01: AJOUT PERTURBATION - Logique de 2 combinaisons identiques avec variables inversées
 /// - 2025-08-25: Création initiale avec code utilisateur
 ///
 /// 🔧 POINTS D'ATTENTION:
@@ -36,6 +37,7 @@
 /// - Memory: Surveiller usage mémoire pour images complexes
 /// - Text rendering: Gérer débordement texte et ellipsis
 /// - Aspect ratio: Maintenir proportions pour découpage puzzle
+/// - Perturbation: 2 combinaisons identiques avec variables inversées pour évaluer la compréhension
 ///
 /// 🚀 PROCHAINES ÉTAPES:
 /// - Ajouter plus de presets (géographie, sciences)
@@ -49,7 +51,7 @@
 /// - core/utils/image_optimizer.dart: Optimisation post-génération
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (STRUCTURE ÉDUCATIVE COMPLÈTE)
-/// 📅 Dernière modification: 2025-01-27 20:05
+/// 📅 Dernière modification: 2025-09-01 04:23
 /// </cursor>
 
 import 'dart:math' as math;
@@ -541,8 +543,42 @@ class EducationalImageGenerator {
       }
     }
 
-    // Mélanger la sélection finale
+    // 🎯 3. AJOUT DE LA PERTURBATION : Ajouter une combinaison identique mais avec variables inversées
+    if (selectedCouples.isNotEmpty) {
+      // Choisir aléatoirement une des combinaisons existantes
+      final randomCouple =
+          selectedCouples[math.Random().nextInt(selectedCouples.length)];
+
+      // Créer la combinaison inversée (n,p) devient (p,n) si n ≠ p
+      if (randomCouple.n != randomCouple.p) {
+        final invertedCouple = (n: randomCouple.p, p: randomCouple.n);
+        selectedCouples.add(invertedCouple);
+
+        print(
+            '🎯 [COMBINAISONS] Perturbation ajoutée: C(${randomCouple.n},${randomCouple.p}) et C(${invertedCouple.n},${invertedCouple.p}) = ${combinaison(randomCouple.n, randomCouple.p)}');
+      } else {
+        // Si c'est un carré parfait (n=n), ajouter une combinaison différente
+        final alternativeCouples = allCouples
+            .where((couple) =>
+                combinaison(couple.n, couple.p) !=
+                    combinaison(randomCouple.n, randomCouple.p) &&
+                !selectedCouples.any((selected) =>
+                    selected.n == couple.n && selected.p == couple.p))
+            .toList();
+
+        if (alternativeCouples.isNotEmpty) {
+          alternativeCouples.shuffle();
+          selectedCouples.add(alternativeCouples.first);
+          print(
+              '🎯 [COMBINAISONS] Alternative ajoutée car combinaison carrée parfaite');
+        }
+      }
+    }
+
+    // Mélanger la sélection finale (avec la perturbation incluse)
     selectedCouples.shuffle();
+    print(
+        '🎯 [COMBINAISONS] Total de combinaisons générées: ${selectedCouples.length}');
 
     // Créer les colonnes
     final colonneGauche = <String>[];
@@ -564,7 +600,8 @@ class EducationalImageGenerator {
       sousTheme: 'Analyse combinatoire',
       colonneGauche: colonneGauche,
       colonneDroite: colonneDroite,
-      description: 'Puzzle généré aléatoirement avec combinaisons uniques',
+      description:
+          'Puzzle généré aléatoirement avec 2 combinaisons identiques (variables inversées) pour perturber',
       ratioLargeurColonnes: 0.5, // 50%/50% pour un découpage plus équilibré
     );
   }

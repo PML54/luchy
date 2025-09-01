@@ -5,7 +5,7 @@
 /// du jeu de puzzle en gérant la taille, qualité et recadrage intelligent.
 ///
 /// COMPOSANTS PRINCIPAUX:
-/// - smartOptimizeImage(): Optimisation complète avec recadrage adaptatif
+/// - smartOptimizeImage(): Optimisation complète avec recadrage adaptatif (contexte optionnel)
 /// - simpleOptimizeImage(): Version simple sans recadrage (legacy)
 /// - _resizeImage(): Redimensionnement avec préservation ratio
 /// - Smart cropping: Recadrage selon ratios UI mesurés empiriquement
@@ -14,7 +14,7 @@
 /// - Recadrage intelligent: Basé sur mesures iPhone réelles (1.90/0.37)
 /// - Algorithmes: Redimensionnement bicubique haute qualité
 /// - Optimisation: Calcul automatique taille optimale par appareil
-/// - Performance: Optimisé pour devices mobiles avec contexte UI
+/// - Performance: Optimisé pour devices mobiles, fallback gracieux sans contexte
 ///
 /// HISTORIQUE RÉCENT:
 /// - Intégration recadrage intelligent selon appareil/orientation
@@ -23,7 +23,7 @@
 /// - Documentation mise à jour format <curseur>
 ///
 /// 🔧 POINTS D'ATTENTION:
-/// - Context required: Besoin du BuildContext pour détection appareil
+/// - Context optional: BuildContext pour recadrage intelligent (fallback automatique)
 /// - Memory usage: Surveiller RAM pour très grandes images
 /// - Content preservation: Minimiser perte de contenu important
 /// - Quality vs size: Équilibrer qualité et performance
@@ -86,19 +86,25 @@ class OptimizationResult {
 /// Optimisation intelligente avec recadrage adaptatif selon l'appareil
 Future<OptimizationResult> smartOptimizeImage(
   Uint8List imageBytes,
-  BuildContext context, {
+  BuildContext? context, {
   int maxDimension = 1024,
   int quality = 85,
   bool enableSmartCrop = true,
 }) async {
+  print('🚀 [IMAGE_OPTIMIZER] smartOptimizeImage called');
+  print(
+      '📊 [IMAGE_OPTIMIZER] Parameters: imageBytes.length=${imageBytes.length}, context=$context, enableSmartCrop=$enableSmartCrop');
+
   // Vérification des données d'entrée
   if (imageBytes.isEmpty) {
+    print('❌ [IMAGE_OPTIMIZER] ERROR: Empty image bytes');
     throw Exception('Les données d\'image à optimiser sont vides');
   }
 
   final image = img.decodeImage(imageBytes);
   if (image == null) {
-    throw Exception("Impossible de décoder l'image - format non supporté ou données corrompues");
+    throw Exception(
+        "Impossible de décoder l'image - format non supporté ou données corrompues");
   }
 
   // Vérification des dimensions de base
@@ -113,22 +119,55 @@ Future<OptimizationResult> smartOptimizeImage(
   var wasResized = false;
   var optimizationSteps = <String>[];
 
-  // Étape 1: Recadrage intelligent selon l'appareil (si activé)
-  if (enableSmartCrop) {
-    final config = SmartCropConfig.getRatioConfig(context);
-    final cropResult = SmartCropAlgorithm.calculateOptimalCrop(
-      originalWidth: originalWidth,
-      originalHeight: originalHeight,
-      config: config,
-    );
+  // Étape 1: Recadrage intelligent selon l'appareil (si activé et contexte disponible)
+  print('🔄 [IMAGE_OPTIMIZER] Step 1: Smart cropping check');
+  print(
+      '📋 [IMAGE_OPTIMIZER] enableSmartCrop=$enableSmartCrop, context=$context');
 
-    if (cropResult.needsCropping) {
-      processedImage = SmartCropAlgorithm.applyCrop(processedImage, cropResult);
-      wasCropped = true;
-      optimizationSteps.add('Recadrage: ${cropResult.action}');
+  if (enableSmartCrop && context != null) {
+    print('✅ [IMAGE_OPTIMIZER] Smart cropping enabled and context available');
+
+    // Vérifier si le contexte est encore valide
+    if (context.debugDoingBuild || !context.mounted) {
+      print('❌ [IMAGE_OPTIMIZER] Context is DEFUNCT, skipping smart cropping');
+      optimizationSteps.add('Recadrage: Ignoré (contexte invalide)');
     } else {
-      optimizationSteps.add('Recadrage: ${cropResult.action}');
+      try {
+        print('🎯 [IMAGE_OPTIMIZER] Calling SmartCropConfig.getRatioConfig...');
+        final config = SmartCropConfig.getRatioConfig(context);
+        print('✅ [IMAGE_OPTIMIZER] Config obtained: ${config.description}');
+
+        print('🔍 [IMAGE_OPTIMIZER] Calculating optimal crop...');
+        final cropResult = SmartCropAlgorithm.calculateOptimalCrop(
+          originalWidth: originalWidth,
+          originalHeight: originalHeight,
+          config: config,
+        );
+        print(
+            '✅ [IMAGE_OPTIMIZER] Crop result: ${cropResult.action}, needsCropping: ${cropResult.needsCropping}');
+
+        if (cropResult.needsCropping) {
+          print('✂️ [IMAGE_OPTIMIZER] Applying crop...');
+          processedImage =
+              SmartCropAlgorithm.applyCrop(processedImage, cropResult);
+          wasCropped = true;
+          optimizationSteps.add('Recadrage: ${cropResult.action}');
+          print('✅ [IMAGE_OPTIMIZER] Crop applied successfully');
+        } else {
+          optimizationSteps.add('Recadrage: ${cropResult.action}');
+          print('⏭️ [IMAGE_OPTIMIZER] No cropping needed');
+        }
+      } catch (e, stackTrace) {
+        print('❌ [IMAGE_OPTIMIZER] ERROR in smart cropping: $e');
+        print('🔍 [IMAGE_OPTIMIZER] Stack trace: $stackTrace');
+        rethrow;
+      }
     }
+  } else if (enableSmartCrop && context == null) {
+    print('⚠️ [IMAGE_OPTIMIZER] Smart cropping enabled but context is null');
+    optimizationSteps.add('Recadrage: Ignoré (contexte indisponible)');
+  } else {
+    print('⏭️ [IMAGE_OPTIMIZER] Smart cropping disabled or skipped');
   }
 
   // Étape 2: Redimensionnement si nécessaire
@@ -165,7 +204,8 @@ Future<Uint8List> simpleOptimizeImage(Uint8List imageBytes) async {
 
   final image = img.decodeImage(imageBytes);
   if (image == null) {
-    throw Exception("Impossible de décoder l'image - format non supporté ou données corrompues");
+    throw Exception(
+        "Impossible de décoder l'image - format non supporté ou données corrompues");
   }
 
   // Vérification des dimensions de l'image décodée

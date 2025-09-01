@@ -164,6 +164,8 @@ class ImageController extends StateNotifier<ImageControllerState> {
   /// * Selected image processing
   /// * Game initialization with selected image
   Future<void> pickImageFromGallery([BuildContext? context]) async {
+    print('🖼️ [IMAGE_CONTROLLER] pickImageFromGallery called with context: $context');
+
     state = ImageControllerState(isLoading: true);
 
     try {
@@ -242,12 +244,14 @@ class ImageController extends StateNotifier<ImageControllerState> {
 
       debugPrint('Traitement de l\'image: $imageName (${imageBytes.length} bytes)');
 
+      print('🎨 [IMAGE_CONTROLLER] Calling processImage with context: $context');
       await ref.read(imageProcessingProvider.notifier).processImage(
             imageBytes,
             imageName,
             isAsset,
             context,
           );
+      print('✅ [IMAGE_CONTROLLER] processImage completed successfully');
 
       debugPrint('Image traitée avec succès, initialisation du jeu...');
       await _initializeGameWithProcessedImage();
@@ -298,6 +302,7 @@ class ImageController extends StateNotifier<ImageControllerState> {
 
   /// Processes a picked image file and prepares it for the puzzle.
   Future<void> _processPickedImage(XFile image, [BuildContext? context]) async {
+    print('📂 [IMAGE_CONTROLLER] _processPickedImage called with context: $context');
     try {
       debugPrint('Lecture des bytes de l\'image: ${image.name}');
       final Uint8List imageBytes = await image.readAsBytes();

@@ -302,9 +302,7 @@ class _PuzzleGameScreenState extends ConsumerState<PuzzleGameScreen>
 
   Widget _buildCountersWidget(GameState gameState, int correctPieces) {
     // Protection contre les valeurs null
-    final totalPieces = gameState.pieces?.length ?? 0;
-    // Note: L'avertissement indique que pieces ne peut pas être null ici,
-    // mais on garde la protection pour la sécurité
+    final totalPieces = gameState.pieces.length;
 
     // Afficher seulement le compteur de pièces (sans compteur de coups)
     return Container(

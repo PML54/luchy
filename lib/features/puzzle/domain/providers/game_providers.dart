@@ -53,7 +53,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
-
 import 'package:luchy/core/utils/image_optimizer.dart';
 import 'package:luchy/core/utils/profiler.dart';
 import 'package:luchy/features/puzzle/domain/models/game_state.dart';
@@ -105,11 +104,11 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
 
     // ⚠️ CHARGEMENT BASE DE DONNÉES TEMPORAIREMENT DÉSACTIVÉ
     print('⏸️ Chargement SQLite désactivé - utilisation valeurs par défaut');
-    
+
     // Utiliser les valeurs par défaut de GameSettings.initial()
     _isLoaded = true;
     print('✅ GameSettings initialisés avec valeurs par défaut');
-    
+
     // Code de chargement SQLite commenté
     /*
     try {
@@ -530,24 +529,28 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
     try {
       // Vérifications des paramètres d'entrée
       if (imageBytes.isEmpty) {
-        throw Exception('Les données d\'image pour créer les pièces sont vides');
+        throw Exception(
+            'Les données d\'image pour créer les pièces sont vides');
       }
 
       if (columns <= 0 || rows <= 0) {
-        throw Exception('Nombre de colonnes ($columns) ou lignes ($rows) invalide');
+        throw Exception(
+            'Nombre de colonnes ($columns) ou lignes ($rows) invalide');
       }
 
       debugPrint('🔄 Création des pièces: ${columns}x$rows pièces');
 
       final image = img.decodeImage(imageBytes);
       if (image == null) {
-        throw Exception("Impossible de décoder l'image pour créer les pièces - format non supporté");
+        throw Exception(
+            "Impossible de décoder l'image pour créer les pièces - format non supporté");
       }
       debugPrint('✅ Image décodée pour pièces: ${image.width}x${image.height}');
 
       // Vérifications des dimensions de l'image
       if (image.width <= 0 || image.height <= 0) {
-        throw Exception('Dimensions d\'image invalides: ${image.width}x${image.height}');
+        throw Exception(
+            'Dimensions d\'image invalides: ${image.width}x${image.height}');
       }
 
       if (image.width < columns || image.height < rows) {
@@ -572,10 +575,12 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
 
         // Vérifications des largeurs calculées
         if (leftWidth <= 0 || rightWidth <= 0) {
-          throw Exception('Largeurs calculées invalides: gauche=$leftWidth, droite=$rightWidth');
+          throw Exception(
+              'Largeurs calculées invalides: gauche=$leftWidth, droite=$rightWidth');
         }
 
-        debugPrint('📐 Largeurs calculées: gauche=$leftWidth, droite=$rightWidth');
+        debugPrint(
+            '📐 Largeurs calculées: gauche=$leftWidth, droite=$rightWidth');
 
         for (var y = 0; y < rows; y++) {
           // Vérification des coordonnées de découpe
@@ -627,7 +632,8 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
           throw Exception('Hauteur de pièce invalide: $pieceHeight');
         }
 
-        debugPrint('📐 Dimensions uniformes: largeur=$pieceWidth, hauteur=$pieceHeight');
+        debugPrint(
+            '📐 Dimensions uniformes: largeur=$pieceWidth, hauteur=$pieceHeight');
 
         for (var y = 0; y < rows; y++) {
           for (var x = 0; x < columns; x++) {
@@ -635,8 +641,10 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
             final cropX = x * pieceWidth;
             final cropY = y * pieceHeight;
 
-            if (cropX + pieceWidth > image.width || cropY + pieceHeight > image.height) {
-              throw Exception('Coordonnées de découpe invalides: x=$cropX, y=$cropY pour pièce ($x,$y)');
+            if (cropX + pieceWidth > image.width ||
+                cropY + pieceHeight > image.height) {
+              throw Exception(
+                  'Coordonnées de découpe invalides: x=$cropX, y=$cropY pour pièce ($x,$y)');
             }
 
             final piece = img.copyCrop(
@@ -668,17 +676,23 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
   Future<void> processImage(
       Uint8List imageBytes, String imageName, bool isAsset,
       [BuildContext? context]) async {
+    print('🏭 [IMAGE_PROCESSING] processImage called');
+    print(
+        '📊 [IMAGE_PROCESSING] Parameters: imageName=$imageName, isAsset=$isAsset, context=$context');
+
     state = state.copyWith(isLoading: true);
     profiler.reset(); // Réinitialiser le profiler
 
     try {
       // Vérification des données d'entrée
       if (imageBytes.isEmpty) {
+        print('❌ [IMAGE_PROCESSING] ERROR: Empty image bytes');
         throw Exception('Les données d\'image sont vides');
       }
 
       final sourceType = isAsset ? 'ASSET' : 'USER';
-      debugPrint('🔄 [$sourceType] Début traitement image: $imageName (${imageBytes.length} bytes)');
+      debugPrint(
+          '🔄 [$sourceType] Début traitement image: $imageName (${imageBytes.length} bytes)');
 
       // Mesurer l'optimisation de l'image
       profiler.start('image_optimization');
@@ -689,13 +703,38 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
       if (context != null) {
         // Utiliser le recadrage intelligent si contexte disponible
         debugPrint('🧠 [$sourceType] Utilisation optimisation intelligente');
-        final result = await smartOptimizeImage(imageBytes, context);
-        optimizedBytes = result.imageBytes;
-        optimizationInfo = result.optimizationInfo;
-        debugPrint('🔧 [$sourceType] Smart Optimization: $optimizationInfo');
+        print(
+            '🎯 [IMAGE_PROCESSING] About to call smartOptimizeImage with context');
+
+        // Vérification supplémentaire du contexte avant appel
+        if (context.debugDoingBuild || !context.mounted) {
+          print(
+              '❌ [IMAGE_PROCESSING] Context became invalid, switching to simple optimization');
+          optimizedBytes = await simpleOptimizeImage(imageBytes);
+          optimizationInfo = 'Optimisation simple (contexte invalidé)';
+          debugPrint(
+              '🔧 [$sourceType] Simple Optimization: Context invalidated');
+        } else {
+          try {
+            final result = await smartOptimizeImage(imageBytes, context);
+            optimizedBytes = result.imageBytes;
+            optimizationInfo = result.optimizationInfo;
+            debugPrint(
+                '🔧 [$sourceType] Smart Optimization: $optimizationInfo');
+            print(
+                '✅ [IMAGE_PROCESSING] smartOptimizeImage completed successfully');
+          } catch (e, stackTrace) {
+            print('❌ [IMAGE_PROCESSING] ERROR in smartOptimizeImage: $e');
+            print('🔍 [IMAGE_PROCESSING] Stack trace: $stackTrace');
+            rethrow;
+          }
+        }
       } else {
         // Fallback vers optimisation simple
-        debugPrint('🔧 [$sourceType] Utilisation optimisation simple (pas de contexte)');
+        debugPrint(
+            '🔧 [$sourceType] Utilisation optimisation simple (pas de contexte)');
+        print(
+            '⚠️ [IMAGE_PROCESSING] Context is null, using simple optimization');
         optimizedBytes = await simpleOptimizeImage(imageBytes);
         optimizationInfo = 'Optimisation simple (pas de contexte)';
         debugPrint('🔧 [$sourceType] Simple Optimization: Legacy mode');
@@ -703,7 +742,8 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
 
       // Vérification que l'optimisation a produit des données valides
       if (optimizedBytes.isEmpty) {
-        throw Exception('L\'optimisation de l\'image a produit des données vides');
+        throw Exception(
+            'L\'optimisation de l\'image a produit des données vides');
       }
 
       profiler.end('image_optimization');
@@ -711,13 +751,16 @@ class ImageProcessingNotifier extends StateNotifier<ImageProcessingState> {
 
       // Mesurer le décodage de l'image
       profiler.start('image_decoding');
-      debugPrint('🔄 [$sourceType] Début décodage image (${optimizedBytes.length} bytes)');
+      debugPrint(
+          '🔄 [$sourceType] Début décodage image (${optimizedBytes.length} bytes)');
       final image = img.decodeImage(optimizedBytes);
       if (image == null) {
-        throw Exception("[$sourceType] Impossible de décoder l'image optimisée - format non supporté ou données corrompues");
+        throw Exception(
+            "[$sourceType] Impossible de décoder l'image optimisée - format non supporté ou données corrompues");
       }
       profiler.end('image_decoding');
-      debugPrint('✅ [$sourceType] Décodage réussi: ${image.width}x${image.height}');
+      debugPrint(
+          '✅ [$sourceType] Décodage réussi: ${image.width}x${image.height}');
 
       final optimizedDimensions =
           Size(image.width.toDouble(), image.height.toDouble());
