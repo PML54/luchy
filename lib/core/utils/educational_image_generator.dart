@@ -251,6 +251,7 @@ class EnhancedFormulaTemplate {
   }
 
   /// Génère des variantes avec paramètres inversés
+  /// DÉSACTIVÉ : Génération de variantes avec paramètres inversés
   List<FormulaVariant> generateSmartVariants() {
     if (invertibleVariables.length < 2) {
       return [FormulaVariant(latex: latex, description: description)];
@@ -259,6 +260,9 @@ class EnhancedFormulaTemplate {
     final variants = <FormulaVariant>[];
     variants.add(FormulaVariant(latex: latex, description: description));
 
+    // DÉSACTIVÉ : Génération de variantes avec paramètres inversés
+    // Cette fonctionnalité a été désactivée pour éviter la confusion
+    /*
     // Générer la variante avec paramètres inversés
     final invertedLatex = _invertVariablesInLatex(latex, invertibleVariables);
     final invertedDescription = '$description (paramètres inversés)';
@@ -267,6 +271,7 @@ class EnhancedFormulaTemplate {
       latex: invertedLatex,
       description: invertedDescription,
     ));
+    */
 
     return variants;
   }
