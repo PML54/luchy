@@ -29,6 +29,9 @@
 /// - Structure: id, nom, titre, niveau, catégorie, colonnes, sousThème
 /// - Couleurs par niveau: Vert→Bleu→Orange→Violet→Rouge
 /// - Compatibilité: Conversion automatique vers ancien format
+/// - 2025-09-01: 🏗️ ARCHITECTURE MÉTADONNÉES - Génération automatique de perturbations pédagogiques
+/// - 2025-09-01: 🔄 INTÉGRATION COMPLÈTE - Les 3 catégories Calcul prépa utilisent maintenant l'architecture automatique
+/// - 2025-09-01: AJOUT PERTURBATION - 2 formules identiques avec paramètres inversés pour les 3 catégories Calcul prépa
 /// - 2025-09-01: AJOUT CATÉGORIE COMBINAISONS - Prépa ECG avec formules LaTeX
 /// - 2025-09-01: AJOUT PERTURBATION - Logique de 2 combinaisons identiques avec variables inversées
 /// - 2025-08-25: Création initiale avec code utilisateur
@@ -38,6 +41,9 @@
 /// - Memory: Surveiller usage mémoire pour images complexes
 /// - Text rendering: Gérer débordement texte et ellipsis
 /// - Aspect ratio: Maintenir proportions pour découpage puzzle
+/// - Architecture Métadonnées: FormulaTemplate + FormulaPerturbationGenerator pour génération automatique
+/// - Génération Automatique: Les 3 catégories Calcul prépa utilisent maintenant des templates avec perturbations
+/// - Perturbation: 2 formules identiques avec paramètres inversés générées automatiquement
 /// - Perturbation: 2 combinaisons identiques avec variables inversées pour évaluer la compréhension
 /// - Catégorie Combinaisons: Utilise TypeDeJeu.formulairesLatex pour rendu LaTeX uniforme
 ///
@@ -61,6 +67,357 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+
+/// 🏗️ ARCHITECTURE DE MÉTADONNÉES POUR LES FORMULES AVEC PERTURBATIONS
+/// Permet de définir des formules avec leurs variables pour générer automatiquement
+/// des variantes avec paramètres inversés
+
+/// Template d'une formule avec ses métadonnées
+class FormulaTemplate {
+  final String latex; // Formule LaTeX de base
+  final String description; // Description pédagogique
+  final List<String> variables; // Variables utilisées (ex: ['k', 'n'])
+  final bool generatePerturbations; // Activer la génération de variantes
+
+  const FormulaTemplate({
+    required this.latex,
+    required this.description,
+    required this.variables,
+    this.generatePerturbations = false,
+  });
+
+  /// Génère les variantes avec paramètres inversés
+  List<FormulaVariant> generateVariants() {
+    if (!generatePerturbations || variables.length < 2) {
+      return [FormulaVariant(latex: latex, description: description)];
+    }
+
+    final variants = <FormulaVariant>[];
+    variants.add(FormulaVariant(latex: latex, description: description));
+
+    // Générer la variante avec paramètres inversés
+    final invertedLatex = _invertVariablesInLatex(latex, variables);
+    final invertedDescription = '$description (paramètres inversés)';
+
+    variants.add(FormulaVariant(
+      latex: invertedLatex,
+      description: invertedDescription,
+    ));
+
+    return variants;
+  }
+
+  /// Inverse les variables dans une formule LaTeX
+  String _invertVariablesInLatex(String latex, List<String> variables) {
+    if (variables.length != 2)
+      return latex; // Pour l'instant, seulement 2 variables
+
+    final var1 = variables[0];
+    final var2 = variables[1];
+
+    // Remplacer var1 par var2 et var2 par var1 dans la formule
+    String result = latex;
+
+    // Échapper les backslashes pour les regex
+    final escapedVar1 = RegExp.escape(var1);
+    final escapedVar2 = RegExp.escape(var2);
+
+    // Utiliser une approche plus robuste pour les expressions mathématiques
+    // Remplacer toutes les occurrences de variables isolées (pas dans les mots composés)
+    result = result.replaceAllMapped(
+        RegExp(r'(?<![a-zA-Z])' + escapedVar1 + r'(?![a-zA-Z0-9])'),
+        (match) => var2);
+    result = result.replaceAllMapped(
+        RegExp(r'(?<![a-zA-Z])' + escapedVar2 + r'(?![a-zA-Z0-9])'),
+        (match) => var1);
+
+    return result;
+  }
+}
+
+/// Variante d'une formule générée
+class FormulaVariant {
+  final String latex;
+  final String description;
+
+  const FormulaVariant({
+    required this.latex,
+    required this.description,
+  });
+}
+
+/// Générateur de perturbations pédagogiques
+class FormulaPerturbationGenerator {
+  /// Génère une liste de formules avec perturbations à partir de templates
+  static List<String> generateLatexFormulas(
+    List<FormulaTemplate> templates, {
+    double perturbationRatio = 0.3, // 30% de perturbations par défaut
+  }) {
+    final formulas = <String>[];
+
+    for (final template in templates) {
+      final variants = template.generateVariants();
+
+      for (final variant in variants) {
+        formulas.add(variant.latex);
+      }
+    }
+
+    return formulas;
+  }
+
+  /// Génère les descriptions correspondantes
+  static List<String> generateDescriptions(
+    List<FormulaTemplate> templates, {
+    double perturbationRatio = 0.3,
+  }) {
+    final descriptions = <String>[];
+
+    for (final template in templates) {
+      final variants = template.generateVariants();
+
+      for (final variant in variants) {
+        descriptions.add(variant.description);
+      }
+    }
+
+    return descriptions;
+  }
+}
+
+/// 🔧 FONCTIONS UTILITAIRES POUR L'ARCHITECTURE
+
+/// Crée un questionnaire automatiquement à partir de templates
+QuestionnairePreset _createQuestionnaireFromTemplates({
+  required String id,
+  required String nom,
+  required String titre,
+  required NiveauEducatif niveau,
+  required CategorieMatiere categorie,
+  required TypeDeJeu typeDeJeu,
+  required String sousTheme,
+  required List<FormulaTemplate> templates,
+}) {
+  final latexFormulas =
+      FormulaPerturbationGenerator.generateLatexFormulas(templates);
+  final descriptions =
+      FormulaPerturbationGenerator.generateDescriptions(templates);
+
+  return QuestionnairePreset(
+    id: id,
+    nom: nom,
+    titre: titre,
+    niveau: niveau,
+    categorie: categorie,
+    typeDeJeu: typeDeJeu,
+    sousTheme: sousTheme,
+    colonneGauche: latexFormulas,
+    colonneDroite: descriptions,
+  );
+}
+
+/// 📚 EXEMPLES D'UTILISATION DE L'ARCHITECTURE DE MÉTADONNÉES
+
+/// Templates pour les formules de Binôme de Newton
+final List<FormulaTemplate> binomeTemplates = [
+  FormulaTemplate(
+    latex: r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{\,n-k} b^{\,k}',
+    description: 'développement puissance',
+    variables: ['a', 'b'],
+    generatePerturbations: true,
+  ),
+  FormulaTemplate(
+    latex: r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
+    description: 'calcul coefficient',
+    variables: ['n', 'k'],
+    generatePerturbations: true,
+  ),
+  FormulaTemplate(
+    latex: r'(1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
+    description: 'série génératrice',
+    variables: ['n', 'k', 'x'],
+    generatePerturbations: false, // Pas de perturbation pour cette formule
+  ),
+];
+
+/// Templates pour les formules de Combinaisons
+final List<FormulaTemplate> combinaisonsTemplates = [
+  FormulaTemplate(
+    latex: r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
+    description: 'définition coefficient binomial',
+    variables: ['n', 'k'],
+    generatePerturbations: true,
+  ),
+  FormulaTemplate(
+    latex: r'\binom{n}{k} = \binom{n}{n-k}',
+    description: 'symétrie des coefficients',
+    variables: ['n', 'k'],
+    generatePerturbations: true,
+  ),
+  FormulaTemplate(
+    latex: r'\sum_{k=0}^{n} \binom{n}{k} = 2^n',
+    description: 'formule du binôme (1+1)^n',
+    variables: ['n', 'k'],
+    generatePerturbations: false,
+  ),
+];
+
+/// Templates pour les formules de Sommes
+final List<FormulaTemplate> sommesTemplates = [
+  FormulaTemplate(
+    latex: r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
+    description: 'somme entiers',
+    variables: ['k', 'n'],
+    generatePerturbations: true,
+  ),
+  FormulaTemplate(
+    latex: r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
+    description: 'somme carrés',
+    variables: ['k', 'n'],
+    generatePerturbations: true,
+  ),
+  FormulaTemplate(
+    latex: r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q}',
+    description: 'série géométrique finie',
+    variables: ['k', 'n', 'q'],
+    generatePerturbations: false,
+  ),
+];
+
+/// 🎯 FONCTIONS DE DÉMONSTRATION DE L'ARCHITECTURE
+
+/// Crée un preset Binôme avec perturbations automatiques
+QuestionnairePreset createEnhancedBinomePreset() {
+  final latexFormulas =
+      FormulaPerturbationGenerator.generateLatexFormulas(binomeTemplates);
+  final descriptions =
+      FormulaPerturbationGenerator.generateDescriptions(binomeTemplates);
+
+  return QuestionnairePreset(
+    id: 'prepa_math_binome_enhanced',
+    nom: 'Calcul',
+    titre: 'BINÔME DE NEWTON - AVEC PERTURBATIONS AUTO',
+    niveau: NiveauEducatif.prepa,
+    categorie: CategorieMatiere.mathematiques,
+    typeDeJeu: TypeDeJeu.formulairesLatex,
+    sousTheme: 'Binôme Newton avec perturbations générées',
+    colonneGauche: latexFormulas,
+    colonneDroite: descriptions,
+  );
+}
+
+/// Crée un preset Combinaisons avec perturbations automatiques
+QuestionnairePreset createEnhancedCombinaisonsPreset() {
+  final latexFormulas =
+      FormulaPerturbationGenerator.generateLatexFormulas(combinaisonsTemplates);
+  final descriptions =
+      FormulaPerturbationGenerator.generateDescriptions(combinaisonsTemplates);
+
+  return QuestionnairePreset(
+    id: 'prepa_math_combinaisons_enhanced',
+    nom: 'Calcul',
+    titre: 'COMBINAISONS - AVEC PERTURBATIONS AUTO',
+    niveau: NiveauEducatif.prepa,
+    categorie: CategorieMatiere.mathematiques,
+    typeDeJeu: TypeDeJeu.formulairesLatex,
+    sousTheme: 'Analyse combinatoire avec perturbations générées',
+    colonneGauche: latexFormulas,
+    colonneDroite: descriptions,
+  );
+}
+
+/// Crée un preset Sommes avec perturbations automatiques
+QuestionnairePreset createEnhancedSommesPreset() {
+  final latexFormulas =
+      FormulaPerturbationGenerator.generateLatexFormulas(sommesTemplates);
+  final descriptions =
+      FormulaPerturbationGenerator.generateDescriptions(sommesTemplates);
+
+  return QuestionnairePreset(
+    id: 'prepa_math_sommes_enhanced',
+    nom: 'Calcul',
+    titre: 'SOMMES - AVEC PERTURBATIONS AUTO',
+    niveau: NiveauEducatif.prepa,
+    categorie: CategorieMatiere.mathematiques,
+    typeDeJeu: TypeDeJeu.formulairesLatex,
+    sousTheme: 'Formules de sommes avec perturbations générées',
+    colonneGauche: latexFormulas,
+    colonneDroite: descriptions,
+  );
+}
+
+/// 🧪 FONCTION DE TEST POUR VOIR LES PERTURBATIONS GÉNÉRÉES
+void demonstratePerturbations() {
+  print('🎯 DÉMONSTRATION DES PERTURBATIONS AUTOMATIQUES');
+  print('=' * 50);
+
+  // Test Binôme
+  print('\n📚 BINÔME DE NEWTON:');
+  final binomeFormulas =
+      FormulaPerturbationGenerator.generateLatexFormulas(binomeTemplates);
+  final binomeDescriptions =
+      FormulaPerturbationGenerator.generateDescriptions(binomeTemplates);
+
+  for (int i = 0; i < binomeFormulas.length; i++) {
+    print('  ${i + 1}. ${binomeFormulas[i]}');
+    print('     → ${binomeDescriptions[i]}');
+  }
+
+  // Test Combinaisons
+  print('\n🧮 COMBINAISONS:');
+  final combFormulas =
+      FormulaPerturbationGenerator.generateLatexFormulas(combinaisonsTemplates);
+  final combDescriptions =
+      FormulaPerturbationGenerator.generateDescriptions(combinaisonsTemplates);
+
+  for (int i = 0; i < combFormulas.length; i++) {
+    print('  ${i + 1}. ${combFormulas[i]}');
+    print('     → ${combDescriptions[i]}');
+  }
+
+  // Test Sommes
+  print('\n📊 SOMMES:');
+  final sommesFormulas =
+      FormulaPerturbationGenerator.generateLatexFormulas(sommesTemplates);
+  final sommesDescriptions =
+      FormulaPerturbationGenerator.generateDescriptions(sommesTemplates);
+
+  for (int i = 0; i < sommesFormulas.length; i++) {
+    print('  ${i + 1}. ${sommesFormulas[i]}');
+    print('     → ${sommesDescriptions[i]}');
+  }
+}
+
+/// 🐛 FONCTION DE DEBUG POUR VÉRIFIER LES QUESTIONNAIRES
+void debugQuestionnaires() {
+  print('🐛 DEBUG DES QUESTIONNAIRES');
+  print('=' * 40);
+
+  final allQuestionnaires = EducationalImageGenerator.getAllQuestionnaires();
+  print('Nombre total de questionnaires: ${allQuestionnaires.length}');
+
+  // Chercher les questionnaires de prépa math
+  final prepaMathQuestionnaires = allQuestionnaires
+      .where((q) =>
+          q.niveau == NiveauEducatif.prepa &&
+          q.categorie == CategorieMatiere.mathematiques &&
+          q.nom == 'Calcul')
+      .toList();
+
+  print(
+      'Questionnaires Prépa Math Calcul trouvés: ${prepaMathQuestionnaires.length}');
+
+  for (final q in prepaMathQuestionnaires) {
+    print('\n📋 ${q.titre}');
+    print('   ID: ${q.id}');
+    print('   Nombre de formules: ${q.colonneGauche.length}');
+
+    for (int i = 0; i < q.colonneGauche.length; i++) {
+      print('   ${i + 1}. ${q.colonneGauche[i]}');
+      print('      → ${q.colonneDroite[i]}');
+    }
+  }
+}
 
 /// Résultat de génération d'image éducative
 class EducationalImageResult {
@@ -736,8 +1093,8 @@ class EducationalImageGenerator {
       ],
     ),
 
-    // === PRÉPA ECG ===
-    QuestionnairePreset(
+    // === PRÉPA ECG - BINÔME (GÉNÉRÉ AUTOMATIQUEMENT) ===
+    _createQuestionnaireFromTemplates(
       id: 'prepa_math_binome',
       nom: 'Calcul',
       titre: 'BINÔME DE NEWTON - FORMULES',
@@ -745,30 +1102,11 @@ class EducationalImageGenerator {
       categorie: CategorieMatiere.mathematiques,
       typeDeJeu: TypeDeJeu.formulairesLatex,
       sousTheme: 'Binôme Newton',
-      colonneGauche: [
-        r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{\,n-k} b^{\,k}',
-        r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
-        r'\binom{n}{k} = \binom{n}{n-k}',
-        r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
-        r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
-        r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n\ge 1)',
-        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} \quad (r\le n)',
-        r'(1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
-      ],
-      colonneDroite: [
-        'développement puissance',
-        'calcul coefficient',
-        'symétrie coefficients',
-        'relation Pascal',
-        'comptage sous-ensembles',
-        'alternance nulle',
-        'somme oblique',
-        'série génératrice',
-      ],
+      templates: binomeTemplates,
     ),
 
-    // === PRÉPA ECG - COMBINAISONS ===
-    QuestionnairePreset(
+    // === PRÉPA ECG - COMBINAISONS (GÉNÉRÉ AUTOMATIQUEMENT) ===
+    _createQuestionnaireFromTemplates(
       id: 'prepa_math_combinaisons',
       nom: 'Calcul',
       titre: 'COMBINAISONS - ANALYSE COMBINATOIRE',
@@ -776,37 +1114,11 @@ class EducationalImageGenerator {
       categorie: CategorieMatiere.mathematiques,
       typeDeJeu: TypeDeJeu.formulairesLatex,
       sousTheme: 'Analyse combinatoire',
-      colonneGauche: [
-        r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
-        r'\binom{n}{k} = \binom{n}{n-k}',
-        r'C_n^k = \binom{n}{k}',
-        r'\binom{n}{0} = 1',
-        r'\binom{n}{n} = 1',
-        r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
-        r'\sum_{k=0}^{n} \binom{n}{k} = 2^n',
-        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1}',
-        r'\binom{n}{k} \times \binom{k}{p} = \binom{n}{p} \times \binom{n-p}{k-p}',
-        r'(1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^k',
-        r'\binom{n}{k} = \frac{n \times (n-1) \times \cdots \times (n-k+1)}{k!}',
-        r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \geq 1)',
-      ],
-      colonneDroite: [
-        'définition coefficient binomial',
-        'symétrie des coefficients',
-        'notation alternative',
-        'coefficient pour k=0',
-        'coefficient pour k=n',
-        'relation de Pascal',
-        'formule du binôme (1+1)^n',
-        'somme des coefficients diagonaux',
-        'formule de multiplication',
-        'développement binomial',
-        'définition combinatoire',
-        'alternance des signes',
-      ],
+      templates: combinaisonsTemplates,
     ),
 
-    QuestionnairePreset(
+    // === PRÉPA ECG - SOMMES (GÉNÉRÉ AUTOMATIQUEMENT) ===
+    _createQuestionnaireFromTemplates(
       id: 'prepa_math_sommes',
       nom: 'Calcul',
       titre: 'FORMULES DE SOMMES - PRÉPA',
@@ -814,26 +1126,7 @@ class EducationalImageGenerator {
       categorie: CategorieMatiere.mathematiques,
       typeDeJeu: TypeDeJeu.formulairesLatex,
       sousTheme: 'Sommes classiques',
-      colonneGauche: [
-        r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
-        r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
-        r'\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2',
-        r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q} \quad (q \neq 1)',
-        r'\sum_{k=1}^{n} k \cdot q^k = \frac{q(1-(n+1)q^n + nq^{n+1})}{(1-q)^2}',
-        r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} \quad (|q| < 1)',
-        r'\sum_{k=1}^{\infty} k \cdot q^{k-1} = \frac{1}{(1-q)^2} \quad (|q| < 1)',
-        r'\sum_{k=0}^{n} 1 = n+1',
-      ],
-      colonneDroite: [
-        'somme entiers',
-        'somme carrés',
-        'somme cubes',
-        'série géométrique finie',
-        'série arithmético-géométrique',
-        'série géométrique infinie',
-        'dérivée série géométrique',
-        'comptage éléments',
-      ],
+      templates: sommesTemplates,
     ),
 
     QuestionnairePreset(
