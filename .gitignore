@@ -27,3 +27,7 @@ windows/
 *.iml
 *.log
 .DS_Store
+
+# Fichiers de sauvegarde (maintenant que git gère l'historique)
+*.bak
+*.backup
