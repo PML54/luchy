@@ -29,6 +29,7 @@
 /// - Structure: id, nom, titre, niveau, catégorie, colonnes, sousThème
 /// - Couleurs par niveau: Vert→Bleu→Orange→Violet→Rouge
 /// - Compatibilité: Conversion automatique vers ancien format
+/// - 2025-09-01: AJOUT CATÉGORIE COMBINAISONS - Prépa ECG avec formules LaTeX
 /// - 2025-09-01: AJOUT PERTURBATION - Logique de 2 combinaisons identiques avec variables inversées
 /// - 2025-08-25: Création initiale avec code utilisateur
 ///
@@ -38,6 +39,7 @@
 /// - Text rendering: Gérer débordement texte et ellipsis
 /// - Aspect ratio: Maintenir proportions pour découpage puzzle
 /// - Perturbation: 2 combinaisons identiques avec variables inversées pour évaluer la compréhension
+/// - Catégorie Combinaisons: Utilise TypeDeJeu.formulairesLatex pour rendu LaTeX uniforme
 ///
 /// 🚀 PROCHAINES ÉTAPES:
 /// - Ajouter plus de presets (géographie, sciences)
@@ -762,6 +764,45 @@ class EducationalImageGenerator {
         'alternance nulle',
         'somme oblique',
         'série génératrice',
+      ],
+    ),
+
+    // === PRÉPA ECG - COMBINAISONS ===
+    QuestionnairePreset(
+      id: 'prepa_math_combinaisons',
+      nom: 'Calcul',
+      titre: 'COMBINAISONS - ANALYSE COMBINATOIRE',
+      niveau: NiveauEducatif.prepa,
+      categorie: CategorieMatiere.mathematiques,
+      typeDeJeu: TypeDeJeu.formulairesLatex,
+      sousTheme: 'Analyse combinatoire',
+      colonneGauche: [
+        r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
+        r'\binom{n}{k} = \binom{n}{n-k}',
+        r'C_n^k = \binom{n}{k}',
+        r'\binom{n}{0} = 1',
+        r'\binom{n}{n} = 1',
+        r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
+        r'\sum_{k=0}^{n} \binom{n}{k} = 2^n',
+        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1}',
+        r'\binom{n}{k} \times \binom{k}{p} = \binom{n}{p} \times \binom{n-p}{k-p}',
+        r'(1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^k',
+        r'\binom{n}{k} = \frac{n \times (n-1) \times \cdots \times (n-k+1)}{k!}',
+        r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \geq 1)',
+      ],
+      colonneDroite: [
+        'définition coefficient binomial',
+        'symétrie des coefficients',
+        'notation alternative',
+        'coefficient pour k=0',
+        'coefficient pour k=n',
+        'relation de Pascal',
+        'formule du binôme (1+1)^n',
+        'somme des coefficients diagonaux',
+        'formule de multiplication',
+        'développement binomial',
+        'définition combinatoire',
+        'alternance des signes',
       ],
     ),
 
