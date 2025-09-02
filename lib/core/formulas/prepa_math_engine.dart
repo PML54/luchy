@@ -228,15 +228,16 @@ class FormulaParameter {
 /// =====================================================================================
 
 /// Template de formule étendu avec calcul automatique et validation intelligente
+///
+/// 🔄 ARCHITECTURE À 3 NIVEAUX :
+/// 1. latexOrigine   : LaTeX pur d'origine (ex: '\binom{n}{k} = \frac{n!}{k!(n-k)!}')
+/// 2. latexVariable  : LaTeX avec variables marquées (ex: '\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!({VAR:n}-{VAR:k})!}')
+/// 3. latex          : LaTeX final pour affichage (avec substitutions éventuelles)
 class EnhancedFormulaTemplate {
-  /// Expression LaTeX brute avec variables marquées (ex: r'\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!({VAR:n}-{VAR:k})!}')
-  final String _rawLatex;
-
-  /// Partie gauche brute de la formule LaTeX (avant le =) pour affichage puzzle
-  final String? _rawLeftLatex;
-
-  /// Partie droite brute de la formule LaTeX (après le =) pour affichage puzzle
-  final String? _rawRightLatex;
+  /// 📝 NIVEAU 1 : LaTeX d'origine (sans modifications)
+  final String latexOrigine;
+  final String? leftLatexOrigine;
+  final String? rightLatexOrigine;
 
   /// Description pédagogique de la formule
   final String description;
@@ -245,26 +246,29 @@ class EnhancedFormulaTemplate {
   final List<FormulaParameter> parameters;
 
   const EnhancedFormulaTemplate({
-    required String latex,
+    required this.latexOrigine,
     required this.description,
     required this.parameters,
-    String? leftLatex,
-    String? rightLatex,
-  })  : _rawLatex = latex,
-        _rawLeftLatex = leftLatex,
-        _rawRightLatex = rightLatex;
+    this.leftLatexOrigine,
+    this.rightLatexOrigine,
+  });
 
-  /// Expression LaTeX traitée pour l'affichage (variables marquées converties)
-  String get latex => FormulaPreprocessor.processLatex(_rawLatex);
-
-  /// Partie gauche traitée pour l'affichage
-  String? get leftLatex => _rawLeftLatex != null
-      ? FormulaPreprocessor.processLatex(_rawLeftLatex)
+  /// 🔄 NIVEAU 2 : LaTeX avec variables identifiées automatiquement
+  String get latexVariable => _convertToVariableSyntax(latexOrigine);
+  String? get leftLatexVariable => leftLatexOrigine != null
+      ? _convertToVariableSyntax(leftLatexOrigine!)
+      : null;
+  String? get rightLatexVariable => rightLatexOrigine != null
+      ? _convertToVariableSyntax(rightLatexOrigine!)
       : null;
 
-  /// Partie droite traitée pour l'affichage
-  String? get rightLatex => _rawRightLatex != null
-      ? FormulaPreprocessor.processLatex(_rawRightLatex)
+  /// 🎯 NIVEAU 3 : LaTeX final pour affichage (avec substitutions éventuelles)
+  String get latex => _applySubstitutions(latexVariable);
+  String? get leftLatex => leftLatexVariable != null
+      ? _applySubstitutions(leftLatexVariable!)
+      : null;
+  String? get rightLatex => rightLatexVariable != null
+      ? _applySubstitutions(rightLatexVariable!)
       : null;
 
   /// Nombre de paramètres de la formule
@@ -291,13 +295,55 @@ class EnhancedFormulaTemplate {
     return parts.length > 1 ? parts[1].trim() : description;
   }
 
-  /// Obtient les variables extraites de la formule brute
+  /// Obtient les variables extraites de la formule
   List<String> get extractedVariables =>
-      FormulaPreprocessor.extractVariableNames(_rawLatex);
+      FormulaPreprocessor.extractVariableNames(latexVariable);
 
-  /// Substitue les variables marquées dans la formule brute
+  /// Substitue les variables marquées dans la formule
   String substituteMarkedVariables(Map<String, String> values) {
-    return FormulaPreprocessor.substituteVariables(_rawLatex, values);
+    return FormulaPreprocessor.substituteVariables(latexVariable, values);
+  }
+
+  /// 🔧 MÉTHODES INTERNES DE CONVERSION
+
+  /// Convertit un LaTeX d'origine vers la syntaxe avec variables marquées
+  ///
+  /// Détecte automatiquement les variables (lettres isolées) et les convertit en {VAR:nom}
+  /// Exemples:
+  /// - '\binom{n}{k}' → '\binom{{VAR:n}}{{VAR:k}}'
+  /// - '(a+b)^{n}' → '({VAR:a}+{VAR:b})^{{VAR:n}}'
+  String _convertToVariableSyntax(String originalLatex) {
+    // Regex pour détecter les variables : lettres isolées (pas dans des commandes LaTeX)
+    // Évite de transformer \sum, \binom, etc.
+    final RegExp variableRegex =
+        RegExp(r'(?<!\\[a-zA-Z]*)\b([a-zA-Z])\b(?![a-zA-Z])');
+
+    return originalLatex.replaceAllMapped(variableRegex, (match) {
+      final variable = match.group(1)!;
+
+      // Ne pas transformer les commandes LaTeX communes
+      if (_isLatexCommand(variable)) {
+        return variable;
+      }
+
+      return '{VAR:$variable}';
+    });
+  }
+
+  /// Applique les substitutions finales pour l'affichage
+  ///
+  /// Pour l'instant, convertit simplement {VAR:nom} → nom
+  /// Plus tard pourra appliquer des substitutions numériques
+  String _applySubstitutions(String variableLatex) {
+    // Pour l'instant, on utilise le préprocesseur pour convertir vers l'affichage
+    return FormulaPreprocessor.processLatex(variableLatex);
+  }
+
+  /// Vérifie si une chaîne est une commande LaTeX connue à ne pas transformer
+  bool _isLatexCommand(String text) {
+    // Pour l'instant, on accepte toutes les lettres simples comme variables
+    // On peut affiner cette logique plus tard si nécessaire
+    return false;
   }
 
   /// =====================================================================================
@@ -309,7 +355,7 @@ class EnhancedFormulaTemplate {
   /// Avec l'approche "tout substituable", seules les variables marquées avec '_'
   /// sont substituées. Les autres variables restent inchangées.
   ///
-  /// Exemple: r'(_a+_b)^_n' avec {'_a': '2', '_b': '3', '_n': '2'}
+  /// Exemple: r'(_a+_b)^n' avec {'_a': '2', '_b': '3', 'n': '2'}
   /// devient: r'(2+3)^2'
   String substitute(Map<String, String> values) {
     String result = latex;
@@ -380,34 +426,34 @@ class EnhancedFormulaTemplate {
     }
   }
 
-  /// Calcule un coefficient binomial C(_n,_k) = _n! / (_k! * (_n-_k)!)
+  /// Calcule un coefficient binomial C(n,k) = n! / (k! * (n-k)!)
   num? _calculateCombinaison(Map<String, num> values) {
-    final n = values['_n']?.toInt();
-    final k = values['_k']?.toInt();
+    final n = values['n']?.toInt();
+    final k = values['k']?.toInt();
     if (n == null || k == null || k > n || k < 0) return null;
 
     return _factorial(n) / (_factorial(k) * _factorial(n - k));
   }
 
-  /// Calcule un développement binomial (_a+_b)^_n = Σ C(_n,k) * _a^(_n-k) * _b^k
+  /// Calcule un développement binomial (_a+_b)^n = Σ C(n,k) * _a^(n-k) * _b^k
   num? _calculateBinome(Map<String, num> values) {
     final a = values['_a'];
     final b = values['_b'];
-    final n = values['_n']?.toInt();
+    final n = values['n']?.toInt();
     if (a == null || b == null || n == null || n < 0) return null;
 
     num result = 0;
     for (int k = 0; k <= n; k++) {
-      final coeff = _calculateCombinaison({'_n': n, '_k': k});
+      final coeff = _calculateCombinaison({'n': n, 'k': k});
       if (coeff == null) return null;
       result += coeff * math.pow(a, n - k) * math.pow(b, k);
     }
     return result;
   }
 
-  /// Calcule une somme Σ (actuellement supporte Σ(k=1 to _n) k = _n(_n+1)/2)
+  /// Calcule une somme Σ (actuellement supporte Σ(k=1 to n) k = n(n+1)/2)
   num? _calculateSomme(Map<String, num> values) {
-    final n = values['_n']?.toInt();
+    final n = values['n']?.toInt();
     if (n == null || n < 1) return null;
 
     // Formule de la somme des n premiers entiers naturels
@@ -449,7 +495,7 @@ class EnhancedFormulaTemplate {
     final invertedDescription = '$description (paramètres inversés)';
 
     variants.add(FormulaVariant(
-      latex: invertedLatex,
+      latexOrigine: invertedLatex,
       description: invertedDescription,
     ));
     */
@@ -588,27 +634,25 @@ class EnhancedFormulaPerturbationGenerator {
 final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Développement général du binôme
   EnhancedFormulaTemplate(
-    latex:
-        r'({VAR:a}+{VAR:b})^{VAR:n} = \sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:a}^{VAR:n-k} {VAR:b}^{k}',
-    leftLatex: r'({VAR:a}+{VAR:b})^{VAR:n}',
-    rightLatex:
-        r'\sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:a}^{VAR:n-k} {VAR:b}^{k}',
+    latexOrigine: r'(a+b)^{n} = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    leftLatexOrigine: r'(a+b)^{n}',
+    rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
     description: 'développement général du binôme de Newton',
     parameters: const [
       FormulaParameter(
-        name: '_a',
+        name: 'a',
         description: 'première variable (interchangeable avec _b)',
         canInvert: true,
         type: ParameterType.REAL,
       ),
       FormulaParameter(
-        name: '_b',
+        name: 'b',
         description: 'seconde variable (interchangeable avec _a)',
         canInvert: true,
         type: ParameterType.REAL,
       ),
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'exposant entier positif',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -619,20 +663,20 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Coefficient binomial de base
   EnhancedFormulaTemplate(
-    latex: r'\binom{VAR:n}{VAR:k} = \frac{VAR:n!}{VAR:k!(VAR:n-VAR:k)!}',
-    leftLatex: r'\binom{VAR:n}{VAR:k}',
-    rightLatex: r'\frac{VAR:n!}{VAR:k!(VAR:n-VAR:k)!}',
+    latexOrigine: r'\binom{n}{k} = \frac{n!}{k!(n-k)!}',
+    leftLatexOrigine: r'\binom{n}{k}',
+    rightLatexOrigine: r'\frac{n!}{k!(n-k)!}',
     description: 'coefficient binomial de base',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'ensemble total',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 10,
       ),
       FormulaParameter(
-        name: '_k',
+        name: 'k',
         description: 'sous-ensemble choisi',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -643,19 +687,18 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Développement binomial spécial
   EnhancedFormulaTemplate(
-    latex:
-        r'(1+{VAR:x})^{VAR:n} = \sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:x}^{k}',
-    leftLatex: r'(1+{VAR:x})^{VAR:n}',
-    rightLatex: r'\sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:x}^{k}',
+    latexOrigine: r'(1+x)^{n} = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
+    leftLatexOrigine: r'(1+x)^{n}',
+    rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} x^{k}',
     description: 'développement binomial spécial',
     parameters: const [
       FormulaParameter(
-        name: '_x',
+        name: 'x',
         description: 'variable réelle',
         type: ParameterType.REAL,
       ),
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'exposant entier positif',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -666,13 +709,13 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Alternance des coefficients binomiaux
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} (-1)^k \binom{_n}{k} = 0 \quad (_n \ge 1)',
-    leftLatex: r'\sum_{k=0}^{n} (-1)^k \binom{_n}{k}',
-    rightLatex: r'0 \quad (_n \ge 1)',
+    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
+    leftLatexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
+    rightLatexOrigine: r'0 \quad (n \ge 1)',
     description: 'somme alternée des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'exposant (doit être ≥ 1)',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -683,21 +726,21 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Somme oblique de Hockey-stick
   EnhancedFormulaTemplate(
-    latex:
-        r'\sum_{k=r}^{n} \binom{k}{_r} = \binom{_n+1}{_r+1} \quad (_r \le _n)',
-    leftLatex: r'\sum_{k=r}^{n} \binom{k}{_r}',
-    rightLatex: r'\binom{_n+1}{_r+1}',
+    latexOrigine:
+        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} \quad (r \le n)',
+    leftLatexOrigine: r'\sum_{k=r}^{n} \binom{k}{r}',
+    rightLatexOrigine: r'\binom{n+1}{r+1}',
     description: 'identité de hockey-stick',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'borne supérieure',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 12,
       ),
       FormulaParameter(
-        name: '_r',
+        name: 'r',
         description: 'indice fixe (≤ n)',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -708,11 +751,11 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Cas particuliers des coefficients binomiaux
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{0} = 1',
+    latexOrigine: r'\binom{n}{0} = 1',
     description: 'coefficient binomial pour k=0',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'taille de l\'ensemble',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -722,11 +765,11 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   ),
 
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{_n} = 1',
+    latexOrigine: r'\binom{n}{n} = 1',
     description: 'coefficient binomial pour k=n',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'taille de l\'ensemble',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -737,18 +780,18 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Relation de Pascal
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{_k} = \binom{_n-1}{_k} + \binom{_n-1}{_k-1}',
+    latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
     description: 'relation de récurrence de Pascal',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'indice de ligne',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 12,
       ),
       FormulaParameter(
-        name: '_k',
+        name: 'k',
         description: 'indice de colonne',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -759,13 +802,13 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Formule du binôme pour (1+1)^n
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} \binom{_n}{k} = 2^{_n}',
-    leftLatex: r'\sum_{k=0}^{n} \binom{_n}{k}',
-    rightLatex: r'2^{_n}',
+    latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
+    leftLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k}',
+    rightLatexOrigine: r'2^{n}',
     description: 'formule du binôme pour (1+1)^n',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'exposant entier positif',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -776,18 +819,18 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Symétrie des coefficients binomiaux
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{_k} = \binom{_n}{_n-_k}',
+    latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
     description: 'propriété de symétrie des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'taille totale de l\'ensemble',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 12,
       ),
       FormulaParameter(
-        name: '_k',
+        name: 'k',
         description: 'indice (interchangeable avec n-k)',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -805,18 +848,18 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Définition de base
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{_k} = \frac{_n!}{_k!\,(_n-_k)!}',
+    latexOrigine: r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
     description: 'définition du coefficient binomial',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'taille de l\'ensemble',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 12,
       ),
       FormulaParameter(
-        name: '_k',
+        name: 'k',
         description: 'nombre d\'éléments choisis',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -827,18 +870,18 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Propriété symétrique
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{_k} = \binom{_n}{_n-_k}',
+    latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
     description: 'symétrie des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'taille totale',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 12,
       ),
       FormulaParameter(
-        name: '_k',
+        name: 'k',
         description: 'indice (interchangeable avec n-k)',
         canInvert: true,
         type: ParameterType.NATURAL,
@@ -850,18 +893,18 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Triangle de Pascal
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{_k} = \binom{_n-1}{_k} + \binom{_n-1}{_k-1}',
+    latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
     description: 'relation de récurrence du triangle de Pascal',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'ligne du triangle',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 12,
       ),
       FormulaParameter(
-        name: '_k',
+        name: 'k',
         description: 'position dans la ligne',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -872,25 +915,25 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Développement binomial général
   EnhancedFormulaTemplate(
-    latex: r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
-    leftLatex: r'(a+b)^n',
-    rightLatex: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    latexOrigine: r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    leftLatexOrigine: r'(a+b)^n',
+    rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
     description: 'développement binomial général',
     parameters: const [
       FormulaParameter(
-        name: '_a',
+        name: 'a',
         description: 'première variable',
         canInvert: true,
         type: ParameterType.REAL,
       ),
       FormulaParameter(
-        name: '_b',
+        name: 'b',
         description: 'seconde variable',
         canInvert: true,
         type: ParameterType.REAL,
       ),
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'exposant',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -901,13 +944,13 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Nombre total de sous-ensembles
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
-    leftLatex: r'\sum_{k=0}^{n} \binom{n}{k}',
-    rightLatex: r'2^{n}',
+    latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
+    leftLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k}',
+    rightLatexOrigine: r'2^{n}',
     description: 'nombre total de sous-ensembles d\'un ensemble à n éléments',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'taille de l\'ensemble',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -918,13 +961,13 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Relation d'orthogonalité
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
-    leftLatex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
-    rightLatex: r'0 \quad (n \ge 1)',
+    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
+    leftLatexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
+    rightLatexOrigine: r'0 \quad (n \ge 1)',
     description: 'somme alternée des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'degré (doit être ≥ 1)',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -935,13 +978,14 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Identité de Chu-Vandermonde
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k} = \binom{n}{m}',
-    leftLatex: r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k}',
-    rightLatex: r'\binom{n}{m}',
+    latexOrigine:
+        r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k} = \binom{n}{m}',
+    leftLatexOrigine: r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k}',
+    rightLatexOrigine: r'\binom{n}{m}',
     description: 'identité de Chu-Vandermonde (pour m fixe)',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'taille totale',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -966,13 +1010,13 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des premiers entiers
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
-    leftLatex: r'\sum_{k=1}^{n} k',
-    rightLatex: r'\frac{n(n+1)}{2}',
+    latexOrigine: r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
+    leftLatexOrigine: r'\sum_{k=1}^{n} k',
+    rightLatexOrigine: r'\frac{n(n+1)}{2}',
     description: 'somme des n premiers entiers naturels',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'borne supérieure',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -983,13 +1027,13 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Somme des carrés
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
-    leftLatex: r'\sum_{k=1}^{n} k^2',
-    rightLatex: r'\frac{n(n+1)(2n+1)}{6}',
+    latexOrigine: r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
+    leftLatexOrigine: r'\sum_{k=1}^{n} k^2',
+    rightLatexOrigine: r'\frac{n(n+1)(2n+1)}{6}',
     description: 'somme des carrés des n premiers entiers',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'borne supérieure',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -1000,13 +1044,13 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Somme des cubes
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2',
-    leftLatex: r'\sum_{k=1}^{n} k^3',
-    rightLatex: r'\left(\frac{n(n+1)}{2}\right)^2',
+    latexOrigine: r'\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2',
+    leftLatexOrigine: r'\sum_{k=1}^{n} k^3',
+    rightLatexOrigine: r'\left(\frac{n(n+1)}{2}\right)^2',
     description: 'somme des cubes des n premiers entiers',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'borne supérieure',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -1017,9 +1061,10 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Série géométrique finie
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q} \quad (q \neq 1)',
-    leftLatex: r'\sum_{k=0}^{n} q^k',
-    rightLatex: r'\frac{1-q^{n+1}}{1-q}',
+    latexOrigine:
+        r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q} \quad (q \neq 1)',
+    leftLatexOrigine: r'\sum_{k=0}^{n} q^k',
+    rightLatexOrigine: r'\frac{1-q^{n+1}}{1-q}',
     description: 'somme des termes d\'une suite géométrique finie',
     parameters: const [
       FormulaParameter(
@@ -1030,7 +1075,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
         maxValue: 3,
       ),
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'nombre de termes',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -1041,10 +1086,10 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Série arithmético-géométrique
   EnhancedFormulaTemplate(
-    latex:
+    latexOrigine:
         r'\sum_{k=1}^{n} k \cdot q^k = \frac{q(1-(n+1)q^n + nq^{n+1})}{(1-q)^2}',
-    leftLatex: r'\sum_{k=1}^{n} k \cdot q^k',
-    rightLatex: r'\frac{q(1-(n+1)q^n + nq^{n+1})}{(1-q)^2}',
+    leftLatexOrigine: r'\sum_{k=1}^{n} k \cdot q^k',
+    rightLatexOrigine: r'\frac{q(1-(n+1)q^n + nq^{n+1})}{(1-q)^2}',
     description: 'somme d\'une série arithmético-géométrique',
     parameters: const [
       FormulaParameter(
@@ -1055,7 +1100,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
         maxValue: 2,
       ),
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'borne supérieure',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -1066,9 +1111,9 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Série géométrique infinie
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} \quad (|q| < 1)',
-    leftLatex: r'\sum_{k=0}^{\infty} q^k',
-    rightLatex: r'\frac{1}{1-q}',
+    latexOrigine: r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} \quad (|q| < 1)',
+    leftLatexOrigine: r'\sum_{k=0}^{\infty} q^k',
+    rightLatexOrigine: r'\frac{1}{1-q}',
     description: 'somme d\'une série géométrique infinie convergente',
     parameters: const [
       FormulaParameter(
@@ -1083,10 +1128,10 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Dérivée de la série géométrique
   EnhancedFormulaTemplate(
-    latex:
+    latexOrigine:
         r'\sum_{k=1}^{\infty} k \cdot q^{k-1} = \frac{1}{(1-q)^2} \quad (|q| < 1)',
-    leftLatex: r'\sum_{k=1}^{\infty} k \cdot q^{k-1}',
-    rightLatex: r'\frac{1}{(1-q)^2}',
+    leftLatexOrigine: r'\sum_{k=1}^{\infty} k \cdot q^{k-1}',
+    rightLatexOrigine: r'\frac{1}{(1-q)^2}',
     description:
         'somme pondérée par les indices (dérivée de la série géométrique)',
     parameters: const [
@@ -1102,13 +1147,13 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Somme élémentaire
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} 1 = n+1',
-    leftLatex: r'\sum_{k=0}^{n} 1',
-    rightLatex: r'n+1',
+    latexOrigine: r'\sum_{k=0}^{n} 1 = n+1',
+    leftLatexOrigine: r'\sum_{k=0}^{n} 1',
+    rightLatexOrigine: r'n+1',
     description: 'comptage des éléments d\'un ensemble fini',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'nombre d\'éléments',
         type: ParameterType.NATURAL,
         minValue: 0,
@@ -1119,13 +1164,13 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Somme des impairs
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{n} (2k-1) = n^2',
-    leftLatex: r'\sum_{k=1}^{n} (2k-1)',
-    rightLatex: r'n^2',
+    latexOrigine: r'\sum_{k=1}^{n} (2k-1) = n^2',
+    leftLatexOrigine: r'\sum_{k=1}^{n} (2k-1)',
+    rightLatexOrigine: r'n^2',
     description: 'somme des n premiers nombres impairs',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'nombre de termes',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -1136,13 +1181,13 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Somme télescopique
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{n} \frac{1}{k(k+1)} = 1 - \frac{1}{n+1}',
-    leftLatex: r'\sum_{k=1}^{n} \frac{1}{k(k+1)}',
-    rightLatex: r'1 - \frac{1}{n+1}',
+    latexOrigine: r'\sum_{k=1}^{n} \frac{1}{k(k+1)} = 1 - \frac{1}{n+1}',
+    leftLatexOrigine: r'\sum_{k=1}^{n} \frac{1}{k(k+1)}',
+    rightLatexOrigine: r'1 - \frac{1}{n+1}',
     description: 'somme télescopique des fractions unitaires',
     parameters: const [
       FormulaParameter(
-        name: '_n',
+        name: 'n',
         description: 'borne supérieure',
         type: ParameterType.NATURAL,
         minValue: 1,
@@ -1181,7 +1226,7 @@ void testFormulaPreprocessor() {
   // Test des templates modifiés
   print('🔬 TEST DES TEMPLATES MODIFIÉS:');
   final testTemplate = enhancedBinomeTemplates[0];
-  print('Template brut: ${testTemplate._rawLatex}');
+  print('Template brut: ${testTemplate.latexOrigine}');
   print('Template traité: ${testTemplate.latex}');
   print('Variables extraites: ${testTemplate.extractedVariables}');
   print('Partie gauche: ${testTemplate.leftSide}');
