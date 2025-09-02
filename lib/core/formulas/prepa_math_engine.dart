@@ -46,7 +46,7 @@
 /// 🔗 FICHIERS LIÉS:
 /// - educational_image_generator.dart: Utilise ce moteur pour les formules
 /// - binome_formules_screen.dart: Interface utilisateur
-/// - mathematical_formulas_oop.dart: Architecture OOP complémentaire
+/// - Nouvelle architecture unifiée avec approche "tout substituable"
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Cœur du système éducatif mathématique)
 /// 📅 Dernière modification: 2025-01-27
@@ -1194,9 +1194,17 @@ class PrepaMathFormulaManager {
     final formulas = UnifiedMathFormulaManager.prepaUnifiedFormulas;
 
     // Créer les listes pour le questionnaire
-    final leftFormulas = formulas.map((f) => f.latexLeft).toList();
-    final rightResults = formulas.map((f) => f.latexRight).toList();
-    final _ = formulas.map((f) => f.description).toList(); // Pour compatibilité
+    final leftFormulas = formulas.map((f) => f.latex).toList();
+    final rightResults = formulas.map((f) {
+      // Générer des exemples numériques pour la colonne droite
+      final examples = f.generateValidExamples(count: 1);
+      if (examples.isNotEmpty) {
+        final result = f.calculate(examples.first);
+        return result?.toString() ?? 'calcul en cours...';
+      }
+      return 'exemple généré';
+    }).toList();
+    final descriptions = formulas.map((f) => f.description).toList(); // Pour compatibilité
 
     return QuestionnairePreset(
       id: 'prepa_calcul_unified',

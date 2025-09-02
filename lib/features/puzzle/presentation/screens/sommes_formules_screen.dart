@@ -44,48 +44,39 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:luchy/core/formulas/prepa_math_engine.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 
-/// Données complètes - Formules LaTeX des sommes (variables mélangées)
-final List<String> _sommesLatexGaucheComplete = [
-  r'\sum_{n=1}^{p} n',
-  r'\sum_{p=1}^{k} p^2',
-  r'\sum_{n=1}^{k} n^3',
-  r'\sum_{p=0}^{k} q^p',
-  r'\sum_{n=1}^{p} n \cdot q^n',
-  r'\sum_{p=0}^{\infty} q^p',
-  r'\sum_{n=1}^{\infty} n \cdot q^{n-1}',
-  r'\sum_{p=0}^{k} 1',
-  r'\sum_{n=1}^{p} (2n-1)',
-  r'\sum_{p=1}^{k} \frac{1}{p(p+1)}',
-];
+/// =====================================================================================
+/// NOUVELLE ARCHITECTURE - Utilisation de PrepaMathFormulaManager
+/// =====================================================================================
 
-final List<String> _sommesLatexDroiteComplete = [
-  r'\frac{p(p+1)}{2}',
-  r'\frac{k(k+1)(2k+1)}{6}',
-  r'\left(\frac{k(k+1)}{2}\right)^2',
-  r'\frac{1-q^{k+1}}{1-q} \quad (q \neq 1)',
-  r'\frac{q(1-(p+1)q^p + pq^{p+1})}{(1-q)^2}',
-  r'\frac{1}{1-q} \quad (|q| < 1)',
-  r'\frac{1}{(1-q)^2} \quad (|q| < 1)',
-  r'k+1',
-  r'p^2',
-  r'1 - \frac{1}{k+1}',
-];
+/// Fonctions utilisant la nouvelle architecture pour les sommes
+List<String> get _sommesLatexGaucheComplete {
+  return PrepaMathFormulaManager.sommesFormulas
+      .map((f) => f.latex)
+      .toList();
+}
 
-final List<String> _sommesUsage2MotsComplete = [
-  'somme entiers',
-  'somme carrés',
-  'somme cubes',
-  'série géométrique finie',
-  'série arithmético-géométrique',
-  'série géométrique infinie',
-  'dérivée série géométrique',
-  'comptage éléments',
-  'somme impairs',
-  'télescopage',
-];
+List<String> get _sommesLatexDroiteComplete {
+  return PrepaMathFormulaManager.sommesFormulas
+      .map((f) {
+        final examples = f.generateValidExamples(count: 1);
+        if (examples.isNotEmpty) {
+          final result = f.calculate(examples.first);
+          return result?.toString() ?? 'calcul en cours...';
+        }
+        return 'exemple généré';
+      })
+      .toList();
+}
+
+List<String> get _sommesUsage2MotsComplete {
+  return PrepaMathFormulaManager.sommesFormulas
+      .map((f) => f.description)
+      .toList();
+}
 
 /// Fonction pour sélectionner 6 questions aléatoires
 List<int> _selectRandomQuestions() {

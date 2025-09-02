@@ -37,8 +37,7 @@
 /// - Optimiser le chargement des formules
 ///
 /// 🔗 FICHIERS LIÉS:
-/// - core/utils/mathematical_formulas_oop.dart: Architecture de base
-/// - core/utils/formulas_implementation.dart: 25 formules implémentées
+/// - core/formulas/prepa_math_engine.dart: Nouvelle architecture unifiée
 /// - features/puzzle/presentation/widgets/toolbar/custom_toolbar.dart: Navigation
 /// - core/utils/educational_image_generator.dart: Configuration
 ///
@@ -51,8 +50,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:luchy/core/utils/formulas_implementation.dart';
-import 'package:luchy/core/utils/mathematical_formulas_oop.dart';
+import 'package:luchy/core/formulas/prepa_math_engine.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 
@@ -62,103 +60,68 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 
 /// Bibliothèque unifiée des formules mathématiques (concaténation des 3 catégories)
 class UnifiedMathFormulaManager {
-  static final FormulaLibrary _library = FormulaLibrary();
-  static List<MathematicalFormula> _allFormulas = [];
-  static List<MathematicalFormula> _prepaUnifiedFormulas = [];
+  static List<EnhancedFormulaTemplate> _prepaUnifiedFormulas = [];
 
-  /// Initialiser la bibliothèque avec toutes les formules
+  /// Initialiser avec les formules de la nouvelle architecture
   static void initialize() {
-    if (_allFormulas.isEmpty) {
-      // Initialiser la bibliothèque principale
-      initializeFormulaLibrary();
-
-      // Récupérer toutes les formules
-      _allFormulas = _library.allFormulas;
-
-      // Concaténer les 3 catégories de niveau prépa
-      final binomialPrepa = _library
-          .getFormulasByCategory(FormulaCategory.BINOMIAL)
-          .where((f) => f.difficulty == DifficultyLevel.PREPA)
-          .toList();
-
-      final summationPrepa = _library
-          .getFormulasByCategory(FormulaCategory.SUMMATION)
-          .where((f) => f.difficulty == DifficultyLevel.PREPA)
-          .toList();
-
-      final combinatorialPrepa = _library
-          .getFormulasByCategory(FormulaCategory.COMBINATORIAL)
-          .where((f) => f.difficulty == DifficultyLevel.PREPA)
-          .toList();
-
-      // Concaténer toutes les formules de prépa
+    if (_prepaUnifiedFormulas.isEmpty) {
+      // Utiliser la nouvelle architecture PrepaMathFormulaManager
       _prepaUnifiedFormulas = [
-        ...binomialPrepa,
-        ...summationPrepa,
-        ...combinatorialPrepa
+        ...PrepaMathFormulaManager.binomeFormulas,
+        ...PrepaMathFormulaManager.combinaisonsFormulas,
+        ...PrepaMathFormulaManager.sommesFormulas,
       ];
 
-      print('🎯 UnifiedMathFormulaManager:');
-      print('   • Total formules: ${_allFormulas.length}');
-      print('   • Binôme prépa: ${binomialPrepa.length}');
-      print('   • Sommes prépa: ${summationPrepa.length}');
-      print('   • Combinaisons prépa: ${combinatorialPrepa.length}');
+      print('🎯 UnifiedMathFormulaManager (NOUVELLE ARCHITECTURE):');
+      print('   • Binôme: ${PrepaMathFormulaManager.binomeFormulas.length}');
+      print('   • Combinaisons: ${PrepaMathFormulaManager.combinaisonsFormulas.length}');
+      print('   • Sommes: ${PrepaMathFormulaManager.sommesFormulas.length}');
       print('   • Prépa unifié: ${_prepaUnifiedFormulas.length} formules');
     }
   }
 
-  /// Obtenir toutes les formules
-  static List<MathematicalFormula> get allFormulas => _allFormulas;
-
   /// Obtenir les formules unifiées de prépa (concaténation des 3 catégories)
-  static List<MathematicalFormula> get prepaUnifiedFormulas =>
+  static List<EnhancedFormulaTemplate> get prepaUnifiedFormulas =>
       _prepaUnifiedFormulas;
 
-  /// Obtenir les formules par catégorie
-  static List<MathematicalFormula> getFormulasByCategory(
-      FormulaCategory category) {
-    return _allFormulas.where((f) => f.category == category).toList();
-  }
+  /// Obtenir les formules binôme
+  static List<EnhancedFormulaTemplate> get binomeFormulas =>
+      PrepaMathFormulaManager.binomeFormulas;
 
-  /// Obtenir les formules d'un niveau spécifique
-  static List<MathematicalFormula> getFormulasByLevel(DifficultyLevel level) {
-    return _allFormulas.where((f) => f.difficulty == level).toList();
-  }
+  /// Obtenir les formules de combinaisons
+  static List<EnhancedFormulaTemplate> get combinaisonsFormulas =>
+      PrepaMathFormulaManager.combinaisonsFormulas;
 
-  /// Obtenir une formule par son ID
-  static MathematicalFormula? getFormulaById(String id) {
-    try {
-      return _allFormulas.firstWhere((f) => f.id == id);
-    } catch (e) {
-      return null;
-    }
-  }
+  /// Obtenir les formules de sommes
+  static List<EnhancedFormulaTemplate> get sommesFormulas =>
+      PrepaMathFormulaManager.sommesFormulas;
 }
 
-/// Bibliothèque de compatibilité pour les formules de binôme
-class BinomeFormulaManager {
-  static List<MathematicalFormula> get allFormulas =>
-      UnifiedMathFormulaManager.getFormulasByCategory(FormulaCategory.BINOMIAL);
-
-  static void initialize() {
-    UnifiedMathFormulaManager.initialize();
-  }
-}
+/// =====================================================================================
+/// NOUVELLES FONCTIONS DE COMPATIBILITÉ - Nouvelle Architecture
+/// =====================================================================================
 
 /// Fonctions de compatibilité pour l'interface existante
-/// Ces fonctions maintiennent la même API que l'ancien système
-/// Maintenant elles utilisent le système unifié avec concaténation des 3 catégories
+/// Ces fonctions utilisent maintenant la nouvelle architecture PrepaMathFormulaManager
 List<String> get _binomeLatexGaucheComplete {
   UnifiedMathFormulaManager.initialize();
   return UnifiedMathFormulaManager.prepaUnifiedFormulas
-      .map((f) => f.latexLeft)
+      .map((f) => f.latex) // Utilise le latex complet avec variables marquées
       .toList();
 }
 
 List<String> get _binomeLatexDroiteComplete {
   UnifiedMathFormulaManager.initialize();
+  // Pour la nouvelle architecture, on génère des exemples numériques
   return UnifiedMathFormulaManager.prepaUnifiedFormulas
-      .map((f) => f.latexRight)
+      .map((f) {
+        final examples = f.generateValidExamples(count: 1);
+        if (examples.isNotEmpty) {
+          final result = f.calculate(examples.first);
+          return result?.toString() ?? 'calcul en cours...';
+        }
+        return 'exemple généré';
+      })
       .toList();
 }
 
