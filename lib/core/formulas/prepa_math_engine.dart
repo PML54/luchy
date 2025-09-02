@@ -326,38 +326,39 @@ class EnhancedFormulaTemplate {
     }
     // Si pas d'espace autour du =, essayer split simple
     final simpleParts = latexVariable.split('=');
-    return simpleParts.length > 1 ? simpleParts.sublist(1).join('=').trim() : description;
+    return simpleParts.length > 1
+        ? simpleParts.sublist(1).join('=').trim()
+        : description;
   }
 
   /// Génère la version avec variables {VAR:} à partir d'une formule originale
   static String _generateLatexVariableFromOriginal(String origine) {
     String result = origine;
-    
+
     // 1. Capturer les variables avec underscore (ex: C_n, a_i)
-    result = result.replaceAllMapped(
-      RegExp(r'([a-zA-Z])_([a-zA-Z0-9]+)'),
-      (match) => '{VAR:${match.group(1)}_${match.group(2)}}'
-    );
-    
+    result = result.replaceAllMapped(RegExp(r'([a-zA-Z])_([a-zA-Z0-9]+)'),
+        (match) => '{VAR:${match.group(1)}_${match.group(2)}}');
+
     // 2. Capturer les variables simples dans les contextes LaTeX courants
     // Variables dans \binom{n}{k}
     result = result.replaceAllMapped(
-      RegExp(r'\\binom\{([a-zA-Z])\}\{([a-zA-Z])\}'),
-      (match) => r'\binom{{VAR:' + match.group(1)! + r'}}{{VAR:' + match.group(2)! + r'}}'
-    );
-    
+        RegExp(r'\\binom\{([a-zA-Z])\}\{([a-zA-Z])\}'),
+        (match) =>
+            r'\binom{{VAR:' +
+            match.group(1)! +
+            r'}}{{VAR:' +
+            match.group(2)! +
+            r'}}');
+
     // Variables dans \frac{n!}{k!...}
     result = result.replaceAllMapped(
-      RegExp(r'([a-zA-Z])!'),
-      (match) => '{VAR:${match.group(1)}}!'
-    );
-    
+        RegExp(r'([a-zA-Z])!'), (match) => '{VAR:${match.group(1)}}!');
+
     // Variables isolées dans certains contextes (entourées d'espaces, parenthèses, opérateurs)
     result = result.replaceAllMapped(
-      RegExp(r'(?<=[\s\(\)\+\-\*=]|^)([a-zA-Z])(?=[\s\(\)\+\-\*=!]|$)'),
-      (match) => '{VAR:${match.group(1)}}'
-    );
-    
+        RegExp(r'(?<=[\s\(\)\+\-\*=]|^)([a-zA-Z])(?=[\s\(\)\+\-\*=!]|$)'),
+        (match) => '{VAR:${match.group(1)}}');
+
     return result;
   }
 
@@ -370,6 +371,30 @@ class EnhancedFormulaTemplate {
     return FormulaPreprocessor.substituteVariables(latexVariable, values);
   }
 
+  /// Génère une version avec inversion de variables
+  /// Exemple: inverser n et k dans \binom{{VAR:n}}{{VAR:k}}
+  String generateWithInversion(String var1, String var2) {
+    return latexVariable
+        .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
+        .replaceAll('{VAR:$var2}', '{VAR:$var1}')
+        .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
+  }
+
+  /// Génère une version avec substitutions de variables
+  /// Exemple: remplacer n par x, k par y
+  String generateWithSubstitutions(Map<String, String> substitutions) {
+    String result = latexVariable;
+    for (final entry in substitutions.entries) {
+      result = result.replaceAll('{VAR:${entry.key}}', '{VAR:${entry.value}}');
+    }
+    return result;
+  }
+
+  /// Génère le latex final à partir d'une version avec variables
+  String convertVariablesToLatex(String variableVersion) {
+    return FormulaPreprocessor.processLatex(variableVersion);
+  }
+
   /// 🔧 MÉTHODES INTERNES DE CONVERSION
 
   /// Convertit un LaTeX d'origine vers la syntaxe avec variables marquées
@@ -379,21 +404,8 @@ class EnhancedFormulaTemplate {
   /// - '\binom{n}{k}' → '\binom{{VAR:n}}{{VAR:k}}'
   /// - '(a+b)^{n}' → '({VAR:a}+{VAR:b})^{{VAR:n}}'
   String _convertToVariableSyntax(String originalLatex) {
-    // Regex pour détecter les variables : lettres isolées (pas dans des commandes LaTeX)
-    // Évite de transformer \sum, \binom, etc.
-    final RegExp variableRegex =
-        RegExp(r'(?<!\\[a-zA-Z]*)\b([a-zA-Z])\b(?![a-zA-Z])');
-
-    return originalLatex.replaceAllMapped(variableRegex, (match) {
-      final variable = match.group(1)!;
-
-      // Ne pas transformer les commandes LaTeX communes
-      if (_isLatexCommand(variable)) {
-        return variable;
-      }
-
-      return '{VAR:$variable}';
-    });
+    // Utiliser la logique améliorée pour détecter toutes les variables
+    return _generateLatexVariableFromOriginal(originalLatex);
   }
 
   /// Applique les substitutions finales pour l'affichage
