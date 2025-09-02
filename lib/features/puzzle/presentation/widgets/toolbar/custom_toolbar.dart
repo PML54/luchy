@@ -48,6 +48,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Core imports
+import 'package:luchy/core/formulas/prepa_math_engine.dart';
 import 'package:luchy/core/utils/educational_image_generator.dart';
 // Domain imports
 
@@ -57,7 +58,6 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 import 'package:luchy/features/puzzle/presentation/screens/binome_formules_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/figures_style_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/puzzle_game_screen.dart';
-import 'package:luchy/features/puzzle/presentation/screens/sommes_formules_screen.dart';
 import 'package:luchy/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -434,20 +434,15 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
     // Si c'est un formulaire LaTeX, naviguer vers l'écran dédié
     if (questionnaire.typeDeJeu == TypeDeJeu.formulairesLatex) {
       // Déterminer quel écran LaTeX utiliser selon l'ID
-      if (questionnaire.id == 'prepa_math_binome') {
+      if (questionnaire.id == 'prepa_calcul_unified') {
+        // Nouveau système unifié - utilise BinomeFormulesScreen avec concaténation
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => const BinomeFormulesScreen(),
           ),
         );
-      } else if (questionnaire.id == 'prepa_math_sommes') {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const SommesFormulesScreen(),
-          ),
-        );
       } else {
-        // Par défaut, utiliser l'écran binôme pour les autres
+        // Pour les autres questionnaires LaTeX, utiliser l'écran binôme par défaut
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => const BinomeFormulesScreen(),

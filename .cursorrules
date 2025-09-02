@@ -1,0 +1,80 @@
+# RÈGLES CURSOR - MAINTIEN DE LA DOCUMENTATION
+
+## 📋 FORMAT STANDARD DE DOCUMENTATION
+
+Chaque fichier doit contenir une documentation cursor complète :
+
+```dart
+/// <cursor>
+///
+/// [NOM DU MODULE/FICHIER]
+///
+/// [DESCRIPTION DÉTAILLÉE DE 2-3 LIGNES]
+///
+/// COMPOSANTS PRINCIPAUX:
+/// - [Liste des classes/fonctions principales]
+/// - [Responsabilités clés]
+/// - [Interfaces importantes]
+///
+/// ÉTAT ACTUEL:
+/// - [Fonctionnalités implémentées]
+/// - [Statut des tests]
+/// - [Bugs connus ou limitations]
+///
+/// HISTORIQUE RÉCENT:
+/// - [Dernières modifications avec dates]
+/// - [Corrections importantes]
+/// - [Changements d'architecture]
+///
+/// 🔧 POINTS D'ATTENTION:
+/// - [Dépendances critiques]
+/// - [Configurations spéciales]
+/// - [Précautions d'usage]
+///
+/// �� PROCHAINES ÉTAPES:
+/// - [Améliorations planifiées]
+/// - [Nouvelles fonctionnalités]
+/// - [Optimisations à venir]
+///
+/// 🔗 FICHIERS LIÉS:
+/// - [Dépendances importantes]
+/// - [Modules interconnectés]
+///
+/// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Échelle de 1 à 5 étoiles)
+/// 📅 Dernière modification: [DATE_AUTO]
+/// </cursor>
+```
+
+## 🔄 WORKFLOW DE MAINTIEN
+
+### APRÈS CHAQUE MODIFICATION:
+
+1. **Mise à jour automatique de la date:**
+   ```bash
+   ./update_docs_after_edit.sh --all
+   ```
+
+2. **Mise à jour manuelle des sections:**
+   - ÉTAT ACTUEL (si le statut change)
+   - HISTORIQUE RÉCENT (ajouter nouvelle entrée)
+   - POINTS D'ATTENTION (si nouveaux risques)
+   - PROCHAINES ÉTAPES (si planning change)
+
+3. **Vérification:**
+   ```bash
+   # Vérifier la cohérence des dates
+   find lib/ -name "*.dart" -exec grep -l "📅 Dernière modification:" {} \; | xargs grep "2025-" | wc -l
+   ```
+
+## 📊 MÉTRIQUES DE QUALITÉ
+
+- **Couverture documentation:** >95% des fichiers
+- **Fraîcheur:** Dates < 7 jours pour fichiers actifs
+- **Cohérence:** Format uniforme dans tous les fichiers
+
+## 🚫 FICHIERS EXCLUS
+
+Les fichiers suivants NE DOIVENT PAS avoir de doc cursor:
+- `*.freezed.dart` (générés automatiquement)
+- `app_localizations*.dart` (générés par Flutter)
+- `*.g.dart` (générés par build_runner)

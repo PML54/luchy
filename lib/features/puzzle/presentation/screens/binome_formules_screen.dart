@@ -1,42 +1,49 @@
 /// <cursor>
-/// LUCHY - Écran puzzle des formules du binôme de Newton
+/// LUCHY - Écran puzzle des formules du binôme de Newton (ARCHITECTURE OOP)
 ///
-/// Puzzle éducatif avec formules LaTeX et mécanisme de glisser-déposer.
+/// Puzzle éducatif utilisant la nouvelle architecture orientée objet des formules.
 /// Colonne gauche : libellés fixes, Colonne droite : formules déplaçables.
 ///
 /// COMPOSANTS PRINCIPAUX:
 /// - BinomeFormulesScreen: Écran puzzle avec grille 2 colonnes
-/// - Données LaTeX: Formules mathématiques avec flutter_math_fork
-/// - Drag & Drop: Mécanisme de résolution du puzzle
+/// - Architecture OOP: Utilisation de MathematicalFormula et FormulaLibrary
+/// - Données dynamiques: Formules chargées depuis la bibliothèque unifiée
+/// - Drag & Drop: Mécanisme de résolution du puzzle préservé
 /// - Navigation: Intégré dans le système de puzzles éducatifs
 ///
 /// ÉTAT ACTUEL:
+/// - Architecture OOP: Migration complète vers la nouvelle architecture
 /// - Rendu LaTeX: flutter_math_fork pour affichage natif des formules
 /// - Puzzle interactif: Glisser-déposer fonctionnel
-/// - UI cohérente: Style adapté à l'app Luchy
+/// - Bibliothèque unifiée: 25 formules organisées par catégories
 /// - Validation: Détection automatique de completion
 ///
 /// HISTORIQUE RÉCENT:
-/// - Transformation en puzzle interactif
-/// - Intégration drag & drop pour formules LaTeX
-/// - Conservation du rendu LaTeX parfait
+/// - 2025-01-27: Migration vers architecture orientée objet
+/// - Intégration FormulaLibrary avec 25 formules
+/// - Conservation du mécanisme drag & drop
+/// - Rendu LaTeX préservé et optimisé
 ///
 /// 🔧 POINTS D'ATTENTION:
 /// - Dépendance flutter_math_fork requise
 /// - Performance drag & drop sur mobile
+/// - Initialisation FormulaLibrary obligatoire
 /// - Taille des formules adaptée aux cellules
 ///
 /// 🚀 PROCHAINES ÉTAPES:
 /// - Ajouter score et timing
 /// - Intégrer avec système éducatif global
 /// - Ajouter animations de réussite
+/// - Optimiser le chargement des formules
 ///
 /// 🔗 FICHIERS LIÉS:
+/// - core/utils/mathematical_formulas_oop.dart: Architecture de base
+/// - core/utils/formulas_implementation.dart: 25 formules implémentées
 /// - features/puzzle/presentation/widgets/toolbar/custom_toolbar.dart: Navigation
 /// - core/utils/educational_image_generator.dart: Configuration
 ///
-/// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Puzzle LaTeX unique)
-/// 📅 Dernière modification: 2025-01-30 19:00
+/// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Puzzle LaTeX avec architecture moderne)
+/// 📅 Dernière modification: 2025-01-27
 /// </cursor>
 
 import 'dart:math';
@@ -44,48 +51,172 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:luchy/core/utils/formulas_implementation.dart';
+import 'package:luchy/core/utils/mathematical_formulas_oop.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 
-/// Données complètes - Formules LaTeX séparées en parties gauche et droite (variables mélangées)
-final List<String> _binomeLatexGaucheComplete = [
-  r'(a+b)^p',
-  r'\binom{k}{n}',
-  r'\binom{p}{p-n}',
-  r'\sum_{n=0}^{k} \binom{k}{n}',
-  r'\sum_{p=0}^{k} (-1)^p \binom{k}{p}',
-  r'\sum_{n=r}^{p} \binom{n}{r}',
-  r'(1+x)^k',
-  r'\binom{p}{0}',
-  r'\binom{k}{k}',
-];
+/// =====================================================================================
+/// NOUVELLE ARCHITECTURE - Chargement dynamique des formules
+/// =====================================================================================
 
-final List<String> _binomeLatexDroiteComplete = [
-  r'\sum_{n=0}^{p} \binom{p}{n} a^{\,p-n} b^{\,n}',
-  r'\frac{k!}{n!\,(k-n)!}',
-  r'\binom{p}{n}',
-  r'2^{k}',
-  r'0 \quad (k\ge 1)',
-  r'\binom{p+1}{r+1} \quad (r\le p)',
-  r'\sum_{n=0}^{k} \binom{k}{n} x^{n}',
-  r'1',
-  r'1',
-];
+/// Bibliothèque unifiée des formules mathématiques (concaténation des 3 catégories)
+class UnifiedMathFormulaManager {
+  static final FormulaLibrary _library = FormulaLibrary();
+  static List<MathematicalFormula> _allFormulas = [];
+  static List<MathematicalFormula> _prepaUnifiedFormulas = [];
 
-final List<String> _binomeUsage2MotsComplete = [
-  'développement puissance',
-  'calcul coefficient',
-  'symétrie coefficients',
-  'comptage sous-ensembles',
-  'alternance nulle',
-  'somme oblique',
-  'série génératrice',
-  'cas particulier k=0',
-  'cas particulier k=n',
-];
+  /// Initialiser la bibliothèque avec toutes les formules
+  static void initialize() {
+    if (_allFormulas.isEmpty) {
+      // Initialiser la bibliothèque principale
+      initializeFormulaLibrary();
 
-/// Fonction pour sélectionner 6 questions aléatoires
+      // Récupérer toutes les formules
+      _allFormulas = _library.allFormulas;
+
+      // Concaténer les 3 catégories de niveau prépa
+      final binomialPrepa = _library
+          .getFormulasByCategory(FormulaCategory.BINOMIAL)
+          .where((f) => f.difficulty == DifficultyLevel.PREPA)
+          .toList();
+
+      final summationPrepa = _library
+          .getFormulasByCategory(FormulaCategory.SUMMATION)
+          .where((f) => f.difficulty == DifficultyLevel.PREPA)
+          .toList();
+
+      final combinatorialPrepa = _library
+          .getFormulasByCategory(FormulaCategory.COMBINATORIAL)
+          .where((f) => f.difficulty == DifficultyLevel.PREPA)
+          .toList();
+
+      // Concaténer toutes les formules de prépa
+      _prepaUnifiedFormulas = [
+        ...binomialPrepa,
+        ...summationPrepa,
+        ...combinatorialPrepa
+      ];
+
+      print('🎯 UnifiedMathFormulaManager:');
+      print('   • Total formules: ${_allFormulas.length}');
+      print('   • Binôme prépa: ${binomialPrepa.length}');
+      print('   • Sommes prépa: ${summationPrepa.length}');
+      print('   • Combinaisons prépa: ${combinatorialPrepa.length}');
+      print('   • Prépa unifié: ${_prepaUnifiedFormulas.length} formules');
+    }
+  }
+
+  /// Obtenir toutes les formules
+  static List<MathematicalFormula> get allFormulas => _allFormulas;
+
+  /// Obtenir les formules unifiées de prépa (concaténation des 3 catégories)
+  static List<MathematicalFormula> get prepaUnifiedFormulas =>
+      _prepaUnifiedFormulas;
+
+  /// Obtenir les formules par catégorie
+  static List<MathematicalFormula> getFormulasByCategory(
+      FormulaCategory category) {
+    return _allFormulas.where((f) => f.category == category).toList();
+  }
+
+  /// Obtenir les formules d'un niveau spécifique
+  static List<MathematicalFormula> getFormulasByLevel(DifficultyLevel level) {
+    return _allFormulas.where((f) => f.difficulty == level).toList();
+  }
+
+  /// Obtenir une formule par son ID
+  static MathematicalFormula? getFormulaById(String id) {
+    try {
+      return _allFormulas.firstWhere((f) => f.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
+/// Bibliothèque de compatibilité pour les formules de binôme
+class BinomeFormulaManager {
+  static List<MathematicalFormula> get allFormulas =>
+      UnifiedMathFormulaManager.getFormulasByCategory(FormulaCategory.BINOMIAL);
+
+  static void initialize() {
+    UnifiedMathFormulaManager.initialize();
+  }
+}
+
+/// Fonctions de compatibilité pour l'interface existante
+/// Ces fonctions maintiennent la même API que l'ancien système
+/// Maintenant elles utilisent le système unifié avec concaténation des 3 catégories
+List<String> get _binomeLatexGaucheComplete {
+  UnifiedMathFormulaManager.initialize();
+  return UnifiedMathFormulaManager.prepaUnifiedFormulas
+      .map((f) => f.latexLeft)
+      .toList();
+}
+
+List<String> get _binomeLatexDroiteComplete {
+  UnifiedMathFormulaManager.initialize();
+  return UnifiedMathFormulaManager.prepaUnifiedFormulas
+      .map((f) => f.latexRight)
+      .toList();
+}
+
+List<String> get _binomeUsage2MotsComplete {
+  UnifiedMathFormulaManager.initialize();
+  return UnifiedMathFormulaManager.prepaUnifiedFormulas
+      .map((f) => f.description)
+      .toList();
+}
+
+/// Fonction pour sélectionner 6 questions aléatoires avec résultats ET formules uniques
 List<int> _selectRandomQuestions() {
+  final random = Random();
+  final availableIndices =
+      List.generate(_binomeLatexGaucheComplete.length, (i) => i);
+  final selectedIndices = <int>[];
+  final usedLeftFormulas =
+      <String>{}; // Pour éviter les doublons dans la colonne gauche
+  final usedRightResults =
+      <String>{}; // Pour éviter les doublons dans la colonne droite
+
+  // Mélanger les indices disponibles
+  availableIndices.shuffle(random);
+
+  // Sélectionner jusqu'à 6 questions avec formules ET résultats uniques
+  for (final index in availableIndices) {
+    if (selectedIndices.length >= 6) break;
+
+    final leftFormula = _binomeLatexGaucheComplete[index];
+    final rightResult = _binomeLatexDroiteComplete[index];
+
+    // Vérifier si cette formule OU ce résultat n'a pas déjà été utilisé
+    if (!usedLeftFormulas.contains(leftFormula) &&
+        !usedRightResults.contains(rightResult)) {
+      selectedIndices.add(index);
+      usedLeftFormulas.add(leftFormula);
+      usedRightResults.add(rightResult);
+
+      // Debug: afficher ce qui est sélectionné
+      print('🎯 Sélectionnée: $leftFormula = $rightResult');
+    } else {
+      // Debug: afficher ce qui est rejeté et pourquoi
+      final reason = usedLeftFormulas.contains(leftFormula)
+          ? 'formule gauche déjà utilisée'
+          : 'résultat droite déjà utilisé';
+      print('❌ Rejetée ($reason): $leftFormula = $rightResult');
+    }
+  }
+
+  print(
+      '📊 Sélection finale: ${selectedIndices.length} formules avec ${usedLeftFormulas.length} formules uniques et ${usedRightResults.length} résultats uniques');
+  return selectedIndices;
+}
+
+/// Fonction de secours si on n'a pas assez de résultats uniques
+List<int> _selectRandomQuestionsFallback() {
+  print(
+      '⚠️ Pas assez de résultats uniques, utilisation de la méthode classique');
   final random = Random();
   final availableIndices =
       List.generate(_binomeLatexGaucheComplete.length, (i) => i);
@@ -119,14 +250,26 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Initialiser la bibliothèque unifiée avec concaténation des 3 catégories
+    UnifiedMathFormulaManager.initialize();
+
     _initializeQuestions();
     _initializePuzzle();
     _startTime = DateTime.now(); // Démarrer le chronométrage
   }
 
   void _initializeQuestions() {
-    // Sélectionner 6 questions aléatoires
+    // Sélectionner 6 questions aléatoires avec résultats uniques
     _currentSelection = _selectRandomQuestions();
+
+    // Si on n'a pas assez de questions (moins de 6), utiliser la méthode de secours
+    if (_currentSelection.length < 6) {
+      print(
+          '⚠️ Seulement ${_currentSelection.length} questions uniques trouvées, utilisation de la méthode de secours');
+      _currentSelection = _selectRandomQuestionsFallback();
+    }
+
     _itemCount = _currentSelection.length;
 
     // Créer les listes filtrées
@@ -136,6 +279,8 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
         _currentSelection.map((i) => _binomeLatexDroiteComplete[i]).toList();
     binomeUsage2Mots =
         _currentSelection.map((i) => _binomeUsage2MotsComplete[i]).toList();
+
+    print('✅ Questions initialisées: $_itemCount formules chargées');
   }
 
   void _initializePuzzle() {
