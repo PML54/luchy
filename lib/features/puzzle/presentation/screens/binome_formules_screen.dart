@@ -107,16 +107,16 @@ class UnifiedMathFormulaManager {
 List<String> get _binomeLatexGaucheComplete {
   // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
   return PrepaMathFormulaManager.binomeFormulas.map((f) {
-    // Utiliser la nouvelle propriété leftSide qui gère automatiquement leftLatex ou split
-    return f.leftSide;
+    // Utiliser leftSideWithVariables pour afficher les variables {VAR:}
+    return f.leftSideWithVariables;
   }).toList();
 }
 
 List<String> get _binomeLatexDroiteComplete {
   // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
   return PrepaMathFormulaManager.binomeFormulas.map((f) {
-    // Utiliser la nouvelle propriété rightSide qui gère automatiquement rightLatex ou split
-    return f.rightSide;
+    // Utiliser rightSideWithVariables pour afficher les variables {VAR:}
+    return f.rightSideWithVariables;
   }).toList();
 }
 

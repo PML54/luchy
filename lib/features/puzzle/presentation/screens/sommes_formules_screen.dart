@@ -55,15 +55,15 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 /// Fonctions utilisant la nouvelle architecture pour les sommes
 List<String> get _sommesLatexGaucheComplete {
   return PrepaMathFormulaManager.sommesFormulas.map((f) {
-    // Utiliser la nouvelle propriété leftSide qui gère automatiquement leftLatex ou split
-    return f.leftSide;
+    // Utiliser leftSideWithVariables pour afficher les variables {VAR:}
+    return f.leftSideWithVariables;
   }).toList();
 }
 
 List<String> get _sommesLatexDroiteComplete {
   return PrepaMathFormulaManager.sommesFormulas.map((f) {
-    // Utiliser la nouvelle propriété rightSide qui gère automatiquement rightLatex ou split
-    return f.rightSide;
+    // Utiliser rightSideWithVariables pour afficher les variables {VAR:}
+    return f.rightSideWithVariables;
   }).toList();
 }
 

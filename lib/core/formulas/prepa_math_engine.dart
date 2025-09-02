@@ -295,6 +295,72 @@ class EnhancedFormulaTemplate {
     return parts.length > 1 ? parts[1].trim() : description;
   }
 
+  /// Obtient la partie gauche avec variables {VAR:} visibles
+  String get leftSideWithVariables {
+    if (leftLatex != null) {
+      // Si leftLatex est défini, d'abord générer la version avec {VAR:}
+      final withVars = _generateLatexVariableFromOriginal(leftLatex!);
+      return withVars;
+    }
+    // Simple split - on trouve le premier = qui est un séparateur principal
+    final parts = latexVariable.split(' = ');
+    if (parts.length >= 2) {
+      return parts[0].trim();
+    }
+    // Si pas d'espace autour du =, essayer split simple
+    final simpleParts = latexVariable.split('=');
+    return simpleParts.isNotEmpty ? simpleParts[0].trim() : latexVariable;
+  }
+
+  /// Obtient la partie droite avec variables {VAR:} visibles
+  String get rightSideWithVariables {
+    if (rightLatex != null) {
+      // Si rightLatex est défini, d'abord générer la version avec {VAR:}
+      final withVars = _generateLatexVariableFromOriginal(rightLatex!);
+      return withVars;
+    }
+    // Simple split - on trouve le premier = qui est un séparateur principal
+    final parts = latexVariable.split(' = ');
+    if (parts.length >= 2) {
+      return parts.sublist(1).join(' = ').trim();
+    }
+    // Si pas d'espace autour du =, essayer split simple
+    final simpleParts = latexVariable.split('=');
+    return simpleParts.length > 1 ? simpleParts.sublist(1).join('=').trim() : description;
+  }
+
+  /// Génère la version avec variables {VAR:} à partir d'une formule originale
+  static String _generateLatexVariableFromOriginal(String origine) {
+    String result = origine;
+    
+    // 1. Capturer les variables avec underscore (ex: C_n, a_i)
+    result = result.replaceAllMapped(
+      RegExp(r'([a-zA-Z])_([a-zA-Z0-9]+)'),
+      (match) => '{VAR:${match.group(1)}_${match.group(2)}}'
+    );
+    
+    // 2. Capturer les variables simples dans les contextes LaTeX courants
+    // Variables dans \binom{n}{k}
+    result = result.replaceAllMapped(
+      RegExp(r'\\binom\{([a-zA-Z])\}\{([a-zA-Z])\}'),
+      (match) => r'\binom{{VAR:' + match.group(1)! + r'}}{{VAR:' + match.group(2)! + r'}}'
+    );
+    
+    // Variables dans \frac{n!}{k!...}
+    result = result.replaceAllMapped(
+      RegExp(r'([a-zA-Z])!'),
+      (match) => '{VAR:${match.group(1)}}!'
+    );
+    
+    // Variables isolées dans certains contextes (entourées d'espaces, parenthèses, opérateurs)
+    result = result.replaceAllMapped(
+      RegExp(r'(?<=[\s\(\)\+\-\*=]|^)([a-zA-Z])(?=[\s\(\)\+\-\*=!]|$)'),
+      (match) => '{VAR:${match.group(1)}}'
+    );
+    
+    return result;
+  }
+
   /// Obtient les variables extraites de la formule
   List<String> get extractedVariables =>
       FormulaPreprocessor.extractVariableNames(latexVariable);
