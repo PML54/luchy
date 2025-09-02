@@ -59,6 +59,81 @@ import 'package:luchy/features/puzzle/presentation/screens/binome_formules_scree
     show UnifiedMathFormulaManager;
 
 /// =====================================================================================
+/// 🔄 PRÉPROCESSEUR DE FORMULES LATEX
+/// =====================================================================================
+
+/// Préprocesseur pour convertir les variables marquées en LaTeX standard
+///
+/// Utilise la syntaxe {VAR:nom} pour marquer les variables dans les templates,
+/// puis les convertit en variables LaTeX standard pour l'affichage.
+///
+/// Exemple: {VAR:n} → n, {VAR:alpha} → alpha
+class FormulaPreprocessor {
+  /// Regex pour détecter les variables marquées {VAR:nom}
+  static final RegExp _variableRegex =
+      RegExp(r'\{VAR:([a-zA-Z][a-zA-Z0-9]*)\}');
+
+  /// Convertit les variables marquées en LaTeX standard
+  ///
+  /// Exemples:
+  /// - '{VAR:n}' → 'n'
+  /// - '\\binom{{VAR:n}}{{VAR:k}}' → '\\binom{n}{k}'
+  /// - '{VAR:alpha}^{VAR:beta}' → 'alpha^{beta}'
+  static String processLatex(String rawLatex) {
+    if (rawLatex.isEmpty) return rawLatex;
+
+    return rawLatex.replaceAllMapped(_variableRegex, (match) {
+      final variableName = match.group(1)!;
+      return variableName;
+    });
+  }
+
+  /// Extrait les noms de variables depuis le LaTeX marqué
+  ///
+  /// Retourne la liste unique des variables trouvées
+  /// Exemple: '\\binom{{VAR:n}}{{VAR:k}}' → ['n', 'k']
+  static List<String> extractVariableNames(String rawLatex) {
+    if (rawLatex.isEmpty) return [];
+
+    return _variableRegex
+        .allMatches(rawLatex)
+        .map((match) => match.group(1)!)
+        .toSet() // Éliminer les doublons
+        .toList();
+  }
+
+  /// Convertit une variable standard en variable marquée
+  ///
+  /// Utile pour les tests et la conversion inverse
+  /// Exemple: 'n' → '{VAR:n}'
+  static String markVariable(String variableName) {
+    return '{VAR:$variableName}';
+  }
+
+  /// Vérifie si une chaîne contient des variables marquées
+  static bool hasMarkedVariables(String text) {
+    return _variableRegex.hasMatch(text);
+  }
+
+  /// Compte le nombre de variables marquées dans une chaîne
+  static int countMarkedVariables(String text) {
+    return _variableRegex.allMatches(text).length;
+  }
+
+  /// Remplace les variables marquées par des valeurs spécifiques
+  ///
+  /// Exemple: substitueVariables('{VAR:n}+{VAR:k}', {'n': '5', 'k': '2'}) → '5+2'
+  static String substituteVariables(
+      String rawLatex, Map<String, String> values) {
+    return rawLatex.replaceAllMapped(_variableRegex, (match) {
+      final variableName = match.group(1)!;
+      return values[variableName] ??
+          match.group(0)!; // Garder original si pas trouvé
+    });
+  }
+}
+
+/// =====================================================================================
 /// 🧮 ARCHITECTURE DE VALIDATION ET CALCUL
 /// =====================================================================================
 
@@ -154,14 +229,14 @@ class FormulaParameter {
 
 /// Template de formule étendu avec calcul automatique et validation intelligente
 class EnhancedFormulaTemplate {
-  /// Expression LaTeX de la formule (ex: r'C(n,k) = \frac{n!}{k!(n-k)!}')
-  final String latex;
+  /// Expression LaTeX brute avec variables marquées (ex: r'\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!({VAR:n}-{VAR:k})!}')
+  final String _rawLatex;
 
-  /// Partie gauche de la formule LaTeX (avant le =) pour affichage puzzle
-  final String? leftLatex;
+  /// Partie gauche brute de la formule LaTeX (avant le =) pour affichage puzzle
+  final String? _rawLeftLatex;
 
-  /// Partie droite de la formule LaTeX (après le =) pour affichage puzzle
-  final String? rightLatex;
+  /// Partie droite brute de la formule LaTeX (après le =) pour affichage puzzle
+  final String? _rawRightLatex;
 
   /// Description pédagogique de la formule
   final String description;
@@ -170,12 +245,27 @@ class EnhancedFormulaTemplate {
   final List<FormulaParameter> parameters;
 
   const EnhancedFormulaTemplate({
-    required this.latex,
+    required String latex,
     required this.description,
     required this.parameters,
-    this.leftLatex,
-    this.rightLatex,
-  });
+    String? leftLatex,
+    String? rightLatex,
+  })  : _rawLatex = latex,
+        _rawLeftLatex = leftLatex,
+        _rawRightLatex = rightLatex;
+
+  /// Expression LaTeX traitée pour l'affichage (variables marquées converties)
+  String get latex => FormulaPreprocessor.processLatex(_rawLatex);
+
+  /// Partie gauche traitée pour l'affichage
+  String? get leftLatex => _rawLeftLatex != null
+      ? FormulaPreprocessor.processLatex(_rawLeftLatex)
+      : null;
+
+  /// Partie droite traitée pour l'affichage
+  String? get rightLatex => _rawRightLatex != null
+      ? FormulaPreprocessor.processLatex(_rawRightLatex)
+      : null;
 
   /// Nombre de paramètres de la formule
   int get parameterCount => parameters.length;
@@ -199,6 +289,15 @@ class EnhancedFormulaTemplate {
     if (rightLatex != null) return rightLatex!;
     final parts = latex.split('=');
     return parts.length > 1 ? parts[1].trim() : description;
+  }
+
+  /// Obtient les variables extraites de la formule brute
+  List<String> get extractedVariables =>
+      FormulaPreprocessor.extractVariableNames(_rawLatex);
+
+  /// Substitue les variables marquées dans la formule brute
+  String substituteMarkedVariables(Map<String, String> values) {
+    return FormulaPreprocessor.substituteVariables(_rawLatex, values);
   }
 
   /// =====================================================================================
@@ -489,9 +588,11 @@ class EnhancedFormulaPerturbationGenerator {
 final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Développement général du binôme
   EnhancedFormulaTemplate(
-    latex: r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
-    leftLatex: r'(a+b)^n',
-    rightLatex: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    latex:
+        r'({VAR:a}+{VAR:b})^{VAR:n} = \sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:a}^{VAR:n-k} {VAR:b}^{k}',
+    leftLatex: r'({VAR:a}+{VAR:b})^{VAR:n}',
+    rightLatex:
+        r'\sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:a}^{VAR:n-k} {VAR:b}^{k}',
     description: 'développement général du binôme de Newton',
     parameters: const [
       FormulaParameter(
@@ -518,9 +619,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Coefficient binomial de base
   EnhancedFormulaTemplate(
-    latex: r'\binom{n}{k} = \frac{n!}{k!(n-k)!}',
-    leftLatex: r'\binom{n}{k}',
-    rightLatex: r'\frac{n!}{k!(n-k)!}',
+    latex: r'\binom{VAR:n}{VAR:k} = \frac{VAR:n!}{VAR:k!(VAR:n-VAR:k)!}',
+    leftLatex: r'\binom{VAR:n}{VAR:k}',
+    rightLatex: r'\frac{VAR:n!}{VAR:k!(VAR:n-VAR:k)!}',
     description: 'coefficient binomial de base',
     parameters: const [
       FormulaParameter(
@@ -542,9 +643,10 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Développement binomial spécial
   EnhancedFormulaTemplate(
-    latex: r'(1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
-    leftLatex: r'(1+x)^n',
-    rightLatex: r'\sum_{k=0}^{n} \binom{n}{k} x^{k}',
+    latex:
+        r'(1+{VAR:x})^{VAR:n} = \sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:x}^{k}',
+    leftLatex: r'(1+{VAR:x})^{VAR:n}',
+    rightLatex: r'\sum_{k=0}^{VAR:n} \binom{VAR:n}{k} {VAR:x}^{k}',
     description: 'développement binomial spécial',
     parameters: const [
       FormulaParameter(
@@ -564,9 +666,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Alternance des coefficients binomiaux
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
-    leftLatex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
-    rightLatex: r'0 \quad (n \ge 1)',
+    latex: r'\sum_{k=0}^{n} (-1)^k \binom{_n}{k} = 0 \quad (_n \ge 1)',
+    leftLatex: r'\sum_{k=0}^{n} (-1)^k \binom{_n}{k}',
+    rightLatex: r'0 \quad (_n \ge 1)',
     description: 'somme alternée des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
@@ -581,9 +683,10 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Somme oblique de Hockey-stick
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} \quad (r \le n)',
-    leftLatex: r'\sum_{k=r}^{n} \binom{k}{r}',
-    rightLatex: r'\binom{n+1}{r+1}',
+    latex:
+        r'\sum_{k=r}^{n} \binom{k}{_r} = \binom{_n+1}{_r+1} \quad (_r \le _n)',
+    leftLatex: r'\sum_{k=r}^{n} \binom{k}{_r}',
+    rightLatex: r'\binom{_n+1}{_r+1}',
     description: 'identité de hockey-stick',
     parameters: const [
       FormulaParameter(
@@ -656,9 +759,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Formule du binôme pour (1+1)^n
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
-    leftLatex: r'\sum_{k=0}^{n} \binom{n}{k}',
-    rightLatex: r'2^{n}',
+    latex: r'\sum_{k=0}^{n} \binom{_n}{k} = 2^{_n}',
+    leftLatex: r'\sum_{k=0}^{n} \binom{_n}{k}',
+    rightLatex: r'2^{_n}',
     description: 'formule du binôme pour (1+1)^n',
     parameters: const [
       FormulaParameter(
@@ -1052,6 +1155,40 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 /// =====================================================================================
 /// 🧪 FONCTIONS DE TEST ET VALIDATION
 /// =====================================================================================
+
+/// Teste le préprocesseur de formules
+void testFormulaPreprocessor() {
+  print('🧪 TEST DU PRÉPROCESSEUR DE FORMULES');
+  print('=' * 60);
+
+  // Test basique de conversion
+  final testCases = [
+    '{VAR:n}',
+    '\\binom{{VAR:n}}{{VAR:k}}',
+    '({VAR:a}+{VAR:b})^{VAR:n}',
+    '\\sum_{{k=0}}^{{VAR:n}} \\binom{{VAR:n}}{{k}} {VAR:x}^{{k}}',
+  ];
+
+  for (final testCase in testCases) {
+    final processed = FormulaPreprocessor.processLatex(testCase);
+    final variables = FormulaPreprocessor.extractVariableNames(testCase);
+    print('📝 Entrée:  $testCase');
+    print('✅ Sortie:  $processed');
+    print('🔤 Variables: $variables');
+    print('');
+  }
+
+  // Test des templates modifiés
+  print('🔬 TEST DES TEMPLATES MODIFIÉS:');
+  final testTemplate = enhancedBinomeTemplates[0];
+  print('Template brut: ${testTemplate._rawLatex}');
+  print('Template traité: ${testTemplate.latex}');
+  print('Variables extraites: ${testTemplate.extractedVariables}');
+  print('Partie gauche: ${testTemplate.leftSide}');
+  print('Partie droite: ${testTemplate.rightSide}');
+
+  print('\n✅ TESTS DU PRÉPROCESSEUR TERMINÉS !');
+}
 
 /// Teste le calcul automatique des formules
 void testEnhancedCalculations() {

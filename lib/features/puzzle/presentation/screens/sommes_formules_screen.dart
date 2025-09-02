@@ -164,15 +164,15 @@ class _SommesFormulesScreenState extends ConsumerState<SommesFormulesScreen> {
     if (isTablet) {
       // Tailles beaucoup plus grandes pour tablettes
       if (screenWidth >= 1200) {
-        return 32.0; // Très grande tablette/desktop
+        return 40.0; // Très grande tablette/desktop - augmentée
       } else if (screenWidth >= 900) {
-        return 28.0; // Grande tablette
+        return 36.0; // Grande tablette - augmentée
       } else {
-        return 24.0; // Tablette moyenne
+        return 32.0; // Tablette moyenne - augmentée
       }
     } else {
-      // Taille standard pour smartphones
-      return 16.0; // Légèrement augmentée aussi
+      // Taille standard pour smartphones - augmentée
+      return 20.0; // Augmentée de 16 à 20 pour compenser flutter_math_fork
     }
   }
 
@@ -459,34 +459,7 @@ class _SommesFormulesScreenState extends ConsumerState<SommesFormulesScreen> {
                 },
               ),
 
-              // Message de completion
-              if (isComplete)
-                Positioned(
-                  left: 20,
-                  top: 20,
-                  child: AnimatedOpacity(
-                    opacity: 1.0,
-                    duration: const Duration(milliseconds: 2000),
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.orange
-                            .withAlpha(200), // Couleur Epicerie Luchy
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: const Text(
-                        "🎉 Toutes les formules associées !",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
+              // Pas de message automatique - l'utilisateur doit valider lui-même
             ],
           ),
         ),

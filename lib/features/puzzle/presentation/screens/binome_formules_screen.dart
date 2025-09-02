@@ -105,24 +105,24 @@ class UnifiedMathFormulaManager {
 /// Fonctions de compatibilité pour l'interface existante
 /// Ces fonctions utilisent maintenant la nouvelle architecture PrepaMathFormulaManager
 List<String> get _binomeLatexGaucheComplete {
-  UnifiedMathFormulaManager.initialize();
-  return UnifiedMathFormulaManager.prepaUnifiedFormulas.map((f) {
+  // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
+  return PrepaMathFormulaManager.binomeFormulas.map((f) {
     // Utiliser la nouvelle propriété leftSide qui gère automatiquement leftLatex ou split
     return f.leftSide;
   }).toList();
 }
 
 List<String> get _binomeLatexDroiteComplete {
-  UnifiedMathFormulaManager.initialize();
-  return UnifiedMathFormulaManager.prepaUnifiedFormulas.map((f) {
+  // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
+  return PrepaMathFormulaManager.binomeFormulas.map((f) {
     // Utiliser la nouvelle propriété rightSide qui gère automatiquement rightLatex ou split
     return f.rightSide;
   }).toList();
 }
 
 List<String> get _binomeUsage2MotsComplete {
-  UnifiedMathFormulaManager.initialize();
-  return UnifiedMathFormulaManager.prepaUnifiedFormulas
+  // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
+  return PrepaMathFormulaManager.binomeFormulas
       .map((f) => f.description)
       .toList();
 }
@@ -278,15 +278,15 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     if (isTablet) {
       // Tailles beaucoup plus grandes pour tablettes
       if (screenWidth >= 1200) {
-        return 32.0; // Très grande tablette/desktop
+        return 40.0; // Très grande tablette/desktop - augmentée
       } else if (screenWidth >= 900) {
-        return 28.0; // Grande tablette
+        return 36.0; // Grande tablette - augmentée
       } else {
-        return 24.0; // Tablette moyenne
+        return 32.0; // Tablette moyenne - augmentée
       }
     } else {
-      // Taille standard pour smartphones
-      return 16.0; // Légèrement augmentée aussi
+      // Taille standard pour smartphones - augmentée
+      return 20.0; // Augmentée de 16 à 20 pour compenser flutter_math_fork
     }
   }
 
@@ -462,6 +462,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                                 binomeLatexGauche[_leftArrangement[row]],
                                 textStyle: TextStyle(
                                     fontSize: _getAdaptiveFontSize(context)),
+
                               ),
                             ),
                             // Overlay avec définition si activé
@@ -526,6 +527,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                                   binomeLatexDroite[formulaIndex],
                                   textStyle: TextStyle(
                                       fontSize: _getAdaptiveFontSize(context)),
+  
                                 ),
                               ),
                             ),
@@ -555,6 +557,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                                 binomeLatexDroite[formulaIndex],
                                 textStyle: TextStyle(
                                     fontSize: _getAdaptiveFontSize(context)),
+
                               ),
                             ),
                           ),
@@ -565,33 +568,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                 },
               ),
 
-              // Message de completion
-              if (isComplete)
-                Positioned(
-                  left: 20,
-                  top: 20,
-                  child: AnimatedOpacity(
-                    opacity: 1.0,
-                    duration: const Duration(milliseconds: 500),
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.orange
-                            .withAlpha(200), // Couleur Epicerie Luchy
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: const Text(
-                        "Epicerie Luchy",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              // Pas de message automatique - l'utilisateur doit valider lui-même
             ],
           ),
         ),
