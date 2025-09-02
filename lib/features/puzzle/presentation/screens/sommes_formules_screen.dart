@@ -54,22 +54,17 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 
 /// Fonctions utilisant la nouvelle architecture pour les sommes
 List<String> get _sommesLatexGaucheComplete {
-  return PrepaMathFormulaManager.sommesFormulas
-      .map((f) => f.latex)
-      .toList();
+  return PrepaMathFormulaManager.sommesFormulas.map((f) {
+    // Utiliser la nouvelle propriété leftSide qui gère automatiquement leftLatex ou split
+    return f.leftSide;
+  }).toList();
 }
 
 List<String> get _sommesLatexDroiteComplete {
-  return PrepaMathFormulaManager.sommesFormulas
-      .map((f) {
-        final examples = f.generateValidExamples(count: 1);
-        if (examples.isNotEmpty) {
-          final result = f.calculate(examples.first);
-          return result?.toString() ?? 'calcul en cours...';
-        }
-        return 'exemple généré';
-      })
-      .toList();
+  return PrepaMathFormulaManager.sommesFormulas.map((f) {
+    // Utiliser la nouvelle propriété rightSide qui gère automatiquement rightLatex ou split
+    return f.rightSide;
+  }).toList();
 }
 
 List<String> get _sommesUsage2MotsComplete {

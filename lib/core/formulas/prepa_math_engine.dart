@@ -157,6 +157,12 @@ class EnhancedFormulaTemplate {
   /// Expression LaTeX de la formule (ex: r'C(n,k) = \frac{n!}{k!(n-k)!}')
   final String latex;
 
+  /// Partie gauche de la formule LaTeX (avant le =) pour affichage puzzle
+  final String? leftLatex;
+
+  /// Partie droite de la formule LaTeX (après le =) pour affichage puzzle
+  final String? rightLatex;
+
   /// Description pédagogique de la formule
   final String description;
 
@@ -167,6 +173,8 @@ class EnhancedFormulaTemplate {
     required this.latex,
     required this.description,
     required this.parameters,
+    this.leftLatex,
+    this.rightLatex,
   });
 
   /// Nombre de paramètres de la formule
@@ -178,6 +186,20 @@ class EnhancedFormulaTemplate {
   /// Liste des variables qui peuvent être inversées
   List<String> get invertibleVariables =>
       parameters.where((p) => p.canInvert).map((p) => p.name).toList();
+
+  /// Obtient la partie gauche de la formule (avant le =)
+  String get leftSide {
+    if (leftLatex != null) return leftLatex!;
+    final parts = latex.split('=');
+    return parts.isNotEmpty ? parts[0].trim() : latex;
+  }
+
+  /// Obtient la partie droite de la formule (après le =)
+  String get rightSide {
+    if (rightLatex != null) return rightLatex!;
+    final parts = latex.split('=');
+    return parts.length > 1 ? parts[1].trim() : description;
+  }
 
   /// =====================================================================================
   /// 🔄 SUBSTITUTION DE VARIABLES - APPROCHE "TOUT SUBSTITUABLE"
@@ -467,7 +489,9 @@ class EnhancedFormulaPerturbationGenerator {
 final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Développement général du binôme
   EnhancedFormulaTemplate(
-    latex: r'(_a+_b)^_n = \sum_{k=0}^{_n} \binom{_n}{k} _a^{\,_n-k} _b^{\,k}',
+    latex: r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    leftLatex: r'(a+b)^n',
+    rightLatex: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
     description: 'développement général du binôme de Newton',
     parameters: const [
       FormulaParameter(
@@ -494,7 +518,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Coefficient binomial de base
   EnhancedFormulaTemplate(
-    latex: r'\binom{_n}{_k} = \frac{_n!}{_k!\,(_n-_k)!}',
+    latex: r'\binom{n}{k} = \frac{n!}{k!(n-k)!}',
+    leftLatex: r'\binom{n}{k}',
+    rightLatex: r'\frac{n!}{k!(n-k)!}',
     description: 'coefficient binomial de base',
     parameters: const [
       FormulaParameter(
@@ -516,7 +542,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Développement binomial spécial
   EnhancedFormulaTemplate(
-    latex: r'(1+_x)^_n = \sum_{k=0}^{_n} \binom{_n}{k} _x^{k}',
+    latex: r'(1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
+    leftLatex: r'(1+x)^n',
+    rightLatex: r'\sum_{k=0}^{n} \binom{n}{k} x^{k}',
     description: 'développement binomial spécial',
     parameters: const [
       FormulaParameter(
@@ -536,7 +564,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Alternance des coefficients binomiaux
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{_n} (-1)^k \binom{_n}{k} = 0 \quad (_n \ge 1)',
+    latex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
+    leftLatex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
+    rightLatex: r'0 \quad (n \ge 1)',
     description: 'somme alternée des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
@@ -551,8 +581,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Somme oblique de Hockey-stick
   EnhancedFormulaTemplate(
-    latex:
-        r'\sum_{k=_r}^{_n} \binom{k}{_r} = \binom{_n+1}{_r+1} \quad (_r \le _n)',
+    latex: r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} \quad (r \le n)',
+    leftLatex: r'\sum_{k=r}^{n} \binom{k}{r}',
+    rightLatex: r'\binom{n+1}{r+1}',
     description: 'identité de hockey-stick',
     parameters: const [
       FormulaParameter(
@@ -625,7 +656,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Formule du binôme pour (1+1)^n
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{_n} \binom{_n}{k} = 2^{_n}',
+    latex: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
+    leftLatex: r'\sum_{k=0}^{n} \binom{n}{k}',
+    rightLatex: r'2^{n}',
     description: 'formule du binôme pour (1+1)^n',
     parameters: const [
       FormulaParameter(
@@ -736,7 +769,9 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Développement binomial général
   EnhancedFormulaTemplate(
-    latex: r'(_a+_b)^_n = \sum_{k=0}^{_n} \binom{_n}{k} _a^{_n-k} _b^{k}',
+    latex: r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    leftLatex: r'(a+b)^n',
+    rightLatex: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
     description: 'développement binomial général',
     parameters: const [
       FormulaParameter(
@@ -763,7 +798,9 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Nombre total de sous-ensembles
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{_n} \binom{_n}{k} = 2^{_n}',
+    latex: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
+    leftLatex: r'\sum_{k=0}^{n} \binom{n}{k}',
+    rightLatex: r'2^{n}',
     description: 'nombre total de sous-ensembles d\'un ensemble à n éléments',
     parameters: const [
       FormulaParameter(
@@ -778,7 +815,9 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Relation d'orthogonalité
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{_n} (-1)^k \binom{_n}{k} = 0 \quad (_n \ge 1)',
+    latex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
+    leftLatex: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
+    rightLatex: r'0 \quad (n \ge 1)',
     description: 'somme alternée des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
@@ -793,8 +832,9 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Identité de Chu-Vandermonde
   EnhancedFormulaTemplate(
-    latex:
-        r'\sum_{k=0}^{_n} \binom{_m}{k} \binom{_n-_m}{_n-k} = \binom{_n}{_m}',
+    latex: r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k} = \binom{n}{m}',
+    leftLatex: r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k}',
+    rightLatex: r'\binom{n}{m}',
     description: 'identité de Chu-Vandermonde (pour m fixe)',
     parameters: const [
       FormulaParameter(
@@ -823,7 +863,9 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des premiers entiers
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{_n} k = \frac{_n(_n+1)}{2}',
+    latex: r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
+    leftLatex: r'\sum_{k=1}^{n} k',
+    rightLatex: r'\frac{n(n+1)}{2}',
     description: 'somme des n premiers entiers naturels',
     parameters: const [
       FormulaParameter(
@@ -838,7 +880,9 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Somme des carrés
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{_n} k^2 = \frac{_n(_n+1)(2_n+1)}{6}',
+    latex: r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
+    leftLatex: r'\sum_{k=1}^{n} k^2',
+    rightLatex: r'\frac{n(n+1)(2n+1)}{6}',
     description: 'somme des carrés des n premiers entiers',
     parameters: const [
       FormulaParameter(
@@ -853,7 +897,9 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Somme des cubes
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=1}^{_n} k^3 = \left(\frac{_n(_n+1)}{2}\right)^2',
+    latex: r'\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2',
+    leftLatex: r'\sum_{k=1}^{n} k^3',
+    rightLatex: r'\left(\frac{n(n+1)}{2}\right)^2',
     description: 'somme des cubes des n premiers entiers',
     parameters: const [
       FormulaParameter(
@@ -868,7 +914,9 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Série géométrique finie
   EnhancedFormulaTemplate(
-    latex: r'\sum_{k=0}^{_n} _q^k = \frac{1-_q^{_n+1}}{1-_q} \quad (_q \neq 1)',
+    latex: r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q} \quad (q \neq 1)',
+    leftLatex: r'\sum_{k=0}^{n} q^k',
+    rightLatex: r'\frac{1-q^{n+1}}{1-q}',
     description: 'somme des termes d\'une suite géométrique finie',
     parameters: const [
       FormulaParameter(
@@ -892,6 +940,8 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   EnhancedFormulaTemplate(
     latex:
         r'\sum_{k=1}^{n} k \cdot q^k = \frac{q(1-(n+1)q^n + nq^{n+1})}{(1-q)^2}',
+    leftLatex: r'\sum_{k=1}^{n} k \cdot q^k',
+    rightLatex: r'\frac{q(1-(n+1)q^n + nq^{n+1})}{(1-q)^2}',
     description: 'somme d\'une série arithmético-géométrique',
     parameters: const [
       FormulaParameter(
@@ -914,6 +964,8 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Série géométrique infinie
   EnhancedFormulaTemplate(
     latex: r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} \quad (|q| < 1)',
+    leftLatex: r'\sum_{k=0}^{\infty} q^k',
+    rightLatex: r'\frac{1}{1-q}',
     description: 'somme d\'une série géométrique infinie convergente',
     parameters: const [
       FormulaParameter(
@@ -930,6 +982,8 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   EnhancedFormulaTemplate(
     latex:
         r'\sum_{k=1}^{\infty} k \cdot q^{k-1} = \frac{1}{(1-q)^2} \quad (|q| < 1)',
+    leftLatex: r'\sum_{k=1}^{\infty} k \cdot q^{k-1}',
+    rightLatex: r'\frac{1}{(1-q)^2}',
     description:
         'somme pondérée par les indices (dérivée de la série géométrique)',
     parameters: const [
@@ -946,6 +1000,8 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme élémentaire
   EnhancedFormulaTemplate(
     latex: r'\sum_{k=0}^{n} 1 = n+1',
+    leftLatex: r'\sum_{k=0}^{n} 1',
+    rightLatex: r'n+1',
     description: 'comptage des éléments d\'un ensemble fini',
     parameters: const [
       FormulaParameter(
@@ -961,6 +1017,8 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des impairs
   EnhancedFormulaTemplate(
     latex: r'\sum_{k=1}^{n} (2k-1) = n^2',
+    leftLatex: r'\sum_{k=1}^{n} (2k-1)',
+    rightLatex: r'n^2',
     description: 'somme des n premiers nombres impairs',
     parameters: const [
       FormulaParameter(
@@ -976,6 +1034,8 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme télescopique
   EnhancedFormulaTemplate(
     latex: r'\sum_{k=1}^{n} \frac{1}{k(k+1)} = 1 - \frac{1}{n+1}',
+    leftLatex: r'\sum_{k=1}^{n} \frac{1}{k(k+1)}',
+    rightLatex: r'1 - \frac{1}{n+1}',
     description: 'somme télescopique des fractions unitaires',
     parameters: const [
       FormulaParameter(
@@ -1204,7 +1264,6 @@ class PrepaMathFormulaManager {
       }
       return 'exemple généré';
     }).toList();
-    final descriptions = formulas.map((f) => f.description).toList(); // Pour compatibilité
 
     return QuestionnairePreset(
       id: 'prepa_calcul_unified',

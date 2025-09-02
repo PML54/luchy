@@ -74,7 +74,8 @@ class UnifiedMathFormulaManager {
 
       print('🎯 UnifiedMathFormulaManager (NOUVELLE ARCHITECTURE):');
       print('   • Binôme: ${PrepaMathFormulaManager.binomeFormulas.length}');
-      print('   • Combinaisons: ${PrepaMathFormulaManager.combinaisonsFormulas.length}');
+      print(
+          '   • Combinaisons: ${PrepaMathFormulaManager.combinaisonsFormulas.length}');
       print('   • Sommes: ${PrepaMathFormulaManager.sommesFormulas.length}');
       print('   • Prépa unifié: ${_prepaUnifiedFormulas.length} formules');
     }
@@ -105,24 +106,18 @@ class UnifiedMathFormulaManager {
 /// Ces fonctions utilisent maintenant la nouvelle architecture PrepaMathFormulaManager
 List<String> get _binomeLatexGaucheComplete {
   UnifiedMathFormulaManager.initialize();
-  return UnifiedMathFormulaManager.prepaUnifiedFormulas
-      .map((f) => f.latex) // Utilise le latex complet avec variables marquées
-      .toList();
+  return UnifiedMathFormulaManager.prepaUnifiedFormulas.map((f) {
+    // Utiliser la nouvelle propriété leftSide qui gère automatiquement leftLatex ou split
+    return f.leftSide;
+  }).toList();
 }
 
 List<String> get _binomeLatexDroiteComplete {
   UnifiedMathFormulaManager.initialize();
-  // Pour la nouvelle architecture, on génère des exemples numériques
-  return UnifiedMathFormulaManager.prepaUnifiedFormulas
-      .map((f) {
-        final examples = f.generateValidExamples(count: 1);
-        if (examples.isNotEmpty) {
-          final result = f.calculate(examples.first);
-          return result?.toString() ?? 'calcul en cours...';
-        }
-        return 'exemple généré';
-      })
-      .toList();
+  return UnifiedMathFormulaManager.prepaUnifiedFormulas.map((f) {
+    // Utiliser la nouvelle propriété rightSide qui gère automatiquement rightLatex ou split
+    return f.rightSide;
+  }).toList();
 }
 
 List<String> get _binomeUsage2MotsComplete {
