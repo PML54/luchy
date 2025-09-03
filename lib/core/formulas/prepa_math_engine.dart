@@ -849,6 +849,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Coefficient binomial de base
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \frac{n!}{k!(n-k)!}',
+    latexVariable: r'\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!({VAR:n}-{VAR:k})!}',
     leftLatexOrigine: r'\binom{n}{k}',
     rightLatexOrigine: r'\frac{n!}{k!(n-k)!}',
     description: 'coefficient binomial de base',
@@ -873,6 +874,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Développement binomial spécial
   EnhancedFormulaTemplate(
     latexOrigine: r'(1+x)^{n} = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
+    latexVariable: r'(1+{VAR:x})^{{VAR:n}} = \sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:x}^{{VAR:k}}',
     leftLatexOrigine: r'(1+x)^{n}',
     rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} x^{k}',
     description: 'développement binomial spécial',
@@ -894,9 +896,10 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Alternance des coefficients binomiaux
   EnhancedFormulaTemplate(
-    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
+    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 ',
+    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0 \quad ({VAR:n} \ge 1)',
     leftLatexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
-    rightLatexOrigine: r'0 \quad (n \ge 1)',
+    rightLatexOrigine: r'0',
     description: 'somme alternée des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
@@ -912,7 +915,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Somme oblique de Hockey-stick
   EnhancedFormulaTemplate(
     latexOrigine:
-        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} \quad (r \le n)',
+        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} ',
+    latexVariable:
+        r'\sum_{{VAR:k}={VAR:r}}^{{VAR:n}} \binom{{VAR:k}}{{VAR:r}} = \binom{{VAR:n}+1}{{VAR:r}+1} \quad ({VAR:r} \le {VAR:n})',
     leftLatexOrigine: r'\sum_{k=r}^{n} \binom{k}{r}',
     rightLatexOrigine: r'\binom{n+1}{r+1}',
     description: 'identité de hockey-stick',
@@ -937,6 +942,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Cas particuliers des coefficients binomiaux
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{0} = 1',
+    latexVariable: r'\binom{{VAR:n}}{0} = 1',
     leftLatexOrigine: r'\binom{n}{0}',
     rightLatexOrigine: r'1',
     description: 'coefficient binomial pour k=0',
@@ -953,6 +959,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{n} = 1',
+    latexVariable: r'\binom{{VAR:n}}{{VAR:n}} = 1',
     leftLatexOrigine: r'\binom{n}{n}',
     rightLatexOrigine: r'1',
     description: 'coefficient binomial pour k=n',
@@ -970,6 +977,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Relation de Pascal
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
+    latexVariable: r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}-1}{{VAR:k}} + \binom{{VAR:n}-1}{{VAR:k}-1}',
     leftLatexOrigine: r'\binom{n}{k}',
     rightLatexOrigine: r'\binom{n-1}{k} + \binom{n-1}{k-1}',
     description: 'relation de récurrence de Pascal',
@@ -994,6 +1002,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Formule du binôme pour (1+1)^n
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
+    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} = 2^{{VAR:n}}',
     leftLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k}',
     rightLatexOrigine: r'2^{n}',
     description: 'formule du binôme pour (1+1)^n',
@@ -1011,6 +1020,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Symétrie des coefficients binomiaux
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
+    latexVariable: r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}}{{VAR:n}-{VAR:k}}',
     leftLatexOrigine: r'\binom{n}{k}',
     rightLatexOrigine: r'\binom{n}{n-k}',
     description: 'propriété de symétrie des coefficients binomiaux',
@@ -1042,6 +1052,7 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Définition de base
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
+    latexVariable: r'\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!\,({VAR:n}-{VAR:k})!}',
     leftLatexOrigine: r'\binom{n}{k}',
     rightLatexOrigine: r'\frac{n!}{k!\,(n-k)!}',
     description: 'définition du coefficient binomial',
@@ -1066,6 +1077,7 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Propriété symétrique
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
+    latexVariable: r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}}{{VAR:n}-{VAR:k}}',
     leftLatexOrigine: r'\binom{n}{k}',
     rightLatexOrigine: r'\binom{n}{n-k}',
     description: 'symétrie des coefficients binomiaux',
@@ -1091,6 +1103,7 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Triangle de Pascal
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
+    latexVariable: r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}-1}{{VAR:k}} + \binom{{VAR:n}-1}{{VAR:k}-1}',
     leftLatexOrigine: r'\binom{n}{k}',
     rightLatexOrigine: r'\binom{n-1}{k} + \binom{n-1}{k-1}',
     description: 'relation de récurrence du triangle de Pascal',
@@ -1115,6 +1128,7 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Développement binomial général
   EnhancedFormulaTemplate(
     latexOrigine: r'(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    latexVariable: r'({VAR:a}+{VAR:b})^{VAR:n} = \sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:a}^{{VAR:n}-{VAR:k}} {VAR:b}^{{VAR:k}}',
     leftLatexOrigine: r'(a+b)^n',
     rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
     description: 'développement binomial général',
@@ -1144,6 +1158,7 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Nombre total de sous-ensembles
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
+    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} = 2^{{VAR:n}}',
     leftLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k}',
     rightLatexOrigine: r'2^{n}',
     description: 'nombre total de sous-ensembles d\'un ensemble à n éléments',
@@ -1160,9 +1175,10 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
 
   // Relation d'orthogonalité
   EnhancedFormulaTemplate(
-    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad (n \ge 1)',
+    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0',
+    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0 \quad ({VAR:n} \ge 1)',
     leftLatexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
-    rightLatexOrigine: r'0 \quad (n \ge 1)',
+    rightLatexOrigine: r'0',
     description: 'somme alternée des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
@@ -1179,6 +1195,8 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   EnhancedFormulaTemplate(
     latexOrigine:
         r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k} = \binom{n}{m}',
+    latexVariable:
+        r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:m}}{{VAR:k}} \binom{{VAR:n}-{VAR:m}}{{VAR:n}-{VAR:k}} = \binom{{VAR:n}}{{VAR:m}}',
     leftLatexOrigine: r'\sum_{k=0}^{n} \binom{m}{k} \binom{n-m}{n-k}',
     rightLatexOrigine: r'\binom{n}{m}',
     description: 'identité de Chu-Vandermonde (pour m fixe)',
@@ -1210,6 +1228,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des premiers entiers
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
+    latexVariable: r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k} = \frac{{VAR:n}({VAR:n}+1)}{2}',
     leftLatexOrigine: r'\sum_{k=1}^{n} k',
     rightLatexOrigine: r'\frac{n(n+1)}{2}',
     description: 'somme des n premiers entiers naturels',
@@ -1227,6 +1246,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des carrés
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
+    latexVariable: r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}^2 = \frac{{VAR:n}({VAR:n}+1)(2n+1)}{6}',
     leftLatexOrigine: r'\sum_{k=1}^{n} k^2',
     rightLatexOrigine: r'\frac{n(n+1)(2n+1)}{6}',
     description: 'somme des carrés des n premiers entiers',
@@ -1244,6 +1264,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des cubes
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2',
+    latexVariable: r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}^3 = \left(\frac{{VAR:n}({VAR:n}+1)}{2}\right)^2',
     leftLatexOrigine: r'\sum_{k=1}^{n} k^3',
     rightLatexOrigine: r'\left(\frac{n(n+1)}{2}\right)^2',
     description: 'somme des cubes des n premiers entiers',
@@ -1261,7 +1282,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Série géométrique finie
   EnhancedFormulaTemplate(
     latexOrigine:
-        r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q} \quad (q \neq 1)',
+        r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q} ',
     leftLatexOrigine: r'\sum_{k=0}^{n} q^k',
     rightLatexOrigine: r'\frac{1-q^{n+1}}{1-q}',
     description: 'somme des termes d\'une suite géométrique finie',
@@ -1310,7 +1331,8 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
 
   // Série géométrique infinie
   EnhancedFormulaTemplate(
-    latexOrigine: r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} \quad (|q| < 1)',
+    latexOrigine: r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} ',
+    latexVariable: r'\sum_{{VAR:k}=0}^{\infty} {VAR:q}^{VAR:k} = \frac{1}{1-{VAR:q}} \quad (|q| < 1)',
     leftLatexOrigine: r'\sum_{k=0}^{\infty} q^k',
     rightLatexOrigine: r'\frac{1}{1-q}',
     description: 'somme d\'une série géométrique infinie convergente',
@@ -1328,7 +1350,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Dérivée de la série géométrique
   EnhancedFormulaTemplate(
     latexOrigine:
-        r'\sum_{k=1}^{\infty} k \cdot q^{k-1} = \frac{1}{(1-q)^2} \quad (|q| < 1)',
+        r'\sum_{k=1}^{\infty} k \cdot q^{k-1} = \frac{1}{(1-q)^2} ',
     leftLatexOrigine: r'\sum_{k=1}^{\infty} k \cdot q^{k-1}',
     rightLatexOrigine: r'\frac{1}{(1-q)^2}',
     description:
@@ -1347,6 +1369,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme élémentaire
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=0}^{n} 1 = n+1',
+    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} 1 = {VAR:n}+1',
     leftLatexOrigine: r'\sum_{k=0}^{n} 1',
     rightLatexOrigine: r'n+1',
     description: 'comptage des éléments d\'un ensemble fini',
@@ -1364,6 +1387,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des impairs
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=1}^{n} (2k-1) = n^2',
+    latexVariable: r'\sum_{{VAR:k}=1}^{{VAR:n}} (2k-1) = {VAR:n}^2',
     leftLatexOrigine: r'\sum_{k=1}^{n} (2k-1)',
     rightLatexOrigine: r'n^2',
     description: 'somme des n premiers nombres impairs',
@@ -1381,6 +1405,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme télescopique
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=1}^{n} \frac{1}{k(k+1)} = 1 - \frac{1}{n+1}',
+    latexVariable: r'\sum_{{VAR:k}=1}^{{VAR:n}} \frac{1}{{VAR:k}({VAR:k}+1)} = 1 - \frac{1}{{VAR:n}+1}',
     leftLatexOrigine: r'\sum_{k=1}^{n} \frac{1}{k(k+1)}',
     rightLatexOrigine: r'1 - \frac{1}{n+1}',
     description: 'somme télescopique des fractions unitaires',
