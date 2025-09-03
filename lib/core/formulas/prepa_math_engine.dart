@@ -241,8 +241,6 @@ class EnhancedFormulaTemplate {
 
   /// 🔄 NIVEAU VARIABLE : LaTeX avec variables identifiées {VAR:} (donnée d'entrée)
   final String latexVariable;
-  final String? leftLatexVariable;
-  final String? rightLatexVariable;
 
   /// Description pédagogique de la formule
   final String description;
@@ -257,14 +255,16 @@ class EnhancedFormulaTemplate {
     this.latexVariable = '', // TEMPORAIRE: optionnel pendant migration
     this.leftLatexOrigine,
     this.rightLatexOrigine,
-    this.leftLatexVariable,
-    this.rightLatexVariable,
   });
 
   /// 🎯 NIVEAU FINAL : LaTeX final généré avec getters par défaut
   String get finalLatexVariable => latexVariable.isEmpty ? _convertToVariableSyntax(latexOrigine) : latexVariable;
-  String get finalLeftLatexVariable => leftLatexVariable ?? _splitLeft(finalLatexVariable);
-  String get finalRightLatexVariable => rightLatexVariable ?? _splitRight(finalLatexVariable);
+  
+  /// 🔄 GETTERS AVEC SPLIT AUTOMATIQUE : calculés à partir de finalLatexVariable
+  String get leftLatexVariable => _splitLeft(finalLatexVariable);
+  String get rightLatexVariable => _splitRight(finalLatexVariable);
+  String get finalLeftLatexVariable => leftLatexVariable;
+  String get finalRightLatexVariable => rightLatexVariable;
 
   /// 🎯 NIVEAU FINAL : LaTeX final généré (par défaut = origine, modifiable par transformations)
   String get latex => _applySubstitutions(finalLatexVariable);
@@ -412,12 +412,12 @@ class EnhancedFormulaTemplate {
         .replaceAll('{VAR:$var2}', '{VAR:$var1}')
         .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
 
-    final invertedLeftLatexVariable = (leftLatexVariable ?? _splitLeft(finalLatexVariable))
+    final invertedLeftLatexVariable = leftLatexVariable
         .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
         .replaceAll('{VAR:$var2}', '{VAR:$var1}')
         .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
 
-    final invertedRightLatexVariable = (rightLatexVariable ?? _splitRight(finalLatexVariable))
+    final invertedRightLatexVariable = rightLatexVariable
         .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
         .replaceAll('{VAR:$var2}', '{VAR:$var1}')
         .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
@@ -822,8 +822,6 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
     latexVariable: r'({VAR:a}+{VAR:b})^{{VAR:n}} = \sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:a}^{{VAR:n}-{VAR:k}} {VAR:b}^{{VAR:k}}',
     leftLatexOrigine: r'(a+b)^{n}',
     rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
-    leftLatexVariable: r'({VAR:a}+{VAR:b})^{{VAR:n}}',
-    rightLatexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:a}^{{VAR:n}-{VAR:k}} {VAR:b}^{{VAR:k}}',
     description: 'développement général du binôme de Newton',
     parameters: const [
       FormulaParameter(
