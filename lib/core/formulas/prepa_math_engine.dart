@@ -873,14 +873,14 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Développement binomial spécial
   EnhancedFormulaTemplate(
-    latexOrigine: r'(1+x)^{n} = \sum_{k=0}^{n} \binom{n}{k} x^{k}',
-    latexVariable: r'(1+{VAR:x})^{{VAR:n}} = \sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:x}^{{VAR:k}}',
-    leftLatexOrigine: r'(1+x)^{n}',
-    rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} x^{k}',
+    latexOrigine: r'(1+a)^{n} = \sum_{k=0}^{n} \binom{n}{k} a^{k}',
+    latexVariable: r'(1+{VAR:a})^{{VAR:n}} = \sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:a}^{{VAR:k}}',
+    leftLatexOrigine: r'(1+a)^{n}',
+    rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{k}',
     description: 'développement binomial spécial',
     parameters: const [
       FormulaParameter(
-        name: 'x',
+        name: 'a',
         description: 'variable réelle',
         type: ParameterType.REAL,
       ),
