@@ -332,12 +332,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     });
   }
 
-  bool _isComplete() {
-    for (int i = 0; i < _itemCount; i++) {
-      if (_rightArrangement[i] != i) return false;
-    }
-    return true;
-  }
+
 
   int _getCorrectCount() {
     int correctCount = 0;
@@ -355,8 +350,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
         'Listes binomeLatexGauche et binomeLatexDroite doivent avoir la même longueur');
     assert(binomeLatexGauche.length == binomeUsage2Mots.length,
         'Listes binomeLatexGauche et binomeUsage2Mots doivent avoir la même longueur');
-
-    final isComplete = _isComplete();
 
     return WillPopScope(
       onWillPop: () async {

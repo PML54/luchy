@@ -218,12 +218,7 @@ class _SommesFormulesScreenState extends ConsumerState<SommesFormulesScreen> {
     });
   }
 
-  bool _isComplete() {
-    for (int i = 0; i < _itemCount; i++) {
-      if (_rightArrangement[i] != i) return false;
-    }
-    return true;
-  }
+
 
   int _getCorrectCount() {
     int correctCount = 0;
@@ -241,8 +236,6 @@ class _SommesFormulesScreenState extends ConsumerState<SommesFormulesScreen> {
         'Listes sommesLatexGauche et sommesLatexDroite doivent avoir la même longueur');
     assert(sommesLatexGauche.length == sommesUsage2Mots.length,
         'Listes sommesLatexGauche et sommesUsage2Mots doivent avoir la même longueur');
-
-    final isComplete = _isComplete();
 
     return WillPopScope(
       onWillPop: () async {
