@@ -23,17 +23,19 @@
 /// - 27 formules organisées en 3 catégories (Binôme, Combinaisons, Sommes)
 ///
 /// HISTORIQUE RÉCENT:
+/// - 2025-01-30: Correction d'identification des variables dans les formules
+/// - Amélioration de la détection automatique pour les variables collées aux chiffres (2k, 3n)
+/// - Correction de la formule de somme des nombres impairs : (2k-1) → (2{VAR:k}-1)
+/// - Correction de la formule de somme des carrés : (2n+1) → (2{VAR:n}+1)
 /// - 2025-01-27: Création de l'architecture isolée
 /// - Extraction complète depuis educational_image_generator.dart
 /// - Séparation des préoccupations (calcul vs génération d'images)
-/// - Optimisation des performances de calcul
-/// - Validation automatique et génération d'exemples
 ///
 /// 🔧 POINTS D'ATTENTION:
 /// - Performance: Calculs limités pour éviter débordements (n ≤ 10 pour binôme)
 /// - Validation: Vérification automatique des contraintes mathématiques
-/// - Génération d'exemples: Création automatique d'exemples pédagogiques valides
-/// - Calculs: Validation automatique et exemples pédagogiques
+/// - Détection variables: Regex améliorée pour capturer toutes les variables (isolées et collées aux chiffres)
+/// - Cohérence LaTeX: Toutes les variables doivent être marquées {VAR:nom} dans latexVariable
 /// - Factorielle: Limitation à n ≤ 12 pour éviter débordements
 ///
 /// 🚀 PROCHAINES ÉTAPES:
@@ -49,7 +51,7 @@
 /// - Nouvelle architecture unifiée avec approche "tout substituable"
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐⭐ (Cœur du système éducatif mathématique)
-/// 📅 Dernière modification: 2025-01-27
+/// 📅 Dernière modification: 2025-01-30
 /// </cursor>
 
 import 'dart:math' as math;
@@ -229,16 +231,16 @@ class FormulaParameter {
 enum QuizMode {
   /// Mode 0: Formules originales sans modification
   normal(0, "Normal", "Formules originales sans modification"),
-  
+
   /// Mode 1: Variables inversées (n↔k, a↔b)
   inversion(1, "Inversion", "Variables inversées (n↔k, a↔b)"),
-  
+
   /// Mode 2: Original + inversé mélangés dans le même quiz
   mixte(2, "Mixte", "Original + inversé mélangés dans le même quiz"),
-  
+
   /// Mode 3: Variables renommées (n→x, k→y)
   substitution(3, "Substitution", "Variables renommées (n→x, k→y)"),
-  
+
   /// Mode 4: Difficulté progressive (simples → complexes)
   progressive(4, "Progressive", "Difficulté progressive (simples → complexes)");
 
@@ -252,19 +254,19 @@ enum QuizMode {
 class QuizConfiguration {
   /// Mode du quiz (définit les variantes de formules)
   final QuizMode mode;
-  
+
   /// Niveau de difficulté (1-5, filtre les formules)
   final int difficulty;
-  
+
   /// Catégories à inclure ['binome', 'combinaisons', 'sommes']
   final List<String> categories;
-  
+
   /// Afficher des exemples numériques
   final bool showExamples;
-  
+
   /// Nombre de questions dans le quiz
   final int questionCount;
-  
+
   /// Mélanger les formules originales et variantes
   final bool shuffleVariants;
 
@@ -276,7 +278,7 @@ class QuizConfiguration {
     this.questionCount = 6,
     this.shuffleVariants = true,
   });
-  
+
   /// Crée une configuration avec des paramètres personnalisés
   QuizConfiguration copyWith({
     QuizMode? mode,
@@ -295,11 +297,11 @@ class QuizConfiguration {
       shuffleVariants: shuffleVariants ?? this.shuffleVariants,
     );
   }
-  
+
   @override
   String toString() {
     return 'QuizConfiguration(mode: ${mode.nom}, difficulty: $difficulty, '
-           'categories: $categories, questions: $questionCount)';
+        'categories: $categories, questions: $questionCount)';
   }
 }
 
@@ -309,7 +311,7 @@ class QuizGenerator {
   static List<EnhancedFormulaTemplate> generateQuiz(QuizConfiguration config) {
     // 1. Récupérer les formules selon les catégories
     List<EnhancedFormulaTemplate> baseFormulas = [];
-    
+
     for (final category in config.categories) {
       switch (category) {
         case 'binome':
@@ -323,15 +325,15 @@ class QuizGenerator {
           break;
       }
     }
-    
+
     // 2. Appliquer le mode de quiz
     List<EnhancedFormulaTemplate> quizFormulas = [];
-    
+
     switch (config.mode) {
       case QuizMode.normal:
         quizFormulas = baseFormulas;
         break;
-        
+
       case QuizMode.inversion:
         // Utiliser uniquement les versions inversées
         quizFormulas = baseFormulas
@@ -339,7 +341,7 @@ class QuizGenerator {
             .map((f) => f.createWithSimpleInversion())
             .toList();
         break;
-        
+
       case QuizMode.mixte:
         // Mélanger originales et inversées (50/50)
         final originals = baseFormulas.take(baseFormulas.length ~/ 2).toList();
@@ -350,32 +352,32 @@ class QuizGenerator {
             .toList();
         quizFormulas = [...originals, ...inverted];
         break;
-        
+
       case QuizMode.substitution:
         // TODO: Implémenter substitution de variables
         quizFormulas = baseFormulas;
         break;
-        
+
       case QuizMode.progressive:
         // TODO: Implémenter tri par difficulté
         quizFormulas = baseFormulas;
         break;
     }
-    
+
     // 3. Mélanger si demandé
     if (config.shuffleVariants) {
       quizFormulas.shuffle();
     }
-    
+
     // 4. Limiter au nombre de questions demandé
     return quizFormulas.take(config.questionCount).toList();
   }
-  
+
   /// Génère un quiz avec la configuration par défaut (mode mixte)
   static List<EnhancedFormulaTemplate> generateDefaultQuiz() {
     return generateQuiz(const QuizConfiguration());
   }
-  
+
   /// Génère un quiz avec un mode spécifique
   static List<EnhancedFormulaTemplate> generateQuizWithMode(QuizMode mode) {
     return generateQuiz(QuizConfiguration(mode: mode));
@@ -492,6 +494,11 @@ class EnhancedFormulaTemplate {
     // Variables dans \frac{n!}{k!...}
     result = result.replaceAllMapped(
         RegExp(r'([a-zA-Z])!'), (match) => '{VAR:${match.group(1)}}!');
+
+    // Variables précédées d'un chiffre (ex: 2k, 3n)
+    result = result.replaceAllMapped(
+        RegExp(r'([0-9])([a-zA-Z])'),
+        (match) => '${match.group(1)}{VAR:${match.group(2)}}');
 
     // Variables isolées dans certains contextes (entourées d'espaces, parenthèses, opérateurs)
     result = result.replaceAllMapped(
@@ -1370,7 +1377,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
     latexVariable:
-        r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}^2 = \frac{{VAR:n}({VAR:n}+1)(2n+1)}{6}',
+        r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}^2 = \frac{{VAR:n}({VAR:n}+1)(2{VAR:n}+1)}{6}',
     leftLatexOrigine: r'\sum_{k=1}^{n} k^2',
     rightLatexOrigine: r'\frac{n(n+1)(2n+1)}{6}',
     description: 'somme des carrés des n premiers entiers',
@@ -1511,7 +1518,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Somme des impairs
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=1}^{n} (2k-1) = n^2',
-    latexVariable: r'\sum_{{VAR:k}=1}^{{VAR:n}} (2k-1) = {VAR:n}^2',
+    latexVariable: r'\sum_{{VAR:k}=1}^{{VAR:n}} (2{VAR:k}-1) = {VAR:n}^2',
     leftLatexOrigine: r'\sum_{k=1}^{n} (2k-1)',
     rightLatexOrigine: r'n^2',
     description: 'somme des n premiers nombres impairs',
@@ -1697,7 +1704,8 @@ class UnifiedMathFormulaManager {
 
       print('🎯 UnifiedMathFormulaManager (NOUVELLE ARCHITECTURE):');
       print('   • Binôme: ${PrepaMathFormulaManager.binomeFormulas.length}');
-      print('   • Combinaisons: ${PrepaMathFormulaManager.combinaisonsFormulas.length}');
+      print(
+          '   • Combinaisons: ${PrepaMathFormulaManager.combinaisonsFormulas.length}');
       print('   • Sommes: ${PrepaMathFormulaManager.sommesFormulas.length}');
       print('   • Prépa unifié: ${_prepaUnifiedFormulas.length} formules');
     }
@@ -1818,14 +1826,16 @@ class PrepaMathFormulaManager {
 
   /// Crée un questionnaire unifié combinant toutes les catégories de prépa
   /// Utilise le système de codes quiz avec mode mixte par défaut (code 2)
-  static QuestionnairePreset createUnifiedPrepaCalculPreset({QuizConfiguration? config}) {
+  static QuestionnairePreset createUnifiedPrepaCalculPreset(
+      {QuizConfiguration? config}) {
     // Utiliser la configuration par défaut (mode mixte) si non spécifiée
     final quizConfig = config ?? const QuizConfiguration();
-    
+
     // Générer le quiz selon la configuration
     final formulas = QuizGenerator.generateQuiz(quizConfig);
-    
-    print('🎮 Quiz généré avec mode: ${quizConfig.mode.nom} (code ${quizConfig.mode.code})');
+
+    print(
+        '🎮 Quiz généré avec mode: ${quizConfig.mode.nom} (code ${quizConfig.mode.code})');
     print('   • Formules sélectionnées: ${formulas.length}');
     print('   • Catégories: ${quizConfig.categories}');
 
@@ -1848,23 +1858,23 @@ class PrepaMathFormulaManager {
           '${formulas.length} formules avec ${quizConfig.mode.description}.',
     );
   }
-  
+
   /// Crée un quiz avec un mode spécifique
   static QuestionnairePreset createQuizWithMode(QuizMode mode) {
     final config = QuizConfiguration(mode: mode);
     return createUnifiedPrepaCalculPreset(config: config);
   }
-  
+
   /// Crée un quiz normal (mode 0)
   static QuestionnairePreset createNormalQuiz() {
     return createQuizWithMode(QuizMode.normal);
   }
-  
+
   /// Crée un quiz avec inversions (mode 1)
   static QuestionnairePreset createInversionQuiz() {
     return createQuizWithMode(QuizMode.inversion);
   }
-  
+
   /// Crée un quiz mixte (mode 2) - par défaut
   static QuestionnairePreset createMixteQuiz() {
     return createQuizWithMode(QuizMode.mixte);

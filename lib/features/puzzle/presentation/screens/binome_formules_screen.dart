@@ -106,32 +106,32 @@ class UnifiedMathFormulaManager {
 class _QuizFormulaCache {
   static List<EnhancedFormulaTemplate>? _cachedFormulas;
   static DateTime? _lastGenerated;
-  
+
   /// Durée de validité du cache (30 secondes)
   static const Duration _cacheValidityDuration = Duration(seconds: 30);
-  
+
   /// Obtient les formules (avec cache pour synchronisation)
   static List<EnhancedFormulaTemplate> getFormulas() {
     final now = DateTime.now();
-    
+
     // Vérifier si le cache est valide
-    if (_cachedFormulas == null || 
-        _lastGenerated == null || 
+    if (_cachedFormulas == null ||
+        _lastGenerated == null ||
         now.difference(_lastGenerated!) > _cacheValidityDuration) {
-      
       // Générer de nouvelles formules
       _cachedFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
         mode: QuizMode.mixte, // Mode mixte (code 2)
         questionCount: 12, // Plus de formules pour avoir du choix
       ));
       _lastGenerated = now;
-      
-      print('🎮 Nouvelles formules générées en mode mixte: ${_cachedFormulas!.length}');
+
+      print(
+          '🎮 Nouvelles formules générées en mode mixte: ${_cachedFormulas!.length}');
     }
-    
+
     return _cachedFormulas!;
   }
-  
+
   /// Force le renouvellement du cache
   static void refresh() {
     _cachedFormulas = null;
@@ -143,7 +143,7 @@ class _QuizFormulaCache {
 /// SYNCHRONISÉES via le cache pour éviter les incohérences gauche/droite
 List<String> get _binomeLatexGaucheComplete {
   final quizFormulas = _QuizFormulaCache.getFormulas();
-  
+
   return quizFormulas.map((f) {
     // Utiliser la propriété leftSide qui gère automatiquement leftLatex ou split
     return f.leftSide;
@@ -152,7 +152,7 @@ List<String> get _binomeLatexGaucheComplete {
 
 List<String> get _binomeLatexDroiteComplete {
   final quizFormulas = _QuizFormulaCache.getFormulas();
-  
+
   return quizFormulas.map((f) {
     // Utiliser la propriété rightSide qui gère automatiquement rightLatex ou split
     return f.rightSide;
@@ -161,7 +161,7 @@ List<String> get _binomeLatexDroiteComplete {
 
 List<String> get _binomeUsage2MotsComplete {
   final quizFormulas = _QuizFormulaCache.getFormulas();
-  
+
   return quizFormulas.map((f) => f.description).toList();
 }
 
