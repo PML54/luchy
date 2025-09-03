@@ -234,7 +234,7 @@ class FormulaParameter {
 /// 2. latexVariable  : LaTeX avec variables marquées (ex: '\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!({VAR:n}-{VAR:k})!}')
 /// 3. latex          : LaTeX final pour affichage (avec substitutions éventuelles)
 class EnhancedFormulaTemplate {
-  /// 📝 NIVEAU 1 : LaTeX d'origine (sans modifications)
+  /// 📝 NIVEAU ORIGINE : LaTeX d'origine (immutable)
   final String latexOrigine;
   final String? leftLatexOrigine;
   final String? rightLatexOrigine;
@@ -253,23 +253,23 @@ class EnhancedFormulaTemplate {
     this.rightLatexOrigine,
   });
 
-  /// 🔄 NIVEAU 2 : LaTeX avec variables identifiées automatiquement
+  /// 🔄 NIVEAU VARIABLE : LaTeX avec variables identifiées (pivot transformations)
   String get latexVariable => _convertToVariableSyntax(latexOrigine);
-  String? get leftLatexVariable => leftLatexOrigine != null
+  String get leftLatexVariable => leftLatexOrigine != null
       ? _convertToVariableSyntax(leftLatexOrigine!)
-      : null;
-  String? get rightLatexVariable => rightLatexOrigine != null
+      : _splitLeft(latexVariable);
+  String get rightLatexVariable => rightLatexOrigine != null
       ? _convertToVariableSyntax(rightLatexOrigine!)
-      : null;
+      : _splitRight(latexVariable);
 
-  /// 🎯 NIVEAU 3 : LaTeX final pour affichage (avec substitutions éventuelles)
+  /// 🎯 NIVEAU FINAL : LaTeX final généré (par défaut = origine, modifiable par transformations)
   String get latex => _applySubstitutions(latexVariable);
-  String? get leftLatex => leftLatexVariable != null
-      ? _applySubstitutions(leftLatexVariable!)
-      : null;
-  String? get rightLatex => rightLatexVariable != null
-      ? _applySubstitutions(rightLatexVariable!)
-      : null;
+  String get leftLatex => _applySubstitutions(leftLatexVariable);
+  String get rightLatex => _applySubstitutions(rightLatexVariable);
+
+  /// 📊 MÉTADONNÉES : Nombre de variables dans la formule
+  int get numberOfVariables =>
+      FormulaPreprocessor.extractVariableNames(latexVariable).length;
 
   /// Nombre de paramètres de la formule
   int get parameterCount => parameters.length;
@@ -283,25 +283,23 @@ class EnhancedFormulaTemplate {
 
   /// Obtient la partie gauche de la formule (avant le =)
   String get leftSide {
-    if (leftLatex != null) return leftLatex!;
+    return leftLatex;
     final parts = latex.split('=');
     return parts.isNotEmpty ? parts[0].trim() : latex;
   }
 
   /// Obtient la partie droite de la formule (après le =)
   String get rightSide {
-    if (rightLatex != null) return rightLatex!;
+    return rightLatex;
     final parts = latex.split('=');
     return parts.length > 1 ? parts[1].trim() : description;
   }
 
   /// Obtient la partie gauche avec variables {VAR:} visibles
   String get leftSideWithVariables {
-    if (leftLatex != null) {
-      // Si leftLatex est défini, d'abord générer la version avec {VAR:}
-      final withVars = _generateLatexVariableFromOriginal(leftLatex!);
-      return withVars;
-    }
+    // Si leftLatex est défini, d'abord générer la version avec {VAR:}
+    final withVars = _generateLatexVariableFromOriginal(leftLatex);
+    return withVars;
     // Simple split - on trouve le premier = qui est un séparateur principal
     final parts = latexVariable.split(' = ');
     if (parts.length >= 2) {
@@ -314,11 +312,9 @@ class EnhancedFormulaTemplate {
 
   /// Obtient la partie droite avec variables {VAR:} visibles
   String get rightSideWithVariables {
-    if (rightLatex != null) {
-      // Si rightLatex est défini, d'abord générer la version avec {VAR:}
-      final withVars = _generateLatexVariableFromOriginal(rightLatex!);
-      return withVars;
-    }
+    // Si rightLatex est défini, d'abord générer la version avec {VAR:}
+    final withVars = _generateLatexVariableFromOriginal(rightLatex);
+    return withVars;
     // Simple split - on trouve le premier = qui est un séparateur principal
     final parts = latexVariable.split(' = ');
     if (parts.length >= 2) {
@@ -395,6 +391,42 @@ class EnhancedFormulaTemplate {
     return FormulaPreprocessor.processLatex(variableVersion);
   }
 
+  /// 🔄 FONCTION D'INVERSION SIMPLE : Inverse 2 variables si numberOfVariables == 2
+  EnhancedFormulaTemplate createWithSimpleInversion() {
+    if (numberOfVariables != 2) {
+      throw ArgumentError(
+          'Inversion simple possible uniquement avec 2 variables (actuel: $numberOfVariables)');
+    }
+
+    final variables = FormulaPreprocessor.extractVariableNames(latexVariable);
+    final var1 = variables[0];
+    final var2 = variables[1];
+
+    // Inverser les variables dans latexVariable
+    final invertedLatexVariable = latexVariable
+        .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
+        .replaceAll('{VAR:$var2}', '{VAR:$var1}')
+        .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
+
+    final invertedLeftLatexVariable = leftLatexVariable
+        .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
+        .replaceAll('{VAR:$var2}', '{VAR:$var1}')
+        .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
+
+    final invertedRightLatexVariable = rightLatexVariable
+        .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
+        .replaceAll('{VAR:$var2}', '{VAR:$var1}')
+        .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
+
+    // Créer une nouvelle instance avec inversion
+    return _EnhancedFormulaTemplateWithInversion(
+      original: this,
+      invertedLatexVariable: invertedLatexVariable,
+      invertedLeftLatexVariable: invertedLeftLatexVariable,
+      invertedRightLatexVariable: invertedRightLatexVariable,
+    );
+  }
+
   /// 🔧 MÉTHODES INTERNES DE CONVERSION
 
   /// Convertit un LaTeX d'origine vers la syntaxe avec variables marquées
@@ -422,6 +454,28 @@ class EnhancedFormulaTemplate {
     // Pour l'instant, on accepte toutes les lettres simples comme variables
     // On peut affiner cette logique plus tard si nécessaire
     return false;
+  }
+
+  /// Split gauche de la formule variable
+  String _splitLeft(String formula) {
+    final parts = formula.split(' = ');
+    if (parts.length >= 2) {
+      return parts[0].trim();
+    }
+    final simpleParts = formula.split('=');
+    return simpleParts.isNotEmpty ? simpleParts[0].trim() : formula;
+  }
+
+  /// Split droite de la formule variable
+  String _splitRight(String formula) {
+    final parts = formula.split(' = ');
+    if (parts.length >= 2) {
+      return parts.sublist(1).join(' = ').trim();
+    }
+    final simpleParts = formula.split('=');
+    return simpleParts.length > 1
+        ? simpleParts.sublist(1).join('=').trim()
+        : '';
   }
 
   /// =====================================================================================
@@ -650,6 +704,54 @@ class FormulaVariant {
 /// 🔄 GÉNÉRATEUR DE PERTURBATIONS PÉDAGOGIQUES
 /// =====================================================================================
 
+/// Classe spécialisée pour formules avec inversion
+class _EnhancedFormulaTemplateWithInversion extends EnhancedFormulaTemplate {
+  final EnhancedFormulaTemplate original;
+  final String invertedLatexVariable;
+  final String invertedLeftLatexVariable;
+  final String invertedRightLatexVariable;
+
+  const _EnhancedFormulaTemplateWithInversion({
+    required this.original,
+    required this.invertedLatexVariable,
+    required this.invertedLeftLatexVariable,
+    required this.invertedRightLatexVariable,
+  }) : super(
+          latexOrigine: '',
+          description: '',
+          parameters: [],
+        );
+
+  @override
+  String get latexOrigine => original.latexOrigine;
+
+  @override
+  String get description => '${original.description} (inversé)';
+
+  @override
+  List<FormulaParameter> get parameters => original.parameters;
+
+  @override
+  String get latexVariable => invertedLatexVariable;
+
+  @override
+  String get leftLatexVariable => invertedLeftLatexVariable;
+
+  @override
+  String get rightLatexVariable => invertedRightLatexVariable;
+
+  @override
+  String get latex => FormulaPreprocessor.processLatex(invertedLatexVariable);
+
+  @override
+  String get leftLatex =>
+      FormulaPreprocessor.processLatex(invertedLeftLatexVariable);
+
+  @override
+  String get rightLatex =>
+      FormulaPreprocessor.processLatex(invertedRightLatexVariable);
+}
+
 /// Générateur étendu de perturbations pédagogiques pour les formules
 class EnhancedFormulaPerturbationGenerator {
   /// Génère une liste de formules LaTeX à partir des templates
@@ -830,6 +932,8 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Cas particuliers des coefficients binomiaux
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{0} = 1',
+    leftLatexOrigine: r'\binom{n}{0}',
+    rightLatexOrigine: r'1',
     description: 'coefficient binomial pour k=0',
     parameters: const [
       FormulaParameter(
@@ -844,6 +948,8 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{n} = 1',
+    leftLatexOrigine: r'\binom{n}{n}',
+    rightLatexOrigine: r'1',
     description: 'coefficient binomial pour k=n',
     parameters: const [
       FormulaParameter(
@@ -859,6 +965,8 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Relation de Pascal
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
+    leftLatexOrigine: r'\binom{n}{k}',
+    rightLatexOrigine: r'\binom{n-1}{k} + \binom{n-1}{k-1}',
     description: 'relation de récurrence de Pascal',
     parameters: const [
       FormulaParameter(
@@ -898,6 +1006,8 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Symétrie des coefficients binomiaux
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
+    leftLatexOrigine: r'\binom{n}{k}',
+    rightLatexOrigine: r'\binom{n}{n-k}',
     description: 'propriété de symétrie des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
@@ -927,6 +1037,8 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Définition de base
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \frac{n!}{k!\,(n-k)!}',
+    leftLatexOrigine: r'\binom{n}{k}',
+    rightLatexOrigine: r'\frac{n!}{k!\,(n-k)!}',
     description: 'définition du coefficient binomial',
     parameters: const [
       FormulaParameter(
@@ -949,6 +1061,8 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Propriété symétrique
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
+    leftLatexOrigine: r'\binom{n}{k}',
+    rightLatexOrigine: r'\binom{n}{n-k}',
     description: 'symétrie des coefficients binomiaux',
     parameters: const [
       FormulaParameter(
@@ -972,6 +1086,8 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Triangle de Pascal
   EnhancedFormulaTemplate(
     latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
+    leftLatexOrigine: r'\binom{n}{k}',
+    rightLatexOrigine: r'\binom{n-1}{k} + \binom{n-1}{k-1}',
     description: 'relation de récurrence du triangle de Pascal',
     parameters: const [
       FormulaParameter(
