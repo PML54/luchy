@@ -463,12 +463,6 @@ class _SommesFormulesScreenState extends ConsumerState<SommesFormulesScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _renewQuestions,
-          backgroundColor: Colors.orange,
-          child: const Icon(Icons.refresh, color: Colors.white),
-          tooltip: 'Nouvelles questions',
-        ),
       ),
     );
   }

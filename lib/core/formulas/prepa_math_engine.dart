@@ -896,8 +896,8 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
 
   // Alternance des coefficients binomiaux
   EnhancedFormulaTemplate(
-    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 ',
-    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0 \quad ({VAR:n} \ge 1)',
+    latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0',
+    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     leftLatexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
     rightLatexOrigine: r'0',
     description: 'somme alternée des coefficients binomiaux',
@@ -915,9 +915,9 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Somme oblique de Hockey-stick
   EnhancedFormulaTemplate(
     latexOrigine:
-        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1} ',
+        r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1}',
     latexVariable:
-        r'\sum_{{VAR:k}={VAR:r}}^{{VAR:n}} \binom{{VAR:k}}{{VAR:r}} = \binom{{VAR:n}+1}{{VAR:r}+1} \quad ({VAR:r} \le {VAR:n})',
+        r'\sum_{{VAR:k}={VAR:r}}^{{VAR:n}} \binom{{VAR:k}}{{VAR:r}} = \binom{{VAR:n}+1}{{VAR:r}+1}',
     leftLatexOrigine: r'\sum_{k=r}^{n} \binom{k}{r}',
     rightLatexOrigine: r'\binom{n+1}{r+1}',
     description: 'identité de hockey-stick',
@@ -1176,7 +1176,7 @@ final List<EnhancedFormulaTemplate> enhancedCombinaisonsTemplates = [
   // Relation d'orthogonalité
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0',
-    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0 \quad ({VAR:n} \ge 1)',
+    latexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     leftLatexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
     rightLatexOrigine: r'0',
     description: 'somme alternée des coefficients binomiaux',
@@ -1332,7 +1332,7 @@ final List<EnhancedFormulaTemplate> enhancedSommesTemplates = [
   // Série géométrique infinie
   EnhancedFormulaTemplate(
     latexOrigine: r'\sum_{k=0}^{\infty} q^k = \frac{1}{1-q} ',
-    latexVariable: r'\sum_{{VAR:k}=0}^{\infty} {VAR:q}^{VAR:k} = \frac{1}{1-{VAR:q}} \quad (|q| < 1)',
+    latexVariable: r'\sum_{{VAR:k}=0}^{\infty} {VAR:q}^{VAR:k} = \frac{1}{1-{VAR:q}} )',
     leftLatexOrigine: r'\sum_{k=0}^{\infty} q^k',
     rightLatexOrigine: r'\frac{1}{1-q}',
     description: 'somme d\'une série géométrique infinie convergente',
