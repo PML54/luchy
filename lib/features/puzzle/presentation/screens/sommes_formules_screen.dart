@@ -52,15 +52,47 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 /// NOUVELLE ARCHITECTURE - Utilisation de PrepaMathFormulaManager
 /// =====================================================================================
 
-/// Fonctions utilisant le nouveau système de codes quiz (mode mixte par défaut)
-List<String> get _sommesLatexGaucheComplete {
-  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
-  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
-    mode: QuizMode.mixte, // Mode mixte (code 2)
-    questionCount: 12, // Plus de formules pour avoir du choix
-  ));
+/// Système de cache pour synchroniser les listes gauche/droite (sommes)
+class _SommesQuizFormulaCache {
+  static List<EnhancedFormulaTemplate>? _cachedFormulas;
+  static DateTime? _lastGenerated;
   
-  print('🎮 Sommes - Formules chargées en mode mixte: ${quizFormulas.length}');
+  /// Durée de validité du cache (30 secondes)
+  static const Duration _cacheValidityDuration = Duration(seconds: 30);
+  
+  /// Obtient les formules (avec cache pour synchronisation)
+  static List<EnhancedFormulaTemplate> getFormulas() {
+    final now = DateTime.now();
+    
+    // Vérifier si le cache est valide
+    if (_cachedFormulas == null || 
+        _lastGenerated == null || 
+        now.difference(_lastGenerated!) > _cacheValidityDuration) {
+      
+      // Générer de nouvelles formules
+      _cachedFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
+        mode: QuizMode.mixte, // Mode mixte (code 2)
+        questionCount: 12, // Plus de formules pour avoir du choix
+      ));
+      _lastGenerated = now;
+      
+      print('🎮 Sommes - Nouvelles formules générées en mode mixte: ${_cachedFormulas!.length}');
+    }
+    
+    return _cachedFormulas!;
+  }
+  
+  /// Force le renouvellement du cache
+  static void refresh() {
+    _cachedFormulas = null;
+    _lastGenerated = null;
+  }
+}
+
+/// Fonctions utilisant le nouveau système de codes quiz (mode mixte par défaut)
+/// SYNCHRONISÉES via le cache pour éviter les incohérences gauche/droite
+List<String> get _sommesLatexGaucheComplete {
+  final quizFormulas = _SommesQuizFormulaCache.getFormulas();
   
   return quizFormulas.map((f) {
     // Utiliser la propriété leftSide qui gère automatiquement leftLatex ou split
@@ -69,11 +101,7 @@ List<String> get _sommesLatexGaucheComplete {
 }
 
 List<String> get _sommesLatexDroiteComplete {
-  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
-  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
-    mode: QuizMode.mixte, // Mode mixte (code 2)
-    questionCount: 12, // Plus de formules pour avoir du choix
-  ));
+  final quizFormulas = _SommesQuizFormulaCache.getFormulas();
   
   return quizFormulas.map((f) {
     // Utiliser la propriété rightSide qui gère automatiquement rightLatex ou split
@@ -82,11 +110,7 @@ List<String> get _sommesLatexDroiteComplete {
 }
 
 List<String> get _sommesUsage2MotsComplete {
-  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
-  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
-    mode: QuizMode.mixte, // Mode mixte (code 2)
-    questionCount: 12, // Plus de formules pour avoir du choix
-  ));
+  final quizFormulas = _SommesQuizFormulaCache.getFormulas();
   
   return quizFormulas.map((f) => f.description).toList();
 }
@@ -159,6 +183,8 @@ class _SommesFormulesScreenState extends ConsumerState<SommesFormulesScreen> {
 
   void _renewQuestions() {
     setState(() {
+      // Forcer le renouvellement du cache pour avoir de nouvelles formules
+      _SommesQuizFormulaCache.refresh();
       _initializeQuestions();
       _initializePuzzle();
       _startTime = DateTime.now(); // Redémarrer le chronométrage
