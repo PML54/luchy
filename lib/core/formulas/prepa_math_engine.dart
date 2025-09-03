@@ -239,6 +239,11 @@ class EnhancedFormulaTemplate {
   final String? leftLatexOrigine;
   final String? rightLatexOrigine;
 
+  /// 🔄 NIVEAU VARIABLE : LaTeX avec variables identifiées {VAR:} (donnée d'entrée)
+  final String latexVariable;
+  final String? leftLatexVariable;
+  final String? rightLatexVariable;
+
   /// Description pédagogique de la formule
   final String description;
 
@@ -249,27 +254,26 @@ class EnhancedFormulaTemplate {
     required this.latexOrigine,
     required this.description,
     required this.parameters,
+    this.latexVariable = '', // TEMPORAIRE: optionnel pendant migration
     this.leftLatexOrigine,
     this.rightLatexOrigine,
+    this.leftLatexVariable,
+    this.rightLatexVariable,
   });
 
-  /// 🔄 NIVEAU VARIABLE : LaTeX avec variables identifiées (pivot transformations)
-  String get latexVariable => _convertToVariableSyntax(latexOrigine);
-  String get leftLatexVariable => leftLatexOrigine != null
-      ? _convertToVariableSyntax(leftLatexOrigine!)
-      : _splitLeft(latexVariable);
-  String get rightLatexVariable => rightLatexOrigine != null
-      ? _convertToVariableSyntax(rightLatexOrigine!)
-      : _splitRight(latexVariable);
+  /// 🎯 NIVEAU FINAL : LaTeX final généré avec getters par défaut
+  String get finalLatexVariable => latexVariable.isEmpty ? _convertToVariableSyntax(latexOrigine) : latexVariable;
+  String get finalLeftLatexVariable => leftLatexVariable ?? _splitLeft(finalLatexVariable);
+  String get finalRightLatexVariable => rightLatexVariable ?? _splitRight(finalLatexVariable);
 
   /// 🎯 NIVEAU FINAL : LaTeX final généré (par défaut = origine, modifiable par transformations)
-  String get latex => _applySubstitutions(latexVariable);
-  String get leftLatex => _applySubstitutions(leftLatexVariable);
-  String get rightLatex => _applySubstitutions(rightLatexVariable);
+  String get latex => _applySubstitutions(finalLatexVariable);
+  String get leftLatex => _applySubstitutions(finalLeftLatexVariable);
+  String get rightLatex => _applySubstitutions(finalRightLatexVariable);
 
   /// 📊 MÉTADONNÉES : Nombre de variables dans la formule
   int get numberOfVariables =>
-      FormulaPreprocessor.extractVariableNames(latexVariable).length;
+      FormulaPreprocessor.extractVariableNames(finalLatexVariable).length;
 
   /// Nombre de paramètres de la formule
   int get parameterCount => parameters.length;
@@ -360,17 +364,17 @@ class EnhancedFormulaTemplate {
 
   /// Obtient les variables extraites de la formule
   List<String> get extractedVariables =>
-      FormulaPreprocessor.extractVariableNames(latexVariable);
+      FormulaPreprocessor.extractVariableNames(finalLatexVariable);
 
   /// Substitue les variables marquées dans la formule
   String substituteMarkedVariables(Map<String, String> values) {
-    return FormulaPreprocessor.substituteVariables(latexVariable, values);
+    return FormulaPreprocessor.substituteVariables(finalLatexVariable, values);
   }
 
   /// Génère une version avec inversion de variables
   /// Exemple: inverser n et k dans \binom{{VAR:n}}{{VAR:k}}
   String generateWithInversion(String var1, String var2) {
-    return latexVariable
+    return finalLatexVariable
         .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
         .replaceAll('{VAR:$var2}', '{VAR:$var1}')
         .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
@@ -379,7 +383,7 @@ class EnhancedFormulaTemplate {
   /// Génère une version avec substitutions de variables
   /// Exemple: remplacer n par x, k par y
   String generateWithSubstitutions(Map<String, String> substitutions) {
-    String result = latexVariable;
+    String result = finalLatexVariable;
     for (final entry in substitutions.entries) {
       result = result.replaceAll('{VAR:${entry.key}}', '{VAR:${entry.value}}');
     }
@@ -398,22 +402,22 @@ class EnhancedFormulaTemplate {
           'Inversion simple possible uniquement avec 2 variables (actuel: $numberOfVariables)');
     }
 
-    final variables = FormulaPreprocessor.extractVariableNames(latexVariable);
+    final variables = FormulaPreprocessor.extractVariableNames(finalLatexVariable);
     final var1 = variables[0];
     final var2 = variables[1];
-
+    
     // Inverser les variables dans latexVariable
-    final invertedLatexVariable = latexVariable
+    final invertedLatexVariable = finalLatexVariable
         .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
         .replaceAll('{VAR:$var2}', '{VAR:$var1}')
         .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
 
-    final invertedLeftLatexVariable = leftLatexVariable
+    final invertedLeftLatexVariable = (leftLatexVariable ?? _splitLeft(finalLatexVariable))
         .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
         .replaceAll('{VAR:$var2}', '{VAR:$var1}')
         .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
 
-    final invertedRightLatexVariable = rightLatexVariable
+    final invertedRightLatexVariable = (rightLatexVariable ?? _splitRight(finalLatexVariable))
         .replaceAll('{VAR:$var1}', '{TEMP:$var2}')
         .replaceAll('{VAR:$var2}', '{VAR:$var1}')
         .replaceAll('{TEMP:$var2}', '{VAR:$var2}');
@@ -815,8 +819,11 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
   // Développement général du binôme
   EnhancedFormulaTemplate(
     latexOrigine: r'(a+b)^{n} = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    latexVariable: r'({VAR:a}+{VAR:b})^{{VAR:n}} = \sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:a}^{{VAR:n}-{VAR:k}} {VAR:b}^{{VAR:k}}',
     leftLatexOrigine: r'(a+b)^{n}',
     rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
+    leftLatexVariable: r'({VAR:a}+{VAR:b})^{{VAR:n}}',
+    rightLatexVariable: r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:a}^{{VAR:n}-{VAR:k}} {VAR:b}^{{VAR:k}}',
     description: 'développement général du binôme de Newton',
     parameters: const [
       FormulaParameter(
