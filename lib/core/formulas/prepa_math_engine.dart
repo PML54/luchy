@@ -719,7 +719,7 @@ class _EnhancedFormulaTemplateWithInversion extends EnhancedFormulaTemplate {
   }) : super(
           latexOrigine: '',
           description: '',
-          parameters: [],
+          parameters: const [],
         );
 
   @override
