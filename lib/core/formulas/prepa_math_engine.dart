@@ -19,7 +19,7 @@
 /// - Calcul automatique des coefficients binomiaux, développements, sommes
 /// - Validation intelligente des paramètres selon leur type et contraintes
 /// - Génération d'exemples pédagogiques
-/// - Support des perturbations pédagogiques (désactivé pour éviter confusion)
+/// - Génération d'exemples et variants de formules
 /// - 27 formules organisées en 3 catégories (Binôme, Combinaisons, Sommes)
 ///
 /// HISTORIQUE RÉCENT:
@@ -33,7 +33,7 @@
 /// - Performance: Calculs limités pour éviter débordements (n ≤ 10 pour binôme)
 /// - Validation: Vérification automatique des contraintes mathématiques
 /// - Génération d'exemples: Création automatique d'exemples pédagogiques valides
-/// - Perturbations: Fonctionnalité désactivée pour éviter la confusion
+/// - Calculs: Validation automatique et exemples pédagogiques
 /// - Factorielle: Limitation à n ≤ 12 pour éviter débordements
 ///
 /// 🚀 PROCHAINES ÉTAPES:
@@ -288,15 +288,11 @@ class EnhancedFormulaTemplate {
   /// Obtient la partie gauche de la formule (avant le =)
   String get leftSide {
     return leftLatex;
-    final parts = latex.split('=');
-    return parts.isNotEmpty ? parts[0].trim() : latex;
   }
 
   /// Obtient la partie droite de la formule (après le =)
   String get rightSide {
     return rightLatex;
-    final parts = latex.split('=');
-    return parts.length > 1 ? parts[1].trim() : description;
   }
 
   /// Obtient la partie gauche avec variables {VAR:} visibles
@@ -304,14 +300,6 @@ class EnhancedFormulaTemplate {
     // Si leftLatex est défini, d'abord générer la version avec {VAR:}
     final withVars = _generateLatexVariableFromOriginal(leftLatex);
     return withVars;
-    // Simple split - on trouve le premier = qui est un séparateur principal
-    final parts = latexVariable.split(' = ');
-    if (parts.length >= 2) {
-      return parts[0].trim();
-    }
-    // Si pas d'espace autour du =, essayer split simple
-    final simpleParts = latexVariable.split('=');
-    return simpleParts.isNotEmpty ? simpleParts[0].trim() : latexVariable;
   }
 
   /// Obtient la partie droite avec variables {VAR:} visibles
@@ -319,16 +307,6 @@ class EnhancedFormulaTemplate {
     // Si rightLatex est défini, d'abord générer la version avec {VAR:}
     final withVars = _generateLatexVariableFromOriginal(rightLatex);
     return withVars;
-    // Simple split - on trouve le premier = qui est un séparateur principal
-    final parts = latexVariable.split(' = ');
-    if (parts.length >= 2) {
-      return parts.sublist(1).join(' = ').trim();
-    }
-    // Si pas d'espace autour du =, essayer split simple
-    final simpleParts = latexVariable.split('=');
-    return simpleParts.length > 1
-        ? simpleParts.sublist(1).join('=').trim()
-        : description;
   }
 
   /// Génère la version avec variables {VAR:} à partir d'une formule originale
@@ -453,12 +431,7 @@ class EnhancedFormulaTemplate {
     return FormulaPreprocessor.processLatex(variableLatex);
   }
 
-  /// Vérifie si une chaîne est une commande LaTeX connue à ne pas transformer
-  bool _isLatexCommand(String text) {
-    // Pour l'instant, on accepte toutes les lettres simples comme variables
-    // On peut affiner cette logique plus tard si nécessaire
-    return false;
-  }
+
 
   /// Split gauche de la formule variable
   String _splitLeft(String formula) {
@@ -613,33 +586,10 @@ class EnhancedFormulaTemplate {
   /// 🎲 GÉNÉRATION DE VARIANTES ET EXEMPLES
   /// =====================================================================================
 
-  /// Génère des variantes de la formule (originale + avec paramètres inversés)
-  /// DÉSACTIVÉ: Cette fonctionnalité est désactivée pour éviter la confusion pédagogique
+  /// Génère des variantes de la formule (original uniquement)
   List<FormulaVariant> generateSmartVariants() {
-    if (invertibleVariables.length < 2) {
-      return [FormulaVariant(latex: latex, description: description)];
-    }
-
-    final variants = <FormulaVariant>[];
-    variants.add(FormulaVariant(latex: latex, description: description));
-
-    // DÉSACTIVÉ: Génération de variantes avec paramètres inversés
-    // Cette fonctionnalité a été désactivée pour éviter la confusion
-    /*
-    // Générer la variante avec paramètres inversés
-    final invertedLatex = _invertVariablesInLatex(latex, invertibleVariables);
-    final invertedDescription = '$description (paramètres inversés)';
-
-    variants.add(FormulaVariant(
-      latexOrigine: invertedLatex,
-      description: invertedDescription,
-    ));
-    */
-
-    return variants;
+    return [FormulaVariant(latex: latex, description: description)];
   }
-
-  /// Inverse les variables dans une expression LaTeX
 
   /// Génère des exemples numériques valides pour cette formule
   ///
