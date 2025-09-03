@@ -52,25 +52,43 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 /// NOUVELLE ARCHITECTURE - Utilisation de PrepaMathFormulaManager
 /// =====================================================================================
 
-/// Fonctions utilisant la nouvelle architecture pour les sommes
+/// Fonctions utilisant le nouveau système de codes quiz (mode mixte par défaut)
 List<String> get _sommesLatexGaucheComplete {
-  return PrepaMathFormulaManager.sommesFormulas.map((f) {
+  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
+  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
+    mode: QuizMode.mixte, // Mode mixte (code 2)
+    questionCount: 12, // Plus de formules pour avoir du choix
+  ));
+  
+  print('🎮 Sommes - Formules chargées en mode mixte: ${quizFormulas.length}');
+  
+  return quizFormulas.map((f) {
     // Utiliser la propriété leftSide qui gère automatiquement leftLatex ou split
     return f.leftSide;
   }).toList();
 }
 
 List<String> get _sommesLatexDroiteComplete {
-  return PrepaMathFormulaManager.sommesFormulas.map((f) {
+  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
+  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
+    mode: QuizMode.mixte, // Mode mixte (code 2)
+    questionCount: 12, // Plus de formules pour avoir du choix
+  ));
+  
+  return quizFormulas.map((f) {
     // Utiliser la propriété rightSide qui gère automatiquement rightLatex ou split
     return f.rightSide;
   }).toList();
 }
 
 List<String> get _sommesUsage2MotsComplete {
-  return PrepaMathFormulaManager.sommesFormulas
-      .map((f) => f.description)
-      .toList();
+  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
+  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
+    mode: QuizMode.mixte, // Mode mixte (code 2)
+    questionCount: 12, // Plus de formules pour avoir du choix
+  ));
+  
+  return quizFormulas.map((f) => f.description).toList();
 }
 
 /// Fonction pour sélectionner 6 questions aléatoires
@@ -217,8 +235,6 @@ class _SommesFormulesScreenState extends ConsumerState<SommesFormulesScreen> {
       _rightArrangement[index2] = temp;
     });
   }
-
-
 
   int _getCorrectCount() {
     int correctCount = 0;

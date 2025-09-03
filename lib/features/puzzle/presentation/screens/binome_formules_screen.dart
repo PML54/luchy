@@ -102,29 +102,44 @@ class UnifiedMathFormulaManager {
 /// NOUVELLES FONCTIONS DE COMPATIBILITÉ - Nouvelle Architecture
 /// =====================================================================================
 
-/// Fonctions de compatibilité pour l'interface existante
-/// Ces fonctions utilisent maintenant la nouvelle architecture PrepaMathFormulaManager
+/// Fonctions utilisant le nouveau système de codes quiz (mode mixte par défaut)
+/// Ces fonctions utilisent QuizGenerator avec mode mixte (code 2)
 List<String> get _binomeLatexGaucheComplete {
-  // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
-  return PrepaMathFormulaManager.binomeFormulas.map((f) {
+  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
+  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
+    mode: QuizMode.mixte, // Mode mixte (code 2)
+    questionCount: 12, // Plus de formules pour avoir du choix
+  ));
+  
+  print('🎮 Formules chargées en mode mixte: ${quizFormulas.length}');
+  
+  return quizFormulas.map((f) {
     // Utiliser la propriété leftSide qui gère automatiquement leftLatex ou split
     return f.leftSide;
   }).toList();
 }
 
 List<String> get _binomeLatexDroiteComplete {
-  // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
-  return PrepaMathFormulaManager.binomeFormulas.map((f) {
+  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
+  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
+    mode: QuizMode.mixte, // Mode mixte (code 2)
+    questionCount: 12, // Plus de formules pour avoir du choix
+  ));
+  
+  return quizFormulas.map((f) {
     // Utiliser la propriété rightSide qui gère automatiquement rightLatex ou split
     return f.rightSide;
   }).toList();
 }
 
 List<String> get _binomeUsage2MotsComplete {
-  // Utiliser SEULEMENT les formules de binôme, pas toutes les catégories
-  return PrepaMathFormulaManager.binomeFormulas
-      .map((f) => f.description)
-      .toList();
+  // Utiliser le nouveau système de quiz avec toutes les catégories en mode mixte
+  final quizFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
+    mode: QuizMode.mixte, // Mode mixte (code 2)
+    questionCount: 12, // Plus de formules pour avoir du choix
+  ));
+  
+  return quizFormulas.map((f) => f.description).toList();
 }
 
 /// Fonction pour sélectionner 6 questions aléatoires avec résultats ET formules uniques
@@ -332,8 +347,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     });
   }
 
-
-
   int _getCorrectCount() {
     int correctCount = 0;
     for (int i = 0; i < _itemCount; i++) {
@@ -455,7 +468,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                                 binomeLatexGauche[_leftArrangement[row]],
                                 textStyle: TextStyle(
                                     fontSize: _getAdaptiveFontSize(context)),
-
                               ),
                             ),
                             // Overlay avec définition si activé
@@ -520,7 +532,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                                   binomeLatexDroite[formulaIndex],
                                   textStyle: TextStyle(
                                       fontSize: _getAdaptiveFontSize(context)),
-  
                                 ),
                               ),
                             ),
@@ -550,7 +561,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                                 binomeLatexDroite[formulaIndex],
                                 textStyle: TextStyle(
                                     fontSize: _getAdaptiveFontSize(context)),
-
                               ),
                             ),
                           ),
