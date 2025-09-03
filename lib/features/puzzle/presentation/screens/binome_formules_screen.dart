@@ -364,6 +364,209 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     });
   }
 
+  /// Affiche un tooltip avec la formule complète (colonne droite)
+  void _showFormulaTooltip(BuildContext context, String formula) {
+    final overlay = Overlay.of(context);
+    late OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned.fill(
+        child: GestureDetector(
+          onTap: () => overlayEntry.remove(),
+          child: Container(
+            color: Colors.black54,
+            child: Center(
+              child: Material(
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.9,
+                    maxHeight: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: SingleChildScrollView(
+                          child: Math.tex(
+                            formula,
+                            textStyle: const TextStyle(fontSize: 24),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () => overlayEntry.remove(),
+                        child: const Text('Fermer'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+  }
+
+  /// Affiche un tooltip avec la formule gauche et sa description (colonne gauche)
+  void _showLeftFormulaTooltip(
+      BuildContext context, String leftFormula, String description) {
+    // Récupérer la formule complète avec conditions si disponible
+    final quizFormulas = _QuizFormulaCache.getFormulas();
+    EnhancedFormulaTemplate? currentTemplate;
+
+    // Trouver le template correspondant à leftFormula
+    for (final template in quizFormulas) {
+      if (template.leftSide == leftFormula) {
+        currentTemplate = template;
+        break;
+      }
+    }
+
+    final overlay = Overlay.of(context);
+    late OverlayEntry overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned.fill(
+        child: GestureDetector(
+          onTap: () => overlayEntry.remove(),
+          child: Container(
+            color: Colors.black54,
+            child: Center(
+              child: Material(
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.9,
+                    maxHeight: MediaQuery.of(context).size.height * 0.6,
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Formule gauche
+                      const Text(
+                        'Formule:',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.blue[200]!),
+                        ),
+                        child: Math.tex(
+                          leftFormula,
+                          textStyle: const TextStyle(fontSize: 22),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Description/Usage
+                      const Text(
+                        'Description:',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.green[50],
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.green[200]!),
+                        ),
+                        child: Text(
+                          description,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      // Conditions d'application si disponibles
+                      if (currentTemplate?.finalConditionLatex != null) ...[
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Conditions:',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.purple,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.purple[50],
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.purple[200]!),
+                          ),
+                          child: Math.tex(
+                            currentTemplate!.finalConditionLatex!,
+                            textStyle: const TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ],
+
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => overlayEntry.remove(),
+                        child: const Text('Fermer'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+  }
+
   void _swapRightItems(int index1, int index2) {
     setState(() {
       final temp = _rightArrangement[index1];
@@ -471,7 +674,12 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                   if (col == 0) {
                     // Colonne gauche : formules LaTeX gauche (fixes, cliquables)
                     return GestureDetector(
-                      onTap: () => _toggleDefinition(row),
+                      onTap: () => _showLeftFormulaTooltip(
+                        context,
+                        binomeLatexGauche[_leftArrangement[row]],
+                        binomeUsage2Mots[_leftArrangement[row]],
+                      ),
+                      onLongPress: () => _toggleDefinition(row),
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey[300]!),
@@ -568,24 +776,30 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                               color: Colors.grey[200],
                             ),
                           ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey[300]!,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.white,
+                          child: GestureDetector(
+                            onTap: () => _showFormulaTooltip(
+                              context,
+                              binomeLatexDroite[formulaIndex],
                             ),
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width > 600
-                                    ? 12.0
-                                    : 6.0),
-                            child: Center(
-                              child: Math.tex(
-                                binomeLatexDroite[formulaIndex],
-                                textStyle: TextStyle(
-                                    fontSize: _getAdaptiveFontSize(context)),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey[300]!,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                              ),
+                              padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width > 600
+                                      ? 12.0
+                                      : 6.0),
+                              child: Center(
+                                child: Math.tex(
+                                  binomeLatexDroite[formulaIndex],
+                                  textStyle: TextStyle(
+                                      fontSize: _getAdaptiveFontSize(context)),
+                                ),
                               ),
                             ),
                           ),

@@ -406,6 +406,9 @@ class EnhancedFormulaTemplate {
   /// Description pédagogique de la formule
   final String description;
 
+  /// Conditions d'application avec syntaxe LaTeX et variables {VAR:}
+  final String? conditionLatex;
+
   /// Liste des paramètres de la formule avec leurs contraintes
   final List<FormulaParameter> parameters;
 
@@ -416,6 +419,7 @@ class EnhancedFormulaTemplate {
     this.latexVariable = '', // TEMPORAIRE: optionnel pendant migration
     this.leftLatexOrigine,
     this.rightLatexOrigine,
+    this.conditionLatex,
   });
 
   /// 🎯 NIVEAU FINAL : LaTeX final généré avec getters par défaut
@@ -433,6 +437,8 @@ class EnhancedFormulaTemplate {
   String get latex => _applySubstitutions(finalLatexVariable);
   String get leftLatex => _applySubstitutions(finalLeftLatexVariable);
   String get rightLatex => _applySubstitutions(finalRightLatexVariable);
+  String? get finalConditionLatex =>
+      conditionLatex != null ? _applySubstitutions(conditionLatex!) : null;
 
   /// 📊 MÉTADONNÉES : Nombre de variables dans la formule
   int get numberOfVariables =>
@@ -496,8 +502,7 @@ class EnhancedFormulaTemplate {
         RegExp(r'([a-zA-Z])!'), (match) => '{VAR:${match.group(1)}}!');
 
     // Variables précédées d'un chiffre (ex: 2k, 3n)
-    result = result.replaceAllMapped(
-        RegExp(r'([0-9])([a-zA-Z])'),
+    result = result.replaceAllMapped(RegExp(r'([0-9])([a-zA-Z])'),
         (match) => '${match.group(1)}{VAR:${match.group(2)}}');
 
     // Variables isolées dans certains contextes (entourées d'espaces, parenthèses, opérateurs)
@@ -847,10 +852,13 @@ class _EnhancedFormulaTemplateWithInversion extends EnhancedFormulaTemplate {
   String get latexOrigine => original.latexOrigine;
 
   @override
-  String get description => '${original.description} (inversé)';
+  String get description => original.description;
 
   @override
   List<FormulaParameter> get parameters => original.parameters;
+
+  @override
+  String? get conditionLatex => original.conditionLatex;
 
   @override
   String get latexVariable => invertedLatexVariable;
@@ -941,6 +949,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
     leftLatexOrigine: r'(a+b)^{n}',
     rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
     description: 'développement général du binôme de Newton',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'a',
@@ -998,6 +1007,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
     leftLatexOrigine: r'(1+a)^{n}',
     rightLatexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} a^{k}',
     description: 'développement binomial spécial',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:a} \in \mathbb{R}',
     parameters: const [
       FormulaParameter(
         name: 'a',
@@ -1022,6 +1032,7 @@ final List<EnhancedFormulaTemplate> enhancedBinomeTemplates = [
     leftLatexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k}',
     rightLatexOrigine: r'0',
     description: 'somme alternée des coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
