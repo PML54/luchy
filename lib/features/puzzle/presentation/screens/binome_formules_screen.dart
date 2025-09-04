@@ -413,11 +413,11 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
   void _showLeftFormulaTooltip(
       BuildContext context, String leftFormula, String description) {
     // Récupérer la formule complète avec conditions si disponible
-    final quizFormulas = _QuizFormulaCache.getFormulas();
+    // Utiliser allFormulas au lieu du cache limité pour avoir accès à toutes les formules
     EnhancedFormulaTemplate? currentTemplate;
 
-    // Trouver le template correspondant à leftFormula
-    for (final template in quizFormulas) {
+    // Trouver le template correspondant à leftFormula dans toutes les formules
+    for (final template in allFormulas) {
       if (template.leftSide == leftFormula) {
         currentTemplate = template;
         break;
