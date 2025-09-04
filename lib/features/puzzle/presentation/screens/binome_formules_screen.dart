@@ -457,14 +457,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Formule gauche
-                      const Text(
-                        'Formule:',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.all(12),
@@ -482,14 +474,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                       const SizedBox(height: 16),
 
                       // Description/Usage
-                      const Text(
-                        'Description:',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.all(12),
@@ -509,7 +493,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                       ),
 
                       // Conditions d'application si disponibles
-                      if (currentTemplate?.finalConditionLatex != null) ...[
+                      if (currentTemplate?.displayConditionLatex != null) ...[
                         const SizedBox(height: 16),
                         const Text(
                           'Conditions:',
@@ -528,7 +512,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                             border: Border.all(color: Colors.purple[200]!),
                           ),
                           child: Math.tex(
-                            currentTemplate!.finalConditionLatex!,
+                            currentTemplate!.displayConditionLatex!,
                             textStyle: const TextStyle(fontSize: 18),
                           ),
                         ),
@@ -592,7 +576,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
             onPressed: _quitToNormalPuzzle,
           ),
           title: const Text(
-            'Binôme de Newton',
+            'Calcul Prépa',
             style: TextStyle(color: Colors.white),
           ),
           iconTheme: const IconThemeData(color: Colors.white),

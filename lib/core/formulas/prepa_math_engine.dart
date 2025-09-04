@@ -231,6 +231,18 @@ class EnhancedFormulaTemplate {
   /// Condition LaTeX finale (alias pour conditionLatex)
   String? get finalConditionLatex => conditionLatex;
 
+  /// Condition LaTeX traitée pour affichage (remplace {VAR:variable} par variable)
+  String? get displayConditionLatex {
+    if (conditionLatex == null) return null;
+
+    String processed = conditionLatex!;
+    // Remplacer {VAR:variable} par variable pour l'affichage
+    for (final param in parameters) {
+      processed = processed.replaceAll('{VAR:${param.name}}', param.name);
+    }
+    return processed;
+  }
+
   const EnhancedFormulaTemplate({
     required this.chapitre,
     required this.level,
@@ -479,6 +491,13 @@ final List<EnhancedFormulaTemplate> allFormulas = [
         minValue: 0,
         maxValue: 5,
       ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 5,
+      ),
     ],
   ),
 
@@ -489,6 +508,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!({VAR:n}-{VAR:k})!}',
     description: 'coefficient binomial de base',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:k} \in \mathbb{N}, {VAR:k} \leq {VAR:n}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -514,6 +535,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'(1+{VAR:a})^{{VAR:n}} = \sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} {VAR:a}^{{VAR:k}}',
     description: 'développement binomial spécial',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:a} \in \mathbb{R}',
     parameters: const [
       FormulaParameter(
         name: 'a',
@@ -523,6 +545,13 @@ final List<EnhancedFormulaTemplate> allFormulas = [
       FormulaParameter(
         name: 'n',
         description: 'exposant entier positif',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 5,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 5,
@@ -537,12 +566,20 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     description: 'somme alternée des coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'exposant (doit être ≥ 1)',
         type: ParameterType.NATURAL,
         minValue: 1,
+        maxValue: 10,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
         maxValue: 10,
       ),
     ],
@@ -555,6 +592,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}={VAR:r}}^{{VAR:n}} \binom{{VAR:k}}{{VAR:r}} = \binom{{VAR:n}+1}{{VAR:r}+1}',
     description: 'identité de hockey-stick',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:r} \in \mathbb{N}, {VAR:n} \geq {VAR:r}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -570,6 +609,13 @@ final List<EnhancedFormulaTemplate> allFormulas = [
         minValue: 0,
         maxValue: 10,
       ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 10,
+      ),
     ],
   ),
 
@@ -579,6 +625,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexOrigine: r'\binom{n}{0} = 1',
     latexVariable: r'\binom{{VAR:n}}{0} = 1',
     description: 'coefficient binomial pour k=0',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -596,6 +643,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexOrigine: r'\binom{n}{n} = 1',
     latexVariable: r'\binom{{VAR:n}}{{VAR:n}} = 1',
     description: 'coefficient binomial pour k=n',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -614,6 +662,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}-1}{{VAR:k}} + \binom{{VAR:n}-1}{{VAR:k}-1}',
     description: 'relation de récurrence de Pascal',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:k} \in \mathbb{N}, {VAR:n} \geq 1, 1 \leq {VAR:k} \leq {VAR:n}-1',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -639,10 +689,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} = 2^{{VAR:n}}',
     description: 'formule du binôme pour (1+1)^n',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier positif',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 8,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 8,
@@ -657,6 +715,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}}{{VAR:n}-{VAR:k}}',
     description: 'propriété de symétrie des coefficients binomiaux',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:k} \in \mathbb{N}, {VAR:k} \leq {VAR:n}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -683,6 +743,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\binom{{VAR:n}}{{VAR:k}} = \frac{{VAR:n}!}{{VAR:k}!({VAR:n}-{VAR:k})!}',
     description: 'définition de base des combinaisons',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:k} \in \mathbb{N}, {VAR:k} \leq {VAR:n}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -708,6 +770,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}}{{VAR:n}-{VAR:k}}',
     description: 'symétrie des coefficients binomiaux',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:k} \in \mathbb{N}, {VAR:k} \leq {VAR:n}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -734,6 +798,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\binom{{VAR:n}}{{VAR:k}} = \binom{{VAR:n}-1}{{VAR:k}} + \binom{{VAR:n}-1}{{VAR:k}-1}',
     description: 'relation de récurrence du triangle de Pascal',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:k} \in \mathbb{N}, {VAR:n} \geq 1, 1 \leq {VAR:k} \leq {VAR:n}-1',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -758,6 +824,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexOrigine: r'\binom{n}{0} = 1',
     latexVariable: r'\binom{{VAR:n}}{0} = 1',
     description: 'coefficient binomial pour k=0',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -775,6 +842,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexOrigine: r'\binom{n}{n} = 1',
     latexVariable: r'\binom{{VAR:n}}{{VAR:n}} = 1',
     description: 'coefficient binomial pour k=n',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -793,10 +861,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} = 2^{{VAR:n}}',
     description: 'somme de tous les coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier positif',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 10,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 10,
@@ -811,12 +887,20 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     description: 'somme alternée des coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier supérieur à 0',
         type: ParameterType.NATURAL,
         minValue: 1,
+        maxValue: 10,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
         maxValue: 10,
       ),
     ],
@@ -829,12 +913,20 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} {VAR:k} \binom{{VAR:n}}{{VAR:k}} = {VAR:n} \cdot 2^{{VAR:n}-1}',
     description: 'somme pondérée des coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier supérieur à 0',
         type: ParameterType.NATURAL,
         minValue: 1,
+        maxValue: 10,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
         maxValue: 10,
       ),
     ],
@@ -847,12 +939,20 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} {VAR:k}^2 \binom{{VAR:n}}{{VAR:k}} = {VAR:n}({VAR:n}+1) \cdot 2^{{VAR:n}-2}',
     description: 'somme des carrés pondérés des coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier supérieur à 1',
         type: ParameterType.NATURAL,
         minValue: 2,
+        maxValue: 10,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
         maxValue: 10,
       ),
     ],
@@ -865,10 +965,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}}^2 = \binom{2{VAR:n}}{{VAR:n}}',
     description: 'identité de Vandermonde',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier positif',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 8,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 8,
@@ -883,6 +991,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}={VAR:r}}^{{VAR:n}} \binom{{VAR:k}}{{VAR:r}} = \binom{{VAR:n}+1}{{VAR:r}+1}',
     description: 'identité de hockey-stick',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:r} \in \mathbb{N}, {VAR:n} \geq {VAR:r}',
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -898,6 +1008,13 @@ final List<EnhancedFormulaTemplate> allFormulas = [
         minValue: 0,
         maxValue: 10,
       ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 10,
+      ),
     ],
   ),
 
@@ -908,10 +1025,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}^3 = \left(\frac{{VAR:n}({VAR:n}+1)}{2}\right)^2',
     description: 'somme des cubes des premiers entiers',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'nombre d\'entiers à sommer',
+        type: ParameterType.NATURAL,
+        minValue: 1,
+        maxValue: 20,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 20,
@@ -926,6 +1051,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} {VAR:q}^{VAR:k} = \frac{1-{VAR:q}^{{VAR:n}+1}}{1-{VAR:q}}',
     description: 'série géométrique finie',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:q} \in \mathbb{R}, {VAR:q} \neq 1',
     parameters: const [
       FormulaParameter(
         name: 'q',
@@ -935,6 +1062,13 @@ final List<EnhancedFormulaTemplate> allFormulas = [
       FormulaParameter(
         name: 'n',
         description: 'nombre de termes',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 20,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 20,
@@ -950,6 +1084,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} {VAR:k} {VAR:q}^{VAR:k} = \frac{{VAR:q}(1-({VAR:n}+1){VAR:q}^{VAR:n} + {VAR:n} {VAR:q}^{{VAR:n}+1})}{(1-{VAR:q})^2}',
     description: 'série arithmético-géométrique',
+    conditionLatex:
+        r'{VAR:n} \in \mathbb{N}, {VAR:q} \in \mathbb{R}, {VAR:q} \neq 1',
     parameters: const [
       FormulaParameter(
         name: 'q',
@@ -959,6 +1095,13 @@ final List<EnhancedFormulaTemplate> allFormulas = [
       FormulaParameter(
         name: 'n',
         description: 'nombre de termes',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 15,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 15,
@@ -973,10 +1116,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}^4 = \frac{{VAR:n}({VAR:n}+1)(2{VAR:n}+1)(3{VAR:n}^2+3{VAR:n}-1)}{30}',
     description: 'somme des puissances quatrièmes',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'nombre d\'entiers à sommer',
+        type: ParameterType.NATURAL,
+        minValue: 1,
+        maxValue: 10,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 10,
@@ -991,10 +1142,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=1}^{{VAR:n}} \frac{1}{{VAR:k}({VAR:k}+1)} = 1 - \frac{1}{{VAR:n}+1}',
     description: 'somme télescopique',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'nombre de termes',
+        type: ParameterType.NATURAL,
+        minValue: 1,
+        maxValue: 50,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 50,
@@ -1009,10 +1168,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}({VAR:k}+1) = \frac{{VAR:n}({VAR:n}+1)({VAR:n}+2)}{3}',
     description: 'somme des produits consécutifs',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'nombre de termes',
+        type: ParameterType.NATURAL,
+        minValue: 1,
+        maxValue: 20,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 20,
@@ -1028,10 +1195,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=1}^{{VAR:n}} \frac{1}{{VAR:k}^2} = \frac{\pi^2}{6} - \sum_{{VAR:k}={VAR:n}+1}^{\infty} \frac{1}{{VAR:k}^2}',
     description: 'somme partielle des inverses des carrés',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'nombre de termes',
+        type: ParameterType.NATURAL,
+        minValue: 1,
+        maxValue: 100,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 100,
@@ -1046,10 +1221,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} \binom{{VAR:n}}{{VAR:k}} = 2^{{VAR:n}}',
     description: 'somme des coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier positif',
+        type: ParameterType.NATURAL,
+        minValue: 0,
+        maxValue: 15,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 15,
@@ -1064,12 +1247,20 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     description: 'somme alternée des coefficients binomiaux',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'entier supérieur à 0',
         type: ParameterType.NATURAL,
         minValue: 1,
+        maxValue: 15,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
+        type: ParameterType.NATURAL,
+        minValue: 0,
         maxValue: 15,
       ),
     ],
@@ -1083,10 +1274,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k} = \frac{{VAR:n}({VAR:n}+1)}{2}',
     description: 'somme des premiers entiers',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'nombre d\'entiers à sommer',
+        type: ParameterType.NATURAL,
+        minValue: 1,
+        maxValue: 100,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 100,
@@ -1101,10 +1300,18 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable:
         r'\sum_{{VAR:k}=1}^{{VAR:n}} {VAR:k}^2 = \frac{{VAR:n}({VAR:n}+1)(2{VAR:n}+1)}{6}',
     description: 'somme des carrés des premiers entiers',
+    conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
     parameters: const [
       FormulaParameter(
         name: 'n',
         description: 'nombre d\'entiers à sommer',
+        type: ParameterType.NATURAL,
+        minValue: 1,
+        maxValue: 50,
+      ),
+      FormulaParameter(
+        name: 'k',
+        description: 'indice de sommation',
         type: ParameterType.NATURAL,
         minValue: 1,
         maxValue: 50,
