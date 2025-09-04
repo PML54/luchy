@@ -216,6 +216,9 @@ class EnhancedFormulaTemplate {
   /// Paramètres de la formule avec validation
   final List<FormulaParameter> parameters;
 
+  /// Indique si le résultat est une constante (pas d'inversion de nommage)
+  final bool isConstant;
+
   /// Variables extraites automatiquement
   List<String> get extractedVariables => _extractVariables();
 
@@ -251,6 +254,7 @@ class EnhancedFormulaTemplate {
     required this.parameters,
     this.latexVariable = '',
     this.conditionLatex,
+    this.isConstant = false,
   });
 
   /// Traite le LaTeX en remplaçant les variables marquées
@@ -287,10 +291,11 @@ class EnhancedFormulaTemplate {
 
   /// Extrait les variables interchangeables
   List<String> _extractInvertibleVariables() {
-    return parameters
-        .where((param) => param.canInvert)
-        .map((param) => param.name)
-        .toList();
+    // Pas d'inversion pour les constantes
+    if (isConstant) return [];
+
+    // Pour l'inversion de nommage, tous les paramètres peuvent être inversés
+    return parameters.map((param) => param.name).toList();
   }
 
   /// Calcule la valeur numérique de la formule avec les paramètres donnés
@@ -458,8 +463,11 @@ class EnhancedFormulaTemplate {
   /// 🔄 SYSTÈME D'INVERSION DE VARIABLES
   // =====================================================================================
 
-  /// Vérifie si deux variables peuvent être inversées
+  /// Vérifie si deux variables peuvent être inversées (inversion de nommage)
   bool canInvertVariables(String var1, String var2) {
+    // Pas d'inversion pour les constantes
+    if (isConstant) return false;
+
     final param1 = parameters.firstWhere(
       (p) => p.name == var1,
       orElse: () => throw ArgumentError('Variable $var1 non trouvée'),
@@ -469,7 +477,9 @@ class EnhancedFormulaTemplate {
       orElse: () => throw ArgumentError('Variable $var2 non trouvée'),
     );
 
-    return param1.canInvert && param2.canInvert;
+    // Pour l'inversion de nommage, on peut inverser n'importe quels 2 paramètres
+    // tant qu'ils sont différents
+    return var1 != var2;
   }
 
   /// Crée une version inversée de la formule en échangeant deux variables
@@ -493,8 +503,9 @@ class EnhancedFormulaTemplate {
     // Utiliser des patterns plus spécifiques pour éviter les conflits
     final var1Pattern = RegExp(r'\b' + RegExp.escape(var1) + r'\b');
     final var2Pattern = RegExp(r'\b' + RegExp.escape(var2) + r'\b');
-    
-    invertedLatexOrigine = invertedLatexOrigine.replaceAll(var1Pattern, 'TEMP_VAR1');
+
+    invertedLatexOrigine =
+        invertedLatexOrigine.replaceAll(var1Pattern, 'TEMP_VAR1');
     invertedLatexOrigine = invertedLatexOrigine.replaceAll(var2Pattern, var1);
     invertedLatexOrigine = invertedLatexOrigine.replaceAll('TEMP_VAR1', var2);
 
@@ -575,7 +586,7 @@ class EnhancedFormulaTemplate {
     if (invertibleVars.length < 2) return null;
 
     final random = math.Random();
-    
+
     // S'assurer que var1 et var2 sont différentes
     String var1, var2;
     do {
@@ -864,6 +875,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
         r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     description: 'somme alternée des coefficients binomiaux',
     conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
+    isConstant: true, // Résultat = 0 (constante)
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -923,6 +935,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable: r'\binom{{VAR:n}}{0} = 1',
     description: 'coefficient binomial pour k=0',
     conditionLatex: r'{VAR:n} \in \mathbb{N}',
+    isConstant: true, // Résultat = 1 (constante)
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -941,6 +954,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable: r'\binom{{VAR:n}}{{VAR:n}} = 1',
     description: 'coefficient binomial pour k=n',
     conditionLatex: r'{VAR:n} \in \mathbb{N}',
+    isConstant: true, // Résultat = 1 (constante)
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -1122,6 +1136,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable: r'\binom{{VAR:n}}{0} = 1',
     description: 'coefficient binomial pour k=0',
     conditionLatex: r'{VAR:n} \in \mathbb{N}',
+    isConstant: true, // Résultat = 1 (constante)
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -1140,6 +1155,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     latexVariable: r'\binom{{VAR:n}}{{VAR:n}} = 1',
     description: 'coefficient binomial pour k=n',
     conditionLatex: r'{VAR:n} \in \mathbb{N}',
+    isConstant: true, // Résultat = 1 (constante)
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -1185,6 +1201,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
         r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     description: 'somme alternée des coefficients binomiaux',
     conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
+    isConstant: true, // Résultat = 0 (constante)
     parameters: const [
       FormulaParameter(
         name: 'n',
@@ -1545,6 +1562,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
         r'\sum_{{VAR:k}=0}^{{VAR:n}} (-1)^{VAR:k} \binom{{VAR:n}}{{VAR:k}} = 0',
     description: 'somme alternée des coefficients binomiaux',
     conditionLatex: r'{VAR:n} \in \mathbb{N}, {VAR:n} \geq 1',
+    isConstant: true, // Résultat = 0 (constante)
     parameters: const [
       FormulaParameter(
         name: 'n',

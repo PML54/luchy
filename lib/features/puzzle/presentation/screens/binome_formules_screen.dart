@@ -127,7 +127,7 @@ class _QuizFormulaCache {
   static List<EnhancedFormulaTemplate> _generateQuizWithInversion() {
     final random = Random();
     final allFormulasList = allFormulas
-        .where((f) => f.chapitre == 'binome' && f.level == 14)
+        .where((f) => f.chapitre == 'binome' && f.level == 14 && !f.isConstant)
         .toList();
 
     if (allFormulasList.isEmpty) {
@@ -145,30 +145,60 @@ class _QuizFormulaCache {
     }
 
     final selectedFormulas = <EnhancedFormulaTemplate>[];
+    final usedLeftSides = <String>{}; // Pour éviter les doublons
 
-    // 1. Prendre 4 formules normales au hasard
+    // 1. Prendre 4 formules normales au hasard (éviter les doublons de leftSide)
     final availableIndices = List.generate(allFormulasList.length, (i) => i);
     availableIndices.shuffle(random);
 
-    for (int i = 0; i < 4 && i < availableIndices.length; i++) {
-      selectedFormulas.add(allFormulasList[availableIndices[i]]);
+    for (int i = 0;
+        i < availableIndices.length && selectedFormulas.length < 4;
+        i++) {
+      final formula = allFormulasList[availableIndices[i]];
+
+      // Éviter les doublons de leftSide
+      if (!usedLeftSides.contains(formula.leftSide)) {
+        selectedFormulas.add(formula);
+        usedLeftSides.add(formula.leftSide);
+      }
     }
 
-    // 2. Prendre une formule avec variables interchangeables
-    final formulaToDuplicate = formulasWithInversions[random.nextInt(formulasWithInversions.length)];
-    
+    // 2. Prendre une formule avec variables interchangeables (éviter les doublons)
+    EnhancedFormulaTemplate? formulaToDuplicate;
+
+    // Mélanger les formules avec inversions
+    final shuffledInversions =
+        List<EnhancedFormulaTemplate>.from(formulasWithInversions);
+    shuffledInversions.shuffle(random);
+
+    for (final formula in shuffledInversions) {
+      if (!usedLeftSides.contains(formula.leftSide)) {
+        formulaToDuplicate = formula;
+        break;
+      }
+    }
+
+    // Si pas trouvé, prendre n'importe laquelle
+    if (formulaToDuplicate == null) {
+      formulaToDuplicate =
+          formulasWithInversions[random.nextInt(formulasWithInversions.length)];
+    }
+
     // Debug: Afficher la formule sélectionnée
-    print('🔍 Formule sélectionnée pour duplication: ${formulaToDuplicate.description}');
-    print('🔍 Variables interchangeables: ${formulaToDuplicate.invertibleVariables}');
+    print(
+        '🔍 Formule sélectionnée pour duplication: ${formulaToDuplicate.description}');
+    print(
+        '🔍 Variables interchangeables: ${formulaToDuplicate.invertibleVariables}');
 
     // 3. Ajouter la formule originale
     selectedFormulas.add(formulaToDuplicate);
+    usedLeftSides.add(formulaToDuplicate.leftSide);
 
     // 4. Générer l'inversion de cette même formule
     final invertedVariant = formulaToDuplicate.generateRandomInvertedVariant();
     if (invertedVariant != null) {
       selectedFormulas.add(invertedVariant);
-      
+
       // Debug: Confirmer l'inversion
       print('✅ Inversion générée: ${invertedVariant.description}');
       print('✅ LaTeX inversé: ${invertedVariant.latexOrigine}');
@@ -204,24 +234,24 @@ class _QuizFormulaCache {
 /// Fonctions utilisant le nouveau système de codes quiz (mode mixte par défaut)
 /// SYNCHRONISÉES via le cache pour éviter les incohérences gauche/droite
 List<String> get _binomeLatexGaucheComplete {
-  // Utiliser directement toutes les formules de allFormulas
-  return allFormulas.map((f) {
+  // Utiliser le cache qui contient les formules avec inversions
+  return _QuizFormulaCache.getFormulas().map((f) {
     // Utiliser la propriété leftSide qui gère automatiquement leftLatex ou split
     return f.leftSide;
   }).toList();
 }
 
 List<String> get _binomeLatexDroiteComplete {
-  // Utiliser directement toutes les formules de allFormulas
-  return allFormulas.map((f) {
+  // Utiliser le cache qui contient les formules avec inversions
+  return _QuizFormulaCache.getFormulas().map((f) {
     // Utiliser la propriété rightSide qui gère automatiquement rightLatex ou split
     return f.rightSide;
   }).toList();
 }
 
 List<String> get _binomeUsage2MotsComplete {
-  // Utiliser directement toutes les formules de allFormulas
-  return allFormulas.map((f) => f.description).toList();
+  // Utiliser le cache qui contient les formules avec inversions
+  return _QuizFormulaCache.getFormulas().map((f) => f.description).toList();
 }
 
 /// Fonction pour sélectionner 6 questions aléatoires avec résultats ET formules uniques
@@ -234,6 +264,8 @@ List<int> _selectRandomQuestions() {
       <String>{}; // Pour éviter les doublons dans la colonne gauche
   final usedRightResults =
       <String>{}; // Pour éviter les doublons dans la colonne droite
+  final usedDescriptions =
+      <String>{}; // Pour éviter les doublons de descriptions
 
   // Mélanger les indices disponibles
   availableIndices.shuffle(random);
@@ -244,13 +276,16 @@ List<int> _selectRandomQuestions() {
 
     final leftFormula = _binomeLatexGaucheComplete[index];
     final rightResult = _binomeLatexDroiteComplete[index];
+    final description = _binomeUsage2MotsComplete[index];
 
-    // Vérifier si cette formule OU ce résultat n'a pas déjà été utilisé
+    // Vérifier si cette formule OU ce résultat OU cette description n'a pas déjà été utilisé
     if (!usedLeftFormulas.contains(leftFormula) &&
-        !usedRightResults.contains(rightResult)) {
+        !usedRightResults.contains(rightResult) &&
+        !usedDescriptions.contains(description)) {
       selectedIndices.add(index);
       usedLeftFormulas.add(leftFormula);
       usedRightResults.add(rightResult);
+      usedDescriptions.add(description);
 
       // Formule sélectionnée
     } else {
@@ -485,12 +520,13 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
   void _showLeftFormulaTooltip(
       BuildContext context, String leftFormula, String description) {
     // Récupérer la formule complète avec conditions si disponible
-    // Utiliser allFormulas au lieu du cache limité pour avoir accès à toutes les formules
+    // Utiliser le cache qui contient les formules avec inversions
     EnhancedFormulaTemplate? currentTemplate;
 
-    // Trouver le template correspondant à leftFormula dans toutes les formules
-    for (final template in allFormulas) {
-      if (template.leftSide == leftFormula) {
+    // Trouver le template correspondant à leftFormula ET description dans le cache
+    for (final template in _QuizFormulaCache.getFormulas()) {
+      if (template.leftSide == leftFormula &&
+          template.description == description) {
         currentTemplate = template;
         break;
       }
@@ -556,36 +592,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                         ),
                         child: Column(
                           children: [
-                            // Indicateur d'inversion si applicable
-                            if (description.contains('(inversé:')) ...[
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.orange[100],
-                                  borderRadius: BorderRadius.circular(12),
-                                  border:
-                                      Border.all(color: Colors.orange[300]!),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.swap_horiz,
-                                        size: 16, color: Colors.orange[700]),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      'FORMULE INVERSÉE',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.orange[700],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                            ],
                             Text(
                               description,
                               style: const TextStyle(
