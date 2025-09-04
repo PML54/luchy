@@ -739,6 +739,21 @@ class EducationalImageGenerator {
         colonneDroite: generateFormulasRightColumn(),
       ),
 
+      // === HABILETÉ NUMÉRIQUE - OPÉRATIONS MATHÉMATIQUES ===
+      QuestionnairePreset(
+        id: 'habilete_numerique_operations',
+        nom: 'Habileté Numérique',
+        titre: 'HABILETÉ NUMÉRIQUE - OPÉRATIONS',
+        description:
+            'Quiz d\'opérations mathématiques de base (carrés, racines, fractions, etc.)',
+        niveau: NiveauEducatif.lycee,
+        categorie: CategorieMatiere.mathematiques,
+        typeDeJeu: TypeDeJeu.habileteNumerique,
+        sousTheme: 'Opérations de base',
+        colonneGauche: [], // Généré dynamiquement
+        colonneDroite: [], // Généré dynamiquement
+      ),
+
       QuestionnairePreset(
         id: 'lycee_francais_figures_style',
         nom: 'Français',

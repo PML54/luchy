@@ -181,11 +181,33 @@ class FormulaParameter {
 }
 
 /// =====================================================================================
+/// 🔑 GÉNÉRATEUR D'IDENTIFIANTS DE FORMULES
+/// =====================================================================================
+
+/// Générateur d'identifiants uniques pour les formules
+class FormulaIdGenerator {
+  static int _counter = 1;
+
+  /// Génère un nouvel identifiant de formule
+  static String generate() {
+    final fid = 'F${_counter.toString().padLeft(3, '0')}';
+    _counter++;
+    return fid;
+  }
+
+  /// Remet le compteur à zéro (pour les tests)
+  static void reset() => _counter = 1;
+}
+
+/// =====================================================================================
 /// 🧮 TEMPLATE DE FORMULE AVANCÉ
 /// =====================================================================================
 
 /// Template de formule mathématique avec calcul automatique et validation
 class EnhancedFormulaTemplate {
+  /// 🔑 FID : Formula Identifier unique pour le suivi
+  final String fid;
+
   /// 📚 CHAPITRE : Catégorie de la formule (binome, combinaisons, sommes)
   final String chapitre;
 
@@ -247,6 +269,7 @@ class EnhancedFormulaTemplate {
   }
 
   const EnhancedFormulaTemplate({
+    required this.fid,
     required this.chapitre,
     required this.level,
     required this.latexOrigine,
@@ -545,6 +568,7 @@ class EnhancedFormulaTemplate {
     }).toList();
 
     return EnhancedFormulaTemplate(
+      fid: FormulaIdGenerator.generate(),
       chapitre: chapitre,
       level: level,
       latexOrigine: invertedLatexOrigine,
@@ -769,6 +793,7 @@ class InvertedQuizConfiguration {
 final List<EnhancedFormulaTemplate> allFormulas = [
   // ===== FORMULES BINÔME =====
   EnhancedFormulaTemplate(
+    fid: 'F002',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'(a+b)^{n} = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}',
@@ -807,6 +832,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F003',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\binom{n}{k} = \frac{n!}{k!(n-k)!}',
@@ -836,6 +862,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F004',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'(1+a)^{n} = \sum_{k=0}^{n} \binom{n}{k} a^{k}',
@@ -868,6 +895,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F005',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0',
@@ -895,6 +923,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F006',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1}',
@@ -929,6 +958,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F007',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\binom{n}{0} = 1',
@@ -948,6 +978,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F008',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\binom{n}{n} = 1',
@@ -967,6 +998,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F009',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
@@ -994,6 +1026,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F010',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
@@ -1020,6 +1053,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F011',
     chapitre: 'binome',
     level: 14,
     latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
@@ -1048,6 +1082,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
 
   // ===== FORMULES COMBINAISONS =====
   EnhancedFormulaTemplate(
+    fid: 'F012',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\binom{n}{k} = \frac{n!}{k!(n-k)!}',
@@ -1075,6 +1110,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F013',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\binom{n}{k} = \binom{n}{n-k}',
@@ -1103,6 +1139,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F014',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}',
@@ -1130,6 +1167,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F015',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\binom{n}{0} = 1',
@@ -1149,6 +1187,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F016',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\binom{n}{n} = 1',
@@ -1168,6 +1207,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F017',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} = 2^{n}',
@@ -1194,6 +1234,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F018',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0',
@@ -1221,6 +1262,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F019',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} k \binom{n}{k} = n \cdot 2^{n-1}',
@@ -1247,6 +1289,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F020',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} k^2 \binom{n}{k} = n(n+1) \cdot 2^{n-2}',
@@ -1273,6 +1316,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F021',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k}^2 = \binom{2n}{n}',
@@ -1299,6 +1343,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F022',
     chapitre: 'combinaisons',
     level: 14,
     latexOrigine: r'\sum_{k=r}^{n} \binom{k}{r} = \binom{n+1}{r+1}',
@@ -1333,6 +1378,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F023',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=1}^{n} k^3 = \left(\frac{n(n+1)}{2}\right)^2',
@@ -1359,6 +1405,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F024',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} q^k = \frac{1-q^{n+1}}{1-q}',
@@ -1391,6 +1438,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F025',
     chapitre: 'sommes',
     level: 14,
     latexOrigine:
@@ -1424,6 +1472,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F026',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=1}^{n} k^4 = \frac{n(n+1)(2n+1)(3n^2+3n-1)}{30}',
@@ -1450,6 +1499,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F027',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=1}^{n} \frac{1}{k(k+1)} = 1 - \frac{1}{n+1}',
@@ -1476,6 +1526,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F028',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=1}^{n} k(k+1) = \frac{n(n+1)(n+2)}{3}',
@@ -1502,6 +1553,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F029',
     chapitre: 'sommes',
     level: 14,
     latexOrigine:
@@ -1529,6 +1581,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F030',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} \binom{n}{k} = 2^n',
@@ -1555,6 +1608,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F031',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0',
@@ -1583,6 +1637,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
 
   // ===== FORMULES SOMMES =====
   EnhancedFormulaTemplate(
+    fid: 'F032',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=1}^{n} k = \frac{n(n+1)}{2}',
@@ -1609,6 +1664,7 @@ final List<EnhancedFormulaTemplate> allFormulas = [
   ),
 
   EnhancedFormulaTemplate(
+    fid: 'F033',
     chapitre: 'sommes',
     level: 14,
     latexOrigine: r'\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}',
@@ -1724,7 +1780,8 @@ enum TypeDeJeu {
   ordreChronologique('Ordre chronologique', 'Jeu de séquence temporelle'),
   combinaisonsMatematiques('Combinaisons mathématiques', 'Jeu de combinaisons'),
   formulairesLatex('Formulaires LaTeX', 'Jeu de formules mathématiques'),
-  figuresDeStyle('Figures de Style', 'Jeu de littérature');
+  figuresDeStyle('Figures de Style', 'Jeu de littérature'),
+  habileteNumerique('Habileté Numérique', 'Jeu d\'opérations mathématiques');
 
   const TypeDeJeu(this.nom, this.description);
   final String nom;

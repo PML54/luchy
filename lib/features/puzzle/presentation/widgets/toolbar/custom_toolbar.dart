@@ -57,6 +57,7 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 // Feature imports
 import 'package:luchy/features/puzzle/presentation/screens/binome_formules_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/figures_style_screen.dart';
+import 'package:luchy/features/puzzle/presentation/screens/numerical_skills_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/puzzle_game_screen.dart';
 import 'package:luchy/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -327,6 +328,8 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
         return 3;
       case TypeDeJeu.formulairesLatex:
         return 4; // Type spécial pour formulaires LaTeX
+      case TypeDeJeu.habileteNumerique:
+        return 5; // Type spécial pour habileté numérique
       default:
         return 2;
     }
@@ -394,6 +397,9 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
       case TypeDeJeu.figuresDeStyle:
         iconData = Icons.text_fields;
         break;
+      case TypeDeJeu.habileteNumerique:
+        iconData = Icons.functions;
+        break;
       default:
         iconData = Icons.quiz;
     }
@@ -447,6 +453,13 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const FiguresStyleScreen(),
+        ),
+      );
+    } else if (questionnaire.typeDeJeu == TypeDeJeu.habileteNumerique) {
+      // Si c'est habileté numérique, naviguer vers l'écran dédié
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const NumericalSkillsScreen(),
         ),
       );
     } else {

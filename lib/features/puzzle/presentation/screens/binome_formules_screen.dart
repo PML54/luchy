@@ -690,7 +690,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
           iconTheme: const IconThemeData(color: Colors.white),
           actions: [
             IconButton(
-              icon: const Icon(Icons.check_circle, color: Colors.white),
+              icon: const Icon(Icons.thumb_up, color: Colors.white),
               onPressed: () {
                 final correctCount = _getCorrectCount();
                 final elapsedTime = _getElapsedTime();
