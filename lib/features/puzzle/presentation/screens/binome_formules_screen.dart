@@ -392,10 +392,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () => overlayEntry.remove(),
-                        child: const Text('Fermer'),
-                      ),
                     ],
                   ),
                 ),
@@ -519,10 +515,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                       ],
 
                       const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () => overlayEntry.remove(),
-                        child: const Text('Fermer'),
-                      ),
                     ],
                   ),
                 ),
