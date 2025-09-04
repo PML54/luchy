@@ -453,6 +453,294 @@ class EnhancedFormulaTemplate {
     }
     return false;
   }
+
+  // =====================================================================================
+  /// 🔄 SYSTÈME D'INVERSION DE VARIABLES
+  // =====================================================================================
+
+  /// Vérifie si deux variables peuvent être inversées
+  bool canInvertVariables(String var1, String var2) {
+    final param1 = parameters.firstWhere(
+      (p) => p.name == var1,
+      orElse: () => throw ArgumentError('Variable $var1 non trouvée'),
+    );
+    final param2 = parameters.firstWhere(
+      (p) => p.name == var2,
+      orElse: () => throw ArgumentError('Variable $var2 non trouvée'),
+    );
+
+    return param1.canInvert && param2.canInvert;
+  }
+
+  /// Crée une version inversée de la formule en échangeant deux variables
+  EnhancedFormulaTemplate createInvertedVersion(String var1, String var2) {
+    if (!canInvertVariables(var1, var2)) {
+      throw ArgumentError(
+          'Les variables $var1 et $var2 ne peuvent pas être inversées');
+    }
+
+    // Inverser le LaTeX avec variables marquées
+    String invertedLatexVariable = latexVariable;
+    invertedLatexVariable =
+        invertedLatexVariable.replaceAll('{VAR:$var1}', 'TEMP_VAR1');
+    invertedLatexVariable =
+        invertedLatexVariable.replaceAll('{VAR:$var2}', '{VAR:$var1}');
+    invertedLatexVariable =
+        invertedLatexVariable.replaceAll('TEMP_VAR1', '{VAR:$var2}');
+
+    // Inverser le LaTeX original
+    String invertedLatexOrigine = latexOrigine;
+    // Utiliser des patterns plus spécifiques pour éviter les conflits
+    final var1Pattern = RegExp(r'\b' + RegExp.escape(var1) + r'\b');
+    final var2Pattern = RegExp(r'\b' + RegExp.escape(var2) + r'\b');
+    
+    invertedLatexOrigine = invertedLatexOrigine.replaceAll(var1Pattern, 'TEMP_VAR1');
+    invertedLatexOrigine = invertedLatexOrigine.replaceAll(var2Pattern, var1);
+    invertedLatexOrigine = invertedLatexOrigine.replaceAll('TEMP_VAR1', var2);
+
+    // Inverser les conditions LaTeX si elles existent
+    String? invertedConditionLatex = conditionLatex;
+    if (invertedConditionLatex != null) {
+      invertedConditionLatex =
+          invertedConditionLatex.replaceAll('{VAR:$var1}', 'TEMP_VAR1');
+      invertedConditionLatex =
+          invertedConditionLatex.replaceAll('{VAR:$var2}', '{VAR:$var1}');
+      invertedConditionLatex =
+          invertedConditionLatex.replaceAll('TEMP_VAR1', '{VAR:$var2}');
+    }
+
+    // Créer les nouveaux paramètres avec les variables inversées
+    final invertedParameters = parameters.map((param) {
+      if (param.name == var1) {
+        return FormulaParameter(
+          name: var2,
+          description: param.description.replaceAll(var1, var2),
+          canInvert: param.canInvert,
+          type: param.type,
+          minValue: param.minValue,
+          maxValue: param.maxValue,
+        );
+      } else if (param.name == var2) {
+        return FormulaParameter(
+          name: var1,
+          description: param.description.replaceAll(var2, var1),
+          canInvert: param.canInvert,
+          type: param.type,
+          minValue: param.minValue,
+          maxValue: param.maxValue,
+        );
+      }
+      return param;
+    }).toList();
+
+    return EnhancedFormulaTemplate(
+      chapitre: chapitre,
+      level: level,
+      latexOrigine: invertedLatexOrigine,
+      latexVariable: invertedLatexVariable,
+      description: '${description} (inversé: $var1 ↔ $var2)',
+      conditionLatex: invertedConditionLatex,
+      parameters: invertedParameters,
+    );
+  }
+
+  /// Génère toutes les variantes possibles avec inversions
+  List<EnhancedFormulaTemplate> generateInvertedVariants() {
+    final variants = <EnhancedFormulaTemplate>[];
+    final invertibleVars = invertibleVariables;
+
+    // Ajouter la formule originale
+    variants.add(this);
+
+    // Générer toutes les combinaisons d'inversions possibles
+    for (int i = 0; i < invertibleVars.length; i++) {
+      for (int j = i + 1; j < invertibleVars.length; j++) {
+        try {
+          final variant =
+              createInvertedVersion(invertibleVars[i], invertibleVars[j]);
+          variants.add(variant);
+        } catch (e) {
+          // Ignorer les inversions impossibles
+          continue;
+        }
+      }
+    }
+
+    return variants;
+  }
+
+  /// Génère une variante aléatoire avec inversion
+  EnhancedFormulaTemplate? generateRandomInvertedVariant() {
+    final invertibleVars = invertibleVariables;
+    if (invertibleVars.length < 2) return null;
+
+    final random = math.Random();
+    final var1 = invertibleVars[random.nextInt(invertibleVars.length)];
+    final var2 = invertibleVars[random.nextInt(invertibleVars.length)];
+
+    if (var1 == var2) return null;
+
+    try {
+      return createInvertedVersion(var1, var2);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Vérifie si cette formule est une inversion d'une autre
+  bool isInversionOf(EnhancedFormulaTemplate other) {
+    // Comparer les variables interchangeables
+    final myInvertible = invertibleVariables.toSet();
+    final otherInvertible = other.invertibleVariables.toSet();
+
+    if (myInvertible.length != otherInvertible.length) return false;
+    if (!myInvertible.containsAll(otherInvertible)) return false;
+
+    // Vérifier que les formules sont différentes mais similaires
+    return latexOrigine != other.latexOrigine &&
+        chapitre == other.chapitre &&
+        level == other.level;
+  }
+}
+
+/// =====================================================================================
+/// 🔄 GÉNÉRATEUR DE QUIZ AVEC INVERSIONS
+/// =====================================================================================
+
+/// Génère un quiz avec des formules et leurs inversions pour perturber l'utilisateur
+class InvertedQuizGenerator {
+  /// Génère un quiz avec 50% de formules normales et 50% d'inversions
+  static InvertedQuizConfiguration generateInvertedQuiz({
+    String chapitre = 'binome',
+    int level = 14,
+    int nombreQuestions = 12,
+    double inversionRatio = 0.5, // 50% d'inversions
+  }) {
+    final baseFormulas = allFormulas
+        .where((f) => f.chapitre == chapitre && f.level == level)
+        .toList();
+
+    if (baseFormulas.isEmpty) {
+      throw ArgumentError(
+          'Aucune formule trouvée pour chapitre: $chapitre, level: $level');
+    }
+
+    final selectedFormulas = <EnhancedFormulaTemplate>[];
+    final random = math.Random();
+
+    // Sélectionner des formules de base
+    final numberOfInversions = (nombreQuestions * inversionRatio).round();
+    final numberOfNormal = nombreQuestions - numberOfInversions;
+
+    // Ajouter des formules normales
+    for (int i = 0; i < numberOfNormal && i < baseFormulas.length; i++) {
+      selectedFormulas.add(baseFormulas[i]);
+    }
+
+    // Ajouter des inversions
+    final formulasWithInversions =
+        baseFormulas.where((f) => f.invertibleVariables.length >= 2).toList();
+
+    for (int i = 0;
+        i < numberOfInversions && i < formulasWithInversions.length;
+        i++) {
+      final formula = formulasWithInversions[i];
+      final invertedVariant = formula.generateRandomInvertedVariant();
+      if (invertedVariant != null) {
+        selectedFormulas.add(invertedVariant);
+      }
+    }
+
+    // Mélanger les formules pour perturber l'utilisateur
+    selectedFormulas.shuffle(random);
+
+    return InvertedQuizConfiguration(
+      formules: selectedFormulas,
+      chapitre: chapitre,
+      level: level,
+      nombreQuestions: selectedFormulas.length,
+      hasInversions: true,
+      inversionRatio: inversionRatio,
+    );
+  }
+
+  /// Génère un quiz progressif : commence facile, puis ajoute des inversions
+  static InvertedQuizConfiguration generateProgressiveQuiz({
+    String chapitre = 'binome',
+    int level = 14,
+    int nombreQuestions = 12,
+  }) {
+    final baseFormulas = allFormulas
+        .where((f) => f.chapitre == chapitre && f.level == level)
+        .toList();
+
+    if (baseFormulas.isEmpty) {
+      throw ArgumentError(
+          'Aucune formule trouvée pour chapitre: $chapitre, level: $level');
+    }
+
+    final selectedFormulas = <EnhancedFormulaTemplate>[];
+    final random = math.Random();
+
+    // Première moitié : formules normales
+    final firstHalf = (nombreQuestions / 2).round();
+    for (int i = 0; i < firstHalf && i < baseFormulas.length; i++) {
+      selectedFormulas.add(baseFormulas[i]);
+    }
+
+    // Deuxième moitié : mélange de normales et d'inversions
+    final secondHalf = nombreQuestions - firstHalf;
+    final formulasWithInversions =
+        baseFormulas.where((f) => f.invertibleVariables.length >= 2).toList();
+
+    for (int i = 0; i < secondHalf; i++) {
+      if (i < formulasWithInversions.length && random.nextBool()) {
+        // Ajouter une inversion
+        final formula = formulasWithInversions[i];
+        final invertedVariant = formula.generateRandomInvertedVariant();
+        if (invertedVariant != null) {
+          selectedFormulas.add(invertedVariant);
+        } else {
+          selectedFormulas.add(formula);
+        }
+      } else {
+        // Ajouter une formule normale
+        final formulaIndex = (firstHalf + i) % baseFormulas.length;
+        selectedFormulas.add(baseFormulas[formulaIndex]);
+      }
+    }
+
+    // Mélanger pour plus de perturbation
+    selectedFormulas.shuffle(random);
+
+    return InvertedQuizConfiguration(
+      formules: selectedFormulas,
+      chapitre: chapitre,
+      level: level,
+      nombreQuestions: selectedFormulas.length,
+      hasInversions: true,
+      inversionRatio: 0.3, // 30% d'inversions en moyenne
+    );
+  }
+}
+
+/// Configuration étendue pour les quiz avec inversions
+class InvertedQuizConfiguration {
+  final List<EnhancedFormulaTemplate> formules;
+  final String chapitre;
+  final int level;
+  final int nombreQuestions;
+  final bool hasInversions;
+  final double inversionRatio;
+
+  const InvertedQuizConfiguration({
+    required this.formules,
+    required this.chapitre,
+    required this.level,
+    required this.nombreQuestions,
+    this.hasInversions = false,
+    this.inversionRatio = 0.0,
+  });
 }
 
 /// =====================================================================================
@@ -513,14 +801,16 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     parameters: const [
       FormulaParameter(
         name: 'n',
-        description: 'ensemble total',
+        description: 'ensemble total (interchangeable avec k)',
+        canInvert: true,
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 10,
       ),
       FormulaParameter(
         name: 'k',
-        description: 'sous-ensemble choisi',
+        description: 'sous-ensemble choisi (interchangeable avec n)',
+        canInvert: true,
         type: ParameterType.NATURAL,
         minValue: 0,
         maxValue: 10,
@@ -539,7 +829,8 @@ final List<EnhancedFormulaTemplate> allFormulas = [
     parameters: const [
       FormulaParameter(
         name: 'a',
-        description: 'variable réelle',
+        description: 'variable réelle (interchangeable avec 1)',
+        canInvert: true,
         type: ParameterType.REAL,
       ),
       FormulaParameter(
@@ -1575,7 +1866,7 @@ class PrepaMathFormulaManager {
 /// 🎯 GÉNÉRATEUR DE QUIZ
 /// =====================================================================================
 
-/// Configuration pour un quiz
+/// Configuration simple pour un quiz (compatibilité)
 class QuizConfiguration {
   final List<EnhancedFormulaTemplate> formules;
   final int nombreQuestions;

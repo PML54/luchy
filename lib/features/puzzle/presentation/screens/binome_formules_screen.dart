@@ -102,8 +102,8 @@ class _QuizFormulaCache {
   static List<EnhancedFormulaTemplate>? _cachedFormulas;
   static DateTime? _lastGenerated;
 
-  /// Durée de validité du cache (30 secondes)
-  static const Duration _cacheValidityDuration = Duration(seconds: 30);
+  /// Durée de validité du cache (5 secondes pour test)
+  static const Duration _cacheValidityDuration = Duration(seconds: 5);
 
   /// Obtient les formules (avec cache pour synchronisation)
   static List<EnhancedFormulaTemplate> getFormulas() {
@@ -113,19 +113,75 @@ class _QuizFormulaCache {
     if (_cachedFormulas == null ||
         _lastGenerated == null ||
         now.difference(_lastGenerated!) > _cacheValidityDuration) {
-      // Générer de nouvelles formules
-      final quizConfig = quizGenerator.generateQuiz(
-        chapitre: 'binome',
-        level: 14,
-        nombreQuestions: 12,
-      );
-      _cachedFormulas = quizConfig.formules;
+      // Générer 5 formules normales + 1 inversion pour perturber l'utilisateur
+      _cachedFormulas = _generateQuizWithInversion();
       _lastGenerated = now;
 
-      // Nouvelles formules générées en mode mixte
+      // Nouvelles formules générées avec inversion pour perturbation
     }
 
     return _cachedFormulas!;
+  }
+
+  /// Génère un quiz avec 5 formules normales + 1 inversion
+  static List<EnhancedFormulaTemplate> _generateQuizWithInversion() {
+    final random = math.Random();
+    final allFormulasList = allFormulas
+        .where((f) => f.chapitre == 'binome' && f.level == 14)
+        .toList();
+
+    if (allFormulasList.isEmpty) {
+      return [];
+    }
+
+    // Prendre 5 formules au hasard
+    final selectedFormulas = <EnhancedFormulaTemplate>[];
+    final availableIndices = List.generate(allFormulasList.length, (i) => i);
+    availableIndices.shuffle(random);
+
+    for (int i = 0; i < 5 && i < availableIndices.length; i++) {
+      selectedFormulas.add(allFormulasList[availableIndices[i]]);
+    }
+
+    // Prendre une des 5 formules et générer son inversion
+    if (selectedFormulas.isNotEmpty) {
+      final formulaToInvert = selectedFormulas[random.nextInt(selectedFormulas.length)];
+      
+      // Debug: Afficher les variables interchangeables
+      print('🔍 Formule sélectionnée pour inversion: ${formulaToInvert.description}');
+      print('🔍 Variables interchangeables: ${formulaToInvert.invertibleVariables}');
+      
+      // Vérifier si cette formule peut être inversée
+      if (formulaToInvert.invertibleVariables.length >= 2) {
+        final invertedVariant = formulaToInvert.generateRandomInvertedVariant();
+        if (invertedVariant != null) {
+          // Remplacer la formule originale par sa version inversée
+          final index = selectedFormulas.indexOf(formulaToInvert);
+          selectedFormulas[index] = invertedVariant;
+          
+          // Debug: Confirmer l'inversion
+          print('✅ Inversion générée: ${invertedVariant.description}');
+          print('✅ LaTeX inversé: ${invertedVariant.latexOrigine}');
+        } else {
+          print('❌ Impossible de générer l\'inversion');
+        }
+      } else {
+        print('❌ Pas assez de variables interchangeables: ${formulaToInvert.invertibleVariables.length}');
+      }
+    }
+
+    // Mélanger pour plus de perturbation
+    selectedFormulas.shuffle(random);
+
+    // Debug: Afficher le résultat final
+    print('🎯 Quiz généré avec ${selectedFormulas.length} formules');
+    for (int i = 0; i < selectedFormulas.length; i++) {
+      final formula = selectedFormulas[i];
+      final isInverted = formula.description.contains('(inversé:');
+      print('  ${i + 1}. ${isInverted ? '🔄' : '📝'} ${formula.description}');
+    }
+
+    return selectedFormulas;
   }
 
   /// Force le renouvellement du cache
@@ -172,7 +228,7 @@ List<int> _selectRandomQuestions() {
   // Mélanger les indices disponibles
   availableIndices.shuffle(random);
 
-  // Sélectionner jusqu'à 6 questions avec formules ET résultats uniques
+  // Sélectionner exactement 6 questions avec formules ET résultats uniques
   for (final index in availableIndices) {
     if (selectedIndices.length >= 6) break;
 
@@ -192,8 +248,18 @@ List<int> _selectRandomQuestions() {
     }
   }
 
-  // Sélection finale des formules
-  return selectedIndices;
+  // Si on n'a pas 6 formules uniques, prendre les premières disponibles
+  if (selectedIndices.length < 6) {
+    for (final index in availableIndices) {
+      if (selectedIndices.length >= 6) break;
+      if (!selectedIndices.contains(index)) {
+        selectedIndices.add(index);
+      }
+    }
+  }
+
+  // Sélection finale des formules (exactement 6)
+  return selectedIndices.take(6).toList();
 }
 
 /// Fonction de secours si on n'a pas assez de résultats uniques
@@ -478,13 +544,47 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Colors.green[200]!),
                         ),
-                        child: Text(
-                          description,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
-                          textAlign: TextAlign.center,
+                        child: Column(
+                          children: [
+                            // Indicateur d'inversion si applicable
+                            if (description.contains('(inversé:')) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange[100],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border:
+                                      Border.all(color: Colors.orange[300]!),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.swap_horiz,
+                                        size: 16, color: Colors.orange[700]),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'FORMULE INVERSÉE',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.orange[700],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                            ],
+                            Text(
+                              description,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       ),
 
