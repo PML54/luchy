@@ -125,7 +125,7 @@ class _QuizFormulaCache {
 
   /// Génère un quiz avec 5 formules normales + 1 inversion
   static List<EnhancedFormulaTemplate> _generateQuizWithInversion() {
-    final random = math.Random();
+    final random = Random();
     final allFormulasList = allFormulas
         .where((f) => f.chapitre == 'binome' && f.level == 14)
         .toList();
