@@ -123,7 +123,7 @@ class _QuizFormulaCache {
     return _cachedFormulas!;
   }
 
-  /// Génère un quiz avec 5 formules normales + 1 inversion
+  /// Génère un quiz avec 4 formules normales + 2 formules identiques (1 normale + 1 inversée)
   static List<EnhancedFormulaTemplate> _generateQuizWithInversion() {
     final random = Random();
     final allFormulasList = allFormulas
@@ -134,39 +134,49 @@ class _QuizFormulaCache {
       return [];
     }
 
-    // Prendre 5 formules au hasard
+    // Filtrer les formules avec au moins 2 paramètres interchangeables
+    final formulasWithInversions = allFormulasList
+        .where((f) => f.invertibleVariables.length >= 2)
+        .toList();
+
+    if (formulasWithInversions.isEmpty) {
+      print('❌ Aucune formule avec variables interchangeables trouvée');
+      return allFormulasList.take(6).toList();
+    }
+
     final selectedFormulas = <EnhancedFormulaTemplate>[];
+
+    // 1. Prendre 4 formules normales au hasard
     final availableIndices = List.generate(allFormulasList.length, (i) => i);
     availableIndices.shuffle(random);
 
-    for (int i = 0; i < 5 && i < availableIndices.length; i++) {
+    for (int i = 0; i < 4 && i < availableIndices.length; i++) {
       selectedFormulas.add(allFormulasList[availableIndices[i]]);
     }
 
-    // Prendre une des 5 formules et générer son inversion
-    if (selectedFormulas.isNotEmpty) {
-      final formulaToInvert = selectedFormulas[random.nextInt(selectedFormulas.length)];
+    // 2. Prendre une formule avec variables interchangeables
+    final formulaToDuplicate = formulasWithInversions[random.nextInt(formulasWithInversions.length)];
+    
+    // Debug: Afficher la formule sélectionnée
+    print('🔍 Formule sélectionnée pour duplication: ${formulaToDuplicate.description}');
+    print('🔍 Variables interchangeables: ${formulaToDuplicate.invertibleVariables}');
+
+    // 3. Ajouter la formule originale
+    selectedFormulas.add(formulaToDuplicate);
+
+    // 4. Générer l'inversion de cette même formule
+    final invertedVariant = formulaToDuplicate.generateRandomInvertedVariant();
+    if (invertedVariant != null) {
+      selectedFormulas.add(invertedVariant);
       
-      // Debug: Afficher les variables interchangeables
-      print('🔍 Formule sélectionnée pour inversion: ${formulaToInvert.description}');
-      print('🔍 Variables interchangeables: ${formulaToInvert.invertibleVariables}');
-      
-      // Vérifier si cette formule peut être inversée
-      if (formulaToInvert.invertibleVariables.length >= 2) {
-        final invertedVariant = formulaToInvert.generateRandomInvertedVariant();
-        if (invertedVariant != null) {
-          // Remplacer la formule originale par sa version inversée
-          final index = selectedFormulas.indexOf(formulaToInvert);
-          selectedFormulas[index] = invertedVariant;
-          
-          // Debug: Confirmer l'inversion
-          print('✅ Inversion générée: ${invertedVariant.description}');
-          print('✅ LaTeX inversé: ${invertedVariant.latexOrigine}');
-        } else {
-          print('❌ Impossible de générer l\'inversion');
-        }
-      } else {
-        print('❌ Pas assez de variables interchangeables: ${formulaToInvert.invertibleVariables.length}');
+      // Debug: Confirmer l'inversion
+      print('✅ Inversion générée: ${invertedVariant.description}');
+      print('✅ LaTeX inversé: ${invertedVariant.latexOrigine}');
+    } else {
+      print('❌ Impossible de générer l\'inversion');
+      // Si pas d'inversion possible, ajouter une autre formule normale
+      if (availableIndices.length > 4) {
+        selectedFormulas.add(allFormulasList[availableIndices[4]]);
       }
     }
 

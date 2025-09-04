@@ -575,14 +575,20 @@ class EnhancedFormulaTemplate {
     if (invertibleVars.length < 2) return null;
 
     final random = math.Random();
-    final var1 = invertibleVars[random.nextInt(invertibleVars.length)];
-    final var2 = invertibleVars[random.nextInt(invertibleVars.length)];
+    
+    // S'assurer que var1 et var2 sont différentes
+    String var1, var2;
+    do {
+      var1 = invertibleVars[random.nextInt(invertibleVars.length)];
+      var2 = invertibleVars[random.nextInt(invertibleVars.length)];
+    } while (var1 == var2 && invertibleVars.length > 1);
 
     if (var1 == var2) return null;
 
     try {
       return createInvertedVersion(var1, var2);
     } catch (e) {
+      print('❌ Erreur lors de l\'inversion de $var1 et $var2: $e');
       return null;
     }
   }
