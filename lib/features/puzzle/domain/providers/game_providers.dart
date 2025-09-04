@@ -102,39 +102,8 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
   Future<void> _loadSettingsFromDatabase() async {
     if (_isLoaded) return;
 
-    // ⚠️ CHARGEMENT BASE DE DONNÉES TEMPORAIREMENT DÉSACTIVÉ
-    print('⏸️ Chargement SQLite désactivé - utilisation valeurs par défaut');
-
-    // Utiliser les valeurs par défaut de GameSettings.initial()
+    // Utiliser les valeurs par défaut
     _isLoaded = true;
-    print('✅ GameSettings initialisés avec valeurs par défaut');
-
-    // Code de chargement SQLite commenté
-    /*
-    try {
-      final repository = ref.read(gameSettingsRepositoryProvider);
-      final dbSettings = await repository.getSettings();
-
-      print(
-          '🗃️ SQLite settings loaded: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
-
-      // Convertir les paramètres SQLite vers le modèle Freezed
-      state = state.copyWith(
-        difficultyCols: dbSettings.difficultyCols,
-        difficultyRows: dbSettings.difficultyRows,
-        useCustomGridSize: dbSettings.useCustomGridSize,
-        hasSeenDocumentation: dbSettings.hasSeenDocumentation,
-        puzzleType: dbSettings.puzzleType,
-      );
-
-      _isLoaded = true;
-      print('✅ GameSettings state updated with SQLite data');
-    } catch (e) {
-      // En cas d'erreur, garder les valeurs par défaut
-      print('❌ Erreur chargement paramètres SQLite: $e');
-      _isLoaded = true; // Marquer comme chargé même en cas d'erreur
-    }
-    */
   }
 
   Future<void> resetToDefaultDifficulty() async {
@@ -172,30 +141,8 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
   }
 
   Future<void> _saveToDatabase() async {
-    // ⚠️ SAUVEGARDE TEMPORAIREMENT DÉSACTIVÉE
-    print('⏸️ Sauvegarde désactivée temporairement');
+    // Sauvegarde désactivée - utilisation valeurs en mémoire uniquement
     return;
-
-    // Code de sauvegarde commenté
-    /*
-    try {
-      final repository = ref.read(gameSettingsRepositoryProvider);
-      final dbSettings = GameSettingsDb(
-        difficultyRows: state.difficultyRows,
-        difficultyCols: state.difficultyCols,
-        useCustomGridSize: state.useCustomGridSize,
-        hasSeenDocumentation: state.hasSeenDocumentation,
-        puzzleType: state.puzzleType,
-      );
-
-      print(
-          '💾 Saving to SQLite: ${dbSettings.difficultyCols}x${dbSettings.difficultyRows}');
-      await repository.saveSettings(dbSettings);
-      print('✅ SQLite save completed');
-    } catch (e) {
-      print('❌ Erreur sauvegarde paramètres SQLite: $e');
-    }
-    */
   }
 }
 

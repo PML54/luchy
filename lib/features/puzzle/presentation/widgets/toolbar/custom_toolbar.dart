@@ -219,13 +219,6 @@ class CustomToolbar extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Bouton source d'image
-        /*ToolbarButton(
-          icon: Icons.camera_alt_outlined,
-          label: l10n.photoGalleryLabel,
-          color: Colors.white,
-          onPressed: () => PuzzleGameScreen.showImageSourceDialog(context),
-        ),
-*/
         IconButton(
           icon: const Icon(Icons.camera_alt_outlined),
           iconSize: _iconSize,

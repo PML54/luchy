@@ -147,37 +147,34 @@ class SmartCropConfig {
 
   /// Détecte automatiquement la configuration optimale
   static DeviceRatioConfig getRatioConfig(BuildContext context) {
-    print('🧠 [SMART_CROP] getRatioConfig called with context: $context');
+    // SMART_CROP: getRatioConfig called
 
     // Vérifier si le contexte est encore valide
     if (context.debugDoingBuild || !context.mounted) {
-      print('❌ [SMART_CROP] ERROR: Context is not valid anymore (DEFUNCT)!');
-      print('⚠️ [SMART_CROP] Falling back to default configuration');
+      // SMART_CROP: Context is not valid, using fallback
       return iPhonePortrait; // Fallback sécurisé
     }
 
-    print('✅ [SMART_CROP] Context is valid, getting MediaQuery...');
+    // SMART_CROP: Context is valid
     final mediaQuery = MediaQuery.of(context);
-    print('✅ [SMART_CROP] MediaQuery obtained: ${mediaQuery.size}');
 
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height;
     final screenDiagonal = _calculateDiagonal(screenWidth, screenHeight);
 
-    print(
-        '📐 [SMART_CROP] Screen info: ${screenWidth}x${screenHeight}, landscape: $isLandscape, diagonal: $screenDiagonal');
+    // SMART_CROP: Screen info collected
 
     // Détection plateforme
     if (Platform.isIOS) {
-      print('🍎 [SMART_CROP] iOS platform detected');
+      // SMART_CROP: iOS platform detected
       return _getIOSConfig(screenDiagonal, isLandscape);
     } else if (Platform.isAndroid) {
-      print('🤖 [SMART_CROP] Android platform detected');
+      // SMART_CROP: Android platform detected
       return _getAndroidConfig(screenDiagonal, isLandscape);
     }
 
-    print('❓ [SMART_CROP] Unknown platform, using fallback');
+    // SMART_CROP: Unknown platform, using fallback
     // Fallback par défaut
     return isLandscape ? iPhoneLandscape : iPhonePortrait;
   }

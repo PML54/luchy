@@ -97,6 +97,16 @@ import 'package:luchy/core/formulas/prepa_math_engine.dart';
 
 /// 🔧 FONCTIONS UTILITAIRES POUR L'ARCHITECTURE
 
+/// Génère la colonne gauche avec les descriptions des formules
+List<String> generateFormulasLeftColumn() {
+  return allFormulas.map((formula) => formula.description).toList();
+}
+
+/// Génère la colonne droite avec les formules LaTeX
+List<String> generateFormulasRightColumn() {
+  return allFormulas.map((formula) => formula.latex).toList();
+}
+
 /// 🎯 NOUVELLES ARCHITECTURES AVEC CALCUL AUTOMATIQUE
 
 /// Templates étendus pour les formules de Binôme de Newton
@@ -433,8 +443,11 @@ class EducationalImageGenerator {
 
     return EducationalPreset(
       id: 'multiplication_random',
-      name: 'Calcul',
+      nom: 'Calcul',
       description: 'Multiplications aléatoires',
+      niveau: NiveauEducatif.primaire,
+      categorie: CategorieMatiere.mathematiques,
+      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
       leftColumn: left,
       rightColumn: right,
     );
@@ -572,8 +585,11 @@ class EducationalImageGenerator {
   /// Vocabulaire anglais collège : économie de base
   static const EducationalPreset vocabularyEconomyBasic = EducationalPreset(
     id: 'vocab_economy_basic',
-    name: 'Anglais',
+    nom: 'Anglais',
     description: 'Vocabulaire économique niveau collège',
+    niveau: NiveauEducatif.college,
+    categorie: CategorieMatiere.anglais,
+    typeDeJeu: TypeDeJeu.correspondanceVisAVis,
     leftColumn: [
       'Entreprise',
       'Travail',
@@ -603,8 +619,11 @@ class EducationalImageGenerator {
   /// Vocabulaire anglais lycée : commerce
   static const EducationalPreset vocabularyCommerce = EducationalPreset(
     id: 'vocab_commerce',
-    name: 'Anglais',
+    nom: 'Anglais',
     description: 'Vocabulaire commercial niveau lycée',
+    niveau: NiveauEducatif.lycee,
+    categorie: CategorieMatiere.anglais,
+    typeDeJeu: TypeDeJeu.correspondanceVisAVis,
     leftColumn: [
       'Bénéfice',
       'Investissement',
@@ -634,8 +653,11 @@ class EducationalImageGenerator {
   /// Géographie : capitales européennes
   static const EducationalPreset geographyEurope = EducationalPreset(
     id: 'geo_europe',
-    name: 'Histoire',
-    description: '',
+    nom: 'Histoire',
+    description: 'Capitales européennes',
+    niveau: NiveauEducatif.college,
+    categorie: CategorieMatiere.histoire,
+    typeDeJeu: TypeDeJeu.correspondanceVisAVis,
     leftColumn: [
       'France',
       'Allemagne',
@@ -665,158 +687,179 @@ class EducationalImageGenerator {
   // ============ QUESTIONNAIRES STRUCTURÉS ============
 
   /// Questionnaires organisés par niveau et matière
-  static List<QuestionnairePreset> questionnaires = [
-    // === PRIMAIRE ===
-    QuestionnairePreset(
-      id: 'primaire_math_multiplication',
-      nom: 'Calcul',
-      titre: '',
-      niveau: NiveauEducatif.primaire,
-      categorie: CategorieMatiere.mathematiques,
-      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-      sousTheme: 'Calcul mental',
-      colonneGauche: [
-        '2 × 3',
-        '4 × 5',
-        '6 × 7',
-        '3 × 8',
-        '5 × 6',
-        '7 × 4',
-        '9 × 3',
-        '8 × 2',
-      ],
-      colonneDroite: [
-        '6',
-        '20',
-        '42',
-        '24',
-        '30',
-        '28',
-        '27',
-        '16',
-      ],
-    ),
+  static List<QuestionnairePreset> get questionnaires =>
+      _generateQuestionnaires();
 
-    // === PRÉPA ECG - CALCUL UNIFIÉ (CONCATÉNATION DES 3 CATÉGORIES) ===
-    // Utilise maintenant le moteur isolé dans prepa_math_engine.dart
-    PrepaMathFormulaManager.createUnifiedPrepaCalculPreset(),
+  /// Génère la liste des questionnaires de manière dynamique
+  static List<QuestionnairePreset> _generateQuestionnaires() {
+    return [
+      // === PRIMAIRE ===
+      QuestionnairePreset(
+        id: 'primaire_math_multiplication',
+        nom: 'Calcul',
+        titre: 'MULTIPLICATION - PRIMAIRE',
+        description: 'Tables de multiplication niveau primaire',
+        niveau: NiveauEducatif.primaire,
+        categorie: CategorieMatiere.mathematiques,
+        typeDeJeu: TypeDeJeu.correspondanceVisAVis,
+        sousTheme: 'Calcul mental',
+        colonneGauche: [
+          '2 × 3',
+          '4 × 5',
+          '6 × 7',
+          '3 × 8',
+          '5 × 6',
+          '7 × 4',
+          '9 × 3',
+          '8 × 2',
+        ],
+        colonneDroite: [
+          '6',
+          '20',
+          '42',
+          '24',
+          '30',
+          '28',
+          '27',
+          '16',
+        ],
+      ),
 
-    QuestionnairePreset(
-      id: 'lycee_francais_figures_style',
-      nom: 'Français',
-      titre: 'FIGURES DE STYLE - LYCÉE',
-      niveau: NiveauEducatif.lycee,
-      categorie: CategorieMatiere.francais,
-      typeDeJeu: TypeDeJeu.figuresDeStyle,
-      sousTheme: 'Rhétorique',
-      colonneGauche: [
-        'Métaphore',
-        'Comparaison',
-        'Hyperbole',
-        'Litote',
-        'Oxymore',
-        'Antithèse',
-      ],
-      colonneDroite: [
-        'mer de blé',
-        'fort comme lion',
-        'faim de loup',
-        'pas mauvais',
-        'silence assourdissant',
-        'ombre et lumière',
-      ],
-    ),
+      // === PRÉPA ECG - CALCUL UNIFIÉ (CONCATÉNATION DES 3 CATÉGORIES) ===
+      QuestionnairePreset(
+        id: 'prepa_calcul_unifie',
+        nom: 'Calcul Prépa Unifié',
+        titre: 'CALCULS PRÉPA - FORMULES UNIFIÉES',
+        description: 'Formules mathématiques unifiées pour la prépa',
+        niveau: NiveauEducatif.prepa,
+        categorie: CategorieMatiere.mathematiques,
+        typeDeJeu: TypeDeJeu.formulairesLatex,
+        sousTheme: 'Formules unifiées',
+        colonneGauche: generateFormulasLeftColumn(),
+        colonneDroite: generateFormulasRightColumn(),
+      ),
 
-    QuestionnairePreset(
-      id: 'prepa_eco_concepts',
-      nom: 'Économie',
-      titre: 'ÉCONOMIE GÉNÉRALE - PRÉPA ECG',
-      niveau: NiveauEducatif.prepa,
-      categorie: CategorieMatiere.economie,
-      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-      sousTheme: 'Macroéconomie',
-      colonneGauche: [
-        'PIB',
-        'Inflation',
-        'Chômage structurel',
-        'Politique monétaire',
-        'Déficit budgétaire',
-        'Balance commerciale',
-        'Taux de change',
-        'Productivité',
-      ],
-      colonneDroite: [
-        'Produit Intérieur Brut',
-        'Hausse générale des prix',
-        'Inadéquation offre/demande',
-        'Contrôle masse monétaire',
-        'Dépenses > Recettes État',
-        'Exportations - Importations',
-        'Prix d\'une monnaie',
-        'Production/Facteur travail',
-      ],
-    ),
+      QuestionnairePreset(
+        id: 'lycee_francais_figures_style',
+        nom: 'Français',
+        titre: 'FIGURES DE STYLE - LYCÉE',
+        description: 'Figures de style littéraires niveau lycée',
+        niveau: NiveauEducatif.lycee,
+        categorie: CategorieMatiere.francais,
+        typeDeJeu: TypeDeJeu.figuresDeStyle,
+        sousTheme: 'Rhétorique',
+        colonneGauche: [
+          'Métaphore',
+          'Comparaison',
+          'Hyperbole',
+          'Litote',
+          'Oxymore',
+          'Antithèse',
+        ],
+        colonneDroite: [
+          'mer de blé',
+          'fort comme lion',
+          'faim de loup',
+          'pas mauvais',
+          'silence assourdissant',
+          'ombre et lumière',
+        ],
+      ),
 
-    // === VOCABULAIRE ECG UNIFIÉ ===
-    QuestionnairePreset(
-      id: 'prepa_anglais_vocabulaire_ecg',
-      nom: 'Anglais',
-      titre: 'VOCABULAIRE ECG - CONCOURS PRÉPA',
-      niveau: NiveauEducatif.prepa,
-      categorie: CategorieMatiere.anglais,
-      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-      sousTheme: 'Économie & Commerce',
-      colonneGauche: [
-        'Produit intérieur brut',
-        'Croissance économique',
-        'Récession',
-        'Bilan',
-        'Chiffre d\'affaires',
-        'Commerce international',
-        'Mondialisation',
-      ],
-      colonneDroite: [
-        'Gross Domestic Product (GDP)',
-        'Economic growth',
-        'Recession',
-        'Balance sheet',
-        'Revenue',
-        'International trade',
-        'Globalization',
-      ],
-    ),
+      QuestionnairePreset(
+        id: 'prepa_eco_concepts',
+        nom: 'Économie',
+        titre: 'ÉCONOMIE GÉNÉRALE - PRÉPA ECG',
+        description: 'Concepts économiques niveau prépa ECG',
+        niveau: NiveauEducatif.prepa,
+        categorie: CategorieMatiere.economie,
+        typeDeJeu: TypeDeJeu.correspondanceVisAVis,
+        sousTheme: 'Macroéconomie',
+        colonneGauche: [
+          'PIB',
+          'Inflation',
+          'Chômage structurel',
+          'Politique monétaire',
+          'Déficit budgétaire',
+          'Balance commerciale',
+          'Taux de change',
+          'Productivité',
+        ],
+        colonneDroite: [
+          'Produit Intérieur Brut',
+          'Hausse générale des prix',
+          'Inadéquation offre/demande',
+          'Contrôle masse monétaire',
+          'Dépenses > Recettes État',
+          'Exportations - Importations',
+          'Prix d\'une monnaie',
+          'Production/Facteur travail',
+        ],
+      ),
 
-    // === COLLÈGE ===
-    QuestionnairePreset(
-      id: 'college_histoire_chronologie',
-      nom: 'Histoire',
-      titre: 'ORDRE CHRONOLOGIQUE - MOYEN ÂGE',
-      niveau: NiveauEducatif.college,
-      categorie: CategorieMatiere.histoire,
-      typeDeJeu: TypeDeJeu.ordreChronologique,
-      sousTheme: 'Événements médiévaux',
-      colonneGauche: [
-        'Bataille de Hastings',
-        'Prise de Constantinople',
-        'Guerre de Cent Ans début',
-        'Première croisade',
-        'Couronnement Charlemagne',
-        'Chute Empire romain',
-        'Peste noire en Europe',
-        'Découverte Amérique',
-      ],
-      colonneDroite: [
-        '1066',
-        '1453',
-        '1337',
-        '1096',
-        '800',
-        '476',
-        '1347',
-        '1492',
-      ],
-    ),
-  ];
+      // === VOCABULAIRE ECG UNIFIÉ ===
+      QuestionnairePreset(
+        id: 'prepa_anglais_vocabulaire_ecg',
+        nom: 'Anglais',
+        titre: 'VOCABULAIRE ECG - CONCOURS PRÉPA',
+        description: 'Vocabulaire anglais économique niveau prépa ECG',
+        niveau: NiveauEducatif.prepa,
+        categorie: CategorieMatiere.anglais,
+        typeDeJeu: TypeDeJeu.correspondanceVisAVis,
+        sousTheme: 'Économie & Commerce',
+        colonneGauche: [
+          'Produit intérieur brut',
+          'Croissance économique',
+          'Récession',
+          'Bilan',
+          'Chiffre d\'affaires',
+          'Commerce international',
+          'Mondialisation',
+        ],
+        colonneDroite: [
+          'Gross Domestic Product (GDP)',
+          'Economic growth',
+          'Recession',
+          'Balance sheet',
+          'Revenue',
+          'International trade',
+          'Globalization',
+        ],
+      ),
+
+      // === COLLÈGE ===
+      QuestionnairePreset(
+        id: 'college_histoire_chronologie',
+        nom: 'Histoire',
+        titre: 'ORDRE CHRONOLOGIQUE - MOYEN ÂGE',
+        description: 'Chronologie des événements médiévaux niveau collège',
+        niveau: NiveauEducatif.college,
+        categorie: CategorieMatiere.histoire,
+        typeDeJeu: TypeDeJeu.ordreChronologique,
+        sousTheme: 'Événements médiévaux',
+        colonneGauche: [
+          'Bataille de Hastings',
+          'Prise de Constantinople',
+          'Guerre de Cent Ans début',
+          'Première croisade',
+          'Couronnement Charlemagne',
+          'Chute Empire romain',
+          'Peste noire en Europe',
+          'Découverte Amérique',
+        ],
+        colonneDroite: [
+          '1066',
+          '1453',
+          '1337',
+          '1096',
+          '800',
+          '476',
+          '1347',
+          '1492',
+        ],
+      ),
+    ];
+  }
 
   /// Liste de tous les questionnaires disponibles (format moderne)
   static List<QuestionnairePreset> getAllQuestionnaires() {
@@ -996,11 +1039,3 @@ class EducationalImageGenerator {
 /// Widget pour afficher les coefficients binomiaux avec la notation moderne
 /// Utilise flutter_math_fork pour le rendu LaTeX
 /// Note: Cette fonction nécessite l'import de 'package:flutter_math_fork/flutter_math.dart'
-/* 
-Widget binomWidget(int n, int k) {
-  return Math.tex(
-    r'\binom{' '$n' '}{' '$k' '}',
-    textStyle: const TextStyle(fontSize: 32),
-  );
-}
-*/

@@ -67,17 +67,12 @@ class UnifiedMathFormulaManager {
     if (_prepaUnifiedFormulas.isEmpty) {
       // Utiliser la nouvelle architecture PrepaMathFormulaManager
       _prepaUnifiedFormulas = [
-        ...PrepaMathFormulaManager.binomeFormulas,
-        ...PrepaMathFormulaManager.combinaisonsFormulas,
-        ...PrepaMathFormulaManager.sommesFormulas,
+        ...prepaMathFormulaManager.binomeFormulas,
+        ...prepaMathFormulaManager.combinaisonsFormulas,
+        ...prepaMathFormulaManager.sommesFormulas,
       ];
 
-      print('🎯 UnifiedMathFormulaManager (NOUVELLE ARCHITECTURE):');
-      print('   • Binôme: ${PrepaMathFormulaManager.binomeFormulas.length}');
-      print(
-          '   • Combinaisons: ${PrepaMathFormulaManager.combinaisonsFormulas.length}');
-      print('   • Sommes: ${PrepaMathFormulaManager.sommesFormulas.length}');
-      print('   • Prépa unifié: ${_prepaUnifiedFormulas.length} formules');
+      // Architecture unifiée des formules mathématiques
     }
   }
 
@@ -87,15 +82,15 @@ class UnifiedMathFormulaManager {
 
   /// Obtenir les formules binôme
   static List<EnhancedFormulaTemplate> get binomeFormulas =>
-      PrepaMathFormulaManager.binomeFormulas;
+      prepaMathFormulaManager.binomeFormulas;
 
   /// Obtenir les formules de combinaisons
   static List<EnhancedFormulaTemplate> get combinaisonsFormulas =>
-      PrepaMathFormulaManager.combinaisonsFormulas;
+      prepaMathFormulaManager.combinaisonsFormulas;
 
   /// Obtenir les formules de sommes
   static List<EnhancedFormulaTemplate> get sommesFormulas =>
-      PrepaMathFormulaManager.sommesFormulas;
+      prepaMathFormulaManager.sommesFormulas;
 }
 
 /// =====================================================================================
@@ -119,14 +114,15 @@ class _QuizFormulaCache {
         _lastGenerated == null ||
         now.difference(_lastGenerated!) > _cacheValidityDuration) {
       // Générer de nouvelles formules
-      _cachedFormulas = QuizGenerator.generateQuiz(const QuizConfiguration(
-        mode: QuizMode.mixte, // Mode mixte (code 2)
-        questionCount: 12, // Plus de formules pour avoir du choix
-      ));
+      final quizConfig = quizGenerator.generateQuiz(
+        chapitre: 'binome',
+        level: 14,
+        nombreQuestions: 12,
+      );
+      _cachedFormulas = quizConfig.formules;
       _lastGenerated = now;
 
-      print(
-          '🎮 Nouvelles formules générées en mode mixte: ${_cachedFormulas!.length}');
+      // Nouvelles formules générées en mode mixte
     }
 
     return _cachedFormulas!;
@@ -142,27 +138,24 @@ class _QuizFormulaCache {
 /// Fonctions utilisant le nouveau système de codes quiz (mode mixte par défaut)
 /// SYNCHRONISÉES via le cache pour éviter les incohérences gauche/droite
 List<String> get _binomeLatexGaucheComplete {
-  final quizFormulas = _QuizFormulaCache.getFormulas();
-
-  return quizFormulas.map((f) {
+  // Utiliser directement toutes les formules de allFormulas
+  return allFormulas.map((f) {
     // Utiliser la propriété leftSide qui gère automatiquement leftLatex ou split
     return f.leftSide;
   }).toList();
 }
 
 List<String> get _binomeLatexDroiteComplete {
-  final quizFormulas = _QuizFormulaCache.getFormulas();
-
-  return quizFormulas.map((f) {
+  // Utiliser directement toutes les formules de allFormulas
+  return allFormulas.map((f) {
     // Utiliser la propriété rightSide qui gère automatiquement rightLatex ou split
     return f.rightSide;
   }).toList();
 }
 
 List<String> get _binomeUsage2MotsComplete {
-  final quizFormulas = _QuizFormulaCache.getFormulas();
-
-  return quizFormulas.map((f) => f.description).toList();
+  // Utiliser directement toutes les formules de allFormulas
+  return allFormulas.map((f) => f.description).toList();
 }
 
 /// Fonction pour sélectionner 6 questions aléatoires avec résultats ET formules uniques
@@ -193,26 +186,19 @@ List<int> _selectRandomQuestions() {
       usedLeftFormulas.add(leftFormula);
       usedRightResults.add(rightResult);
 
-      // Debug: afficher ce qui est sélectionné
-      print('🎯 Sélectionnée: $leftFormula = $rightResult');
+      // Formule sélectionnée
     } else {
-      // Debug: afficher ce qui est rejeté et pourquoi
-      final reason = usedLeftFormulas.contains(leftFormula)
-          ? 'formule gauche déjà utilisée'
-          : 'résultat droite déjà utilisé';
-      print('❌ Rejetée ($reason): $leftFormula = $rightResult');
+      // Formule rejetée (déjà utilisée)
     }
   }
 
-  print(
-      '📊 Sélection finale: ${selectedIndices.length} formules avec ${usedLeftFormulas.length} formules uniques et ${usedRightResults.length} résultats uniques');
+  // Sélection finale des formules
   return selectedIndices;
 }
 
 /// Fonction de secours si on n'a pas assez de résultats uniques
 List<int> _selectRandomQuestionsFallback() {
-  print(
-      '⚠️ Pas assez de résultats uniques, utilisation de la méthode classique');
+  // Méthode de fallback utilisée
   final random = Random();
   final availableIndices =
       List.generate(_binomeLatexGaucheComplete.length, (i) => i);
@@ -261,8 +247,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
 
     // Si on n'a pas assez de questions (moins de 6), utiliser la méthode de secours
     if (_currentSelection.length < 6) {
-      print(
-          '⚠️ Seulement ${_currentSelection.length} questions uniques trouvées, utilisation de la méthode de secours');
+      // Utilisation de la méthode de secours
       _currentSelection = _selectRandomQuestionsFallback();
     }
 
@@ -276,7 +261,7 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
     binomeUsage2Mots =
         _currentSelection.map((i) => _binomeUsage2MotsComplete[i]).toList();
 
-    print('✅ Questions initialisées: $_itemCount formules chargées');
+    // Questions initialisées
   }
 
   void _initializePuzzle() {
@@ -822,10 +807,6 @@ class _BinomeFormulesScreenState extends ConsumerState<BinomeFormulesScreen> {
 /// Fonction utilitaire pour affichage console (debug)
 void printBinomeFormulesInConsole() {
   for (int i = 0; i < binomeLatexGauche.length; i++) {
-    final gauche = binomeLatexGauche[i];
-    final droite = binomeLatexDroite[i];
-    final tag = binomeUsage2Mots[i];
-    // ignore: avoid_print
-    print('$gauche = $droite  |  $tag');
+    // Debug: formule ${i + 1}
   }
 }
