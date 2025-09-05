@@ -445,9 +445,9 @@ class EducationalImageGenerator {
       id: 'multiplication_random',
       nom: 'Calcul',
       description: 'Multiplications aléatoires',
-      niveau: NiveauEducatif.primaire,
+      niveau: NiveauEducatif.lycee,
       categorie: CategorieMatiere.mathematiques,
-      typeDeJeu: TypeDeJeu.correspondanceVisAVis,
+      typeDeJeu: TypeDeJeu.habileteNumerique,
       leftColumn: left,
       rightColumn: right,
     );
@@ -572,7 +572,7 @@ class EducationalImageGenerator {
       titre: 'COMBINAISONS - PUZZLE ALÉATOIRE',
       niveau: NiveauEducatif.prepa,
       categorie: CategorieMatiere.mathematiques,
-      typeDeJeu: TypeDeJeu.combinaisonsMatematiques,
+      typeDeJeu: TypeDeJeu.habileteSeries,
       sousTheme: 'Analyse combinatoire',
       colonneGauche: colonneGauche,
       colonneDroite: colonneDroite,
@@ -581,108 +581,6 @@ class EducationalImageGenerator {
       ratioLargeurColonnes: 0.5, // 50%/50% pour un découpage plus équilibré
     );
   }
-
-  /// Vocabulaire anglais collège : économie de base
-  static const EducationalPreset vocabularyEconomyBasic = EducationalPreset(
-    id: 'vocab_economy_basic',
-    nom: 'Anglais',
-    description: 'Vocabulaire économique niveau collège',
-    niveau: NiveauEducatif.college,
-    categorie: CategorieMatiere.anglais,
-    typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-    leftColumn: [
-      'Entreprise',
-      'Travail',
-      'Argent',
-      'Prix',
-      'Vente',
-      'Achat',
-      'Marché',
-      'Client',
-      'Patron',
-      'Emploi'
-    ],
-    rightColumn: [
-      'Company',
-      'Work',
-      'Money',
-      'Price',
-      'Sale',
-      'Purchase',
-      'Market',
-      'Customer',
-      'Boss',
-      'Job'
-    ],
-  );
-
-  /// Vocabulaire anglais lycée : commerce
-  static const EducationalPreset vocabularyCommerce = EducationalPreset(
-    id: 'vocab_commerce',
-    nom: 'Anglais',
-    description: 'Vocabulaire commercial niveau lycée',
-    niveau: NiveauEducatif.lycee,
-    categorie: CategorieMatiere.anglais,
-    typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-    leftColumn: [
-      'Bénéfice',
-      'Investissement',
-      'Banque',
-      'Crédit',
-      'Concurrence',
-      'Publicité',
-      'Innovation',
-      'Qualité',
-      'Service',
-      'Exportation'
-    ],
-    rightColumn: [
-      'Profit',
-      'Investment',
-      'Bank',
-      'Credit',
-      'Competition',
-      'Advertising',
-      'Innovation',
-      'Quality',
-      'Service',
-      'Export'
-    ],
-  );
-
-  /// Géographie : capitales européennes
-  static const EducationalPreset geographyEurope = EducationalPreset(
-    id: 'geo_europe',
-    nom: 'Histoire',
-    description: 'Capitales européennes',
-    niveau: NiveauEducatif.college,
-    categorie: CategorieMatiere.histoire,
-    typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-    leftColumn: [
-      'France',
-      'Allemagne',
-      'Italie',
-      'Espagne',
-      'Portugal',
-      'Angleterre',
-      'Suède',
-      'Norvège',
-      'Grèce',
-      'Pologne'
-    ],
-    rightColumn: [
-      'Paris',
-      'Berlin',
-      'Rome',
-      'Madrid',
-      'Lisbonne',
-      'Londres',
-      'Stockholm',
-      'Oslo',
-      'Athènes',
-      'Varsovie'
-    ],
-  );
 
   // ============ QUESTIONNAIRES STRUCTURÉS ============
 
@@ -693,48 +591,16 @@ class EducationalImageGenerator {
   /// Génère la liste des questionnaires de manière dynamique
   static List<QuestionnairePreset> _generateQuestionnaires() {
     return [
-      // === PRIMAIRE ===
+      // === HABILETÉ SÉRIES - CALCULS PRÉPA ===
       QuestionnairePreset(
-        id: 'primaire_math_multiplication',
-        nom: 'Calcul',
-        titre: 'MULTIPLICATION - PRIMAIRE',
-        description: 'Tables de multiplication niveau primaire',
-        niveau: NiveauEducatif.primaire,
-        categorie: CategorieMatiere.mathematiques,
-        typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-        sousTheme: 'Calcul mental',
-        colonneGauche: [
-          '2 × 3',
-          '4 × 5',
-          '6 × 7',
-          '3 × 8',
-          '5 × 6',
-          '7 × 4',
-          '9 × 3',
-          '8 × 2',
-        ],
-        colonneDroite: [
-          '6',
-          '20',
-          '42',
-          '24',
-          '30',
-          '28',
-          '27',
-          '16',
-        ],
-      ),
-
-      // === PRÉPA ECG - CALCUL UNIFIÉ (CONCATÉNATION DES 3 CATÉGORIES) ===
-      QuestionnairePreset(
-        id: 'prepa_calcul_unifie',
-        nom: 'Calcul Prépa Unifié',
-        titre: 'CALCULS PRÉPA - FORMULES UNIFIÉES',
-        description: 'Formules mathématiques unifiées pour la prépa',
+        id: 'habilete_series_prepa',
+        nom: 'Habileté Séries',
+        titre: 'HABILETÉ SÉRIES - CALCULS PRÉPA',
+        description: 'Formules mathématiques de séries pour la prépa',
         niveau: NiveauEducatif.prepa,
         categorie: CategorieMatiere.mathematiques,
-        typeDeJeu: TypeDeJeu.formulairesLatex,
-        sousTheme: 'Formules unifiées',
+        typeDeJeu: TypeDeJeu.habileteSeries,
+        sousTheme: 'Formules de séries',
         colonneGauche: generateFormulasLeftColumn(),
         colonneDroite: generateFormulasRightColumn(),
       ),
@@ -768,126 +634,6 @@ class EducationalImageGenerator {
         colonneGauche: [], // Généré dynamiquement
         colonneDroite: [], // Généré dynamiquement
       ),
-
-      QuestionnairePreset(
-        id: 'lycee_francais_figures_style',
-        nom: 'Français',
-        titre: 'FIGURES DE STYLE - LYCÉE',
-        description: 'Figures de style littéraires niveau lycée',
-        niveau: NiveauEducatif.lycee,
-        categorie: CategorieMatiere.francais,
-        typeDeJeu: TypeDeJeu.figuresDeStyle,
-        sousTheme: 'Rhétorique',
-        colonneGauche: [
-          'Métaphore',
-          'Comparaison',
-          'Hyperbole',
-          'Litote',
-          'Oxymore',
-          'Antithèse',
-        ],
-        colonneDroite: [
-          'mer de blé',
-          'fort comme lion',
-          'faim de loup',
-          'pas mauvais',
-          'silence assourdissant',
-          'ombre et lumière',
-        ],
-      ),
-
-      QuestionnairePreset(
-        id: 'prepa_eco_concepts',
-        nom: 'Économie',
-        titre: 'ÉCONOMIE GÉNÉRALE - PRÉPA ECG',
-        description: 'Concepts économiques niveau prépa ECG',
-        niveau: NiveauEducatif.prepa,
-        categorie: CategorieMatiere.economie,
-        typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-        sousTheme: 'Macroéconomie',
-        colonneGauche: [
-          'PIB',
-          'Inflation',
-          'Chômage structurel',
-          'Politique monétaire',
-          'Déficit budgétaire',
-          'Balance commerciale',
-          'Taux de change',
-          'Productivité',
-        ],
-        colonneDroite: [
-          'Produit Intérieur Brut',
-          'Hausse générale des prix',
-          'Inadéquation offre/demande',
-          'Contrôle masse monétaire',
-          'Dépenses > Recettes État',
-          'Exportations - Importations',
-          'Prix d\'une monnaie',
-          'Production/Facteur travail',
-        ],
-      ),
-
-      // === VOCABULAIRE ECG UNIFIÉ ===
-      QuestionnairePreset(
-        id: 'prepa_anglais_vocabulaire_ecg',
-        nom: 'Anglais',
-        titre: 'VOCABULAIRE ECG - CONCOURS PRÉPA',
-        description: 'Vocabulaire anglais économique niveau prépa ECG',
-        niveau: NiveauEducatif.prepa,
-        categorie: CategorieMatiere.anglais,
-        typeDeJeu: TypeDeJeu.correspondanceVisAVis,
-        sousTheme: 'Économie & Commerce',
-        colonneGauche: [
-          'Produit intérieur brut',
-          'Croissance économique',
-          'Récession',
-          'Bilan',
-          'Chiffre d\'affaires',
-          'Commerce international',
-          'Mondialisation',
-        ],
-        colonneDroite: [
-          'Gross Domestic Product (GDP)',
-          'Economic growth',
-          'Recession',
-          'Balance sheet',
-          'Revenue',
-          'International trade',
-          'Globalization',
-        ],
-      ),
-
-      // === COLLÈGE ===
-      QuestionnairePreset(
-        id: 'college_histoire_chronologie',
-        nom: 'Histoire',
-        titre: 'ORDRE CHRONOLOGIQUE - MOYEN ÂGE',
-        description: 'Chronologie des événements médiévaux niveau collège',
-        niveau: NiveauEducatif.college,
-        categorie: CategorieMatiere.histoire,
-        typeDeJeu: TypeDeJeu.ordreChronologique,
-        sousTheme: 'Événements médiévaux',
-        colonneGauche: [
-          'Bataille de Hastings',
-          'Prise de Constantinople',
-          'Guerre de Cent Ans début',
-          'Première croisade',
-          'Couronnement Charlemagne',
-          'Chute Empire romain',
-          'Peste noire en Europe',
-          'Découverte Amérique',
-        ],
-        colonneDroite: [
-          '1066',
-          '1453',
-          '1337',
-          '1096',
-          '800',
-          '476',
-          '1347',
-          '1492',
-        ],
-      ),
     ];
   }
 
@@ -908,41 +654,20 @@ class EducationalImageGenerator {
     // Table de multiplication aléatoire unique
     presets.add(generateRandomMultiplicationTable());
 
-    // Vocabulaire - format progressif
-    presets.addAll([
-      vocabularyEconomyBasic,
-      vocabularyCommerce,
-      geographyEurope,
-    ]);
-
     return presets;
   }
 
   /// Détermine les couleurs de fond selon le type de preset
   static (Color?, Color?) _getColorsForPreset(String presetId) {
     // Nouveaux questionnaires structurés
-    if (presetId.startsWith('primaire_')) {
-      return (Colors.green[100], Colors.lightGreen[100]); // Vert doux primaire
-    } else if (presetId.startsWith('college_')) {
-      return (Colors.blue[100], Colors.lightBlue[100]); // Bleu collège
-    } else if (presetId.startsWith('lycee_')) {
+    if (presetId.startsWith('lycee_')) {
       return (Colors.orange[100], Colors.deepOrange[100]); // Orange lycée
-    } else if (presetId.startsWith('prepa_')) {
-      return (Colors.purple[100], Colors.deepPurple[100]); // Violet prépa
-    } else if (presetId.startsWith('superieur_')) {
-      return (Colors.red[100], Colors.pink[100]); // Rouge supérieur
-    }
-
-    // Anciens formats
-    else if (presetId.startsWith('multiplication_')) {
-      // Tables de multiplication : Bleu clair / Vert clair
-      return (Colors.blue[50], Colors.green[50]);
-    } else if (presetId.startsWith('vocab_')) {
-      // Vocabulaire : Rose clair / Orange clair
-      return (Colors.pink[50], Colors.orange[50]);
-    } else if (presetId.startsWith('geo_')) {
-      // Géographie : Violet clair / Jaune clair
-      return (Colors.purple[50], Colors.yellow[50]);
+    } else if (presetId.startsWith('prepa_') ||
+        presetId.startsWith('habilete_')) {
+      return (
+        Colors.purple[100],
+        Colors.deepPurple[100]
+      ); // Violet prépa/habileté
     } else {
       // Par défaut : Gris très clair / Bleu très clair
       return (Colors.grey[50], Colors.blue[50]);

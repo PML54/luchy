@@ -56,7 +56,6 @@ import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
 // Feature imports
 import 'package:luchy/features/puzzle/presentation/screens/binome_formules_screen.dart';
-import 'package:luchy/features/puzzle/presentation/screens/figures_style_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/fraction_skills_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/numerical_skills_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/puzzle_game_screen.dart';
@@ -233,7 +232,7 @@ class CustomToolbar extends ConsumerWidget {
           icon: const Icon(Icons.school_outlined),
           iconSize: _iconSize,
           onPressed: () => _showEducationalDialog(context, ref),
-          tooltip: "Puzzles éducatifs",
+          tooltip: "Puzzle Habileté",
           color: Colors.white,
         ),
         // Contrôle du niveau
@@ -325,10 +324,8 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
   // Détermine le type de puzzle selon le questionnaire
   int _getPuzzleType(QuestionnairePreset questionnaire) {
     switch (questionnaire.typeDeJeu) {
-      case TypeDeJeu.combinaisonsMatematiques:
-        return 3;
-      case TypeDeJeu.formulairesLatex:
-        return 4; // Type spécial pour formulaires LaTeX
+      case TypeDeJeu.habileteSeries:
+        return 4; // Type spécial pour habileté séries (ex-formulaires LaTeX)
       case TypeDeJeu.habileteNumerique:
         return 5; // Type spécial pour habileté numérique
       case TypeDeJeu.habileteFractions:
@@ -347,7 +344,7 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
         children: [
           Icon(Icons.school, color: Colors.blue),
           SizedBox(width: 8),
-          Text('Puzzles Éducatifs'),
+          Text('Puzzle Habileté'),
         ],
       ),
       content: SizedBox(
@@ -365,7 +362,6 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
                     child: ListTile(
                       leading: _getQuestionnaireIcon(questionnaire),
                       title: Text(questionnaire.nom),
-                      subtitle: Text('${questionnaire.niveau.nom}'),
                       onTap: () {
                         Navigator.of(context).pop();
                         _handleQuestionnaireSelection(context, questionnaire);
@@ -391,17 +387,14 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
   Widget _getQuestionnaireIcon(QuestionnairePreset questionnaire) {
     IconData iconData;
     switch (questionnaire.typeDeJeu) {
-      case TypeDeJeu.ordreChronologique:
-        iconData = Icons.access_time;
-        break;
-      case TypeDeJeu.combinaisonsMatematiques:
+      case TypeDeJeu.habileteSeries:
         iconData = Icons.calculate;
-        break;
-      case TypeDeJeu.figuresDeStyle:
-        iconData = Icons.text_fields;
         break;
       case TypeDeJeu.habileteNumerique:
         iconData = Icons.functions;
+        break;
+      case TypeDeJeu.habileteFractions:
+        iconData = Icons.calculate_outlined;
         break;
       default:
         iconData = Icons.quiz;
@@ -415,16 +408,10 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
 
   Color _getColorForLevel(NiveauEducatif niveau) {
     switch (niveau) {
-      case NiveauEducatif.primaire:
-        return Colors.green;
-      case NiveauEducatif.college:
-        return Colors.blue;
       case NiveauEducatif.lycee:
         return Colors.orange;
       case NiveauEducatif.prepa:
         return Colors.purple;
-      case NiveauEducatif.superieur:
-        return Colors.red;
     }
   }
 
@@ -433,29 +420,12 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
     BuildContext context,
     QuestionnairePreset questionnaire,
   ) {
-    // Si c'est un formulaire LaTeX, naviguer vers l'écran dédié
-    if (questionnaire.typeDeJeu == TypeDeJeu.formulairesLatex) {
-      // Déterminer quel écran LaTeX utiliser selon l'ID
-      if (questionnaire.id == 'prepa_calcul_unified') {
-        // Nouveau système unifié - utilise BinomeFormulesScreen avec concaténation
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const BinomeFormulesScreen(),
-          ),
-        );
-      } else {
-        // Pour les autres questionnaires LaTeX, utiliser l'écran binôme par défaut
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const BinomeFormulesScreen(),
-          ),
-        );
-      }
-    } else if (questionnaire.typeDeJeu == TypeDeJeu.figuresDeStyle) {
-      // Si c'est figures de style, naviguer vers l'écran dédié
+    // Navigation vers les écrans Habileté
+    if (questionnaire.typeDeJeu == TypeDeJeu.habileteSeries) {
+      // Si c'est habileté séries, naviguer vers l'écran LaTeX
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const FiguresStyleScreen(),
+          builder: (context) => const BinomeFormulesScreen(),
         ),
       );
     } else if (questionnaire.typeDeJeu == TypeDeJeu.habileteNumerique) {

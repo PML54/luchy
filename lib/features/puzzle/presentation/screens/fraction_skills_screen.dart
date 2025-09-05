@@ -146,53 +146,22 @@ class _FractionSkillsScreenState extends ConsumerState<FractionSkillsScreen> {
   /// Affiche un tooltip avec les détails de l'opération
   void _showOperationTooltip(
       BuildContext context, Map<String, dynamic> operation) {
-    // Version avec rendu LaTeX correct
-    final fractionOp = operation['operation'] as FractionOperation?;
+    // Version simplifiée : seulement l'opération LaTeX
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(fractionOp?.description ?? 'Opération'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Rendu LaTeX de l'opération
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue[200]!),
-                ),
-                child: Math.tex(
-                  operation['latex'] ?? '\\text{LaTeX non disponible}',
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Résultat
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.green[50],
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.green[200]!),
-                ),
-                child: Text(
-                  'Résultat : ${operation['result'] ?? 'Non calculé'}',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+        content: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.blue[50],
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.blue[200]!),
+          ),
+          child: Math.tex(
+            operation['latex'] ?? '\\text{LaTeX non disponible}',
+            textStyle: const TextStyle(fontSize: 24),
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fermer'),
-          ),
-        ],
       ),
     );
   }

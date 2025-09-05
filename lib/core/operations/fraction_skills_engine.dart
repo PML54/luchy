@@ -44,6 +44,8 @@
 
 import 'dart:math' as math;
 
+import 'base_skills_engine.dart';
+
 class Fraction {
   final int numerator;
   final int denominator;
@@ -144,20 +146,29 @@ class Fraction {
   double toDouble() => numerator / denominator;
 }
 
-class FractionOperation {
-  final String operationType;
-  final String latexPattern;
-  final String description;
-  final int difficulty;
-  final Function(Map<String, dynamic>) calculateResult;
+/// Template d'opération pour les compétences sur les fractions
+class FractionOperation extends BaseOperationTemplate {
+  final Function(Map<String, dynamic>) _calculateResult;
 
   const FractionOperation({
-    required this.operationType,
-    required this.latexPattern,
-    required this.description,
-    required this.difficulty,
-    required this.calculateResult,
-  });
+    required String operationType,
+    required String latexPattern,
+    required String description,
+    required int difficulty,
+    required Function(Map<String, dynamic>) calculateResult,
+  })  : _calculateResult = calculateResult,
+        super(
+          operationType: operationType,
+          latexPattern: latexPattern,
+          description: description,
+          parameters: const [], // Les fractions n'ont pas de paramètres prédéfinis
+          difficulty: difficulty,
+        );
+
+  @override
+  dynamic calculateResult(Map<String, dynamic> params) {
+    return _calculateResult(params);
+  }
 }
 
 /// Liste des opérations sur les fractions supportées
@@ -347,7 +358,7 @@ final List<FractionOperation> allFractionOperations = [
 ];
 
 /// Générateur de quiz d'opérations sur les fractions
-class FractionSkillsGenerator {
+class FractionSkillsGenerator extends BaseSkillsGenerator {
   static final math.Random _random = math.Random();
 
   /// Génère une fraction aléatoire simple
@@ -432,6 +443,11 @@ class FractionSkillsGenerator {
   }
 
   /// Génère un quiz de 6 opérations sur les fractions
+  /// Génère un quiz en utilisant la base commune
+  static List<Map<String, dynamic>> generateQuizWithBase() {
+    return BaseSkillsGenerator.generateQuiz(allFractionOperations, 6);
+  }
+
   static List<Map<String, dynamic>> generateQuiz() {
     final selectedOperations = <FractionOperation>[];
     final usedResults = <String>{};

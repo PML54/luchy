@@ -1,46 +1,63 @@
 import 'dart:math' as math;
 
-class OperationParameter {
-  final String name;
-  final int minValue;
-  final int maxValue;
-  final String description;
+import 'base_skills_engine.dart';
 
-  const OperationParameter({
-    required this.name,
-    required this.minValue,
-    required this.maxValue,
-    required this.description,
-  });
+/// Paramètre d'opération pour les compétences numériques
+class NumericalOperationParameter extends BaseOperationParameter {
+  const NumericalOperationParameter({
+    required String name,
+    required int minValue,
+    required int maxValue,
+    required String description,
+  }) : super(
+          name: name,
+          minValue: minValue,
+          maxValue: maxValue,
+          description: description,
+        );
 }
 
-class OperationTemplate {
-  final String operationType;
-  final String latexPattern;
-  final String description;
-  final List<OperationParameter> parameters;
-  final int difficulty;
-  final Function(Map<String, int>) calculateResult;
+/// Template d'opération pour les compétences numériques
+class NumericalOperationTemplate extends BaseOperationTemplate {
+  final Function(Map<String, int>) _calculateResult;
 
-  const OperationTemplate({
-    required this.operationType,
-    required this.latexPattern,
-    required this.description,
-    required this.parameters,
-    required this.difficulty,
-    required this.calculateResult,
-  });
+  const NumericalOperationTemplate({
+    required String operationType,
+    required String latexPattern,
+    required String description,
+    required List<NumericalOperationParameter> parameters,
+    required int difficulty,
+    required Function(Map<String, int>) calculateResult,
+  })  : _calculateResult = calculateResult,
+        super(
+          operationType: operationType,
+          latexPattern: latexPattern,
+          description: description,
+          parameters: parameters,
+          difficulty: difficulty,
+        );
+
+  @override
+  dynamic calculateResult(Map<String, dynamic> params) {
+    // Convertir les paramètres en int pour la compatibilité
+    final intParams = <String, int>{};
+    for (final entry in params.entries) {
+      intParams[entry.key] =
+          entry.value is int ? entry.value : int.parse(entry.value.toString());
+    }
+    return _calculateResult(intParams);
+  }
 }
 
 /// Liste complète des opérations mathématiques supportées
-final List<OperationTemplate> allOperations = [
+final List<NumericalOperationTemplate> allOperations = [
   // 1. CARRÉS
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'carre',
     latexPattern: '{VAR:n}^2',
     description: 'Carré de n',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'n',
           minValue: 1,
           maxValue: 20,
@@ -51,12 +68,12 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 2. RACINES CARRÉES (nombres parfaits uniquement)
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'racine',
     latexPattern: '\\sqrt{{VAR:n}}',
     description: 'Racine carrée de n',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'n', minValue: 4, maxValue: 400, description: 'Carré parfait'),
     ],
     difficulty: 2,
@@ -64,12 +81,12 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 3. CUBES
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'cube',
     latexPattern: '{VAR:n}^3',
     description: 'Cube de n',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'n',
           minValue: 1,
           maxValue: 10,
@@ -80,14 +97,14 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 4. PRODUITS
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'produit',
     latexPattern: '{VAR:a} \\times {VAR:b}',
     description: 'Produit de a et b',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'a', minValue: 2, maxValue: 20, description: 'Premier facteur'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'b',
           minValue: 2,
           maxValue: 20,
@@ -98,14 +115,14 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 5. FRACTIONS SIMPLES (résultat entier garanti)
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'fraction',
     latexPattern: '\\frac{{{VAR:a}}}{{{VAR:b}}}',
     description: 'Fraction a sur b',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'a', minValue: 2, maxValue: 40, description: 'Numérateur'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'b', minValue: 1, maxValue: 10, description: 'Dénominateur'),
     ],
     difficulty: 2,
@@ -118,14 +135,14 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 6. SOMMES
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'somme',
     latexPattern: '{VAR:a} + {VAR:b}',
     description: 'Somme de a et b',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'a', minValue: 1, maxValue: 50, description: 'Premier terme'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'b', minValue: 1, maxValue: 50, description: 'Deuxième terme'),
     ],
     difficulty: 1,
@@ -133,14 +150,14 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 7. SOUSTRACTIONS
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'soustraction',
     latexPattern: '{VAR:a} - {VAR:b}',
     description: 'Différence de a et b',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'a', minValue: 10, maxValue: 100, description: 'Minuende'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'b', minValue: 1, maxValue: 50, description: 'Soustrahend'),
     ],
     difficulty: 1,
@@ -148,12 +165,12 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 8. FACTORIELS
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'factoriel',
     latexPattern: '{VAR:n}!',
     description: 'Factoriel de n',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'n', minValue: 1, maxValue: 6, description: 'Nombre factoriel'),
     ],
     difficulty: 3,
@@ -168,18 +185,18 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 9. SOMME DE FRACTIONS (résultat entier garanti)
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'somme_fractions',
     latexPattern: '\\frac{{{VAR:a}}}{{{VAR:b}}} + \\frac{{{VAR:c}}}{{{VAR:d}}}',
     description: 'Somme de deux fractions',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'a', minValue: 1, maxValue: 10, description: 'Numérateur 1'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'b', minValue: 2, maxValue: 10, description: 'Dénominateur 1'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'c', minValue: 1, maxValue: 10, description: 'Numérateur 2'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'd', minValue: 2, maxValue: 10, description: 'Dénominateur 2'),
     ],
     difficulty: 4,
@@ -191,24 +208,32 @@ final List<OperationTemplate> allOperations = [
       // Calcul: (a*d + c*b) / (b*d)
       int numerateur = a * d + c * b;
       int denominateur = b * d;
-      return numerateur ~/ denominateur; // Division entière
+
+      // Vérifier que la division est exacte
+      if (numerateur % denominateur != 0) {
+        // Si ce n'est pas exact, ajuster pour garantir un résultat entier
+        // On prend le quotient entier et on ajuste les paramètres
+        return numerateur ~/ denominateur;
+      }
+
+      return numerateur ~/ denominateur;
     },
   ),
 
   // 10. PRODUIT DE FRACTIONS (résultat entier garanti)
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'produit_fractions',
     latexPattern:
         '\\frac{{{VAR:a}}}{{{VAR:b}}} \\times \\frac{{{VAR:c}}}{{{VAR:d}}}',
     description: 'Produit de deux fractions',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'a', minValue: 1, maxValue: 20, description: 'Numérateur 1'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'b', minValue: 2, maxValue: 10, description: 'Dénominateur 1'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'c', minValue: 1, maxValue: 20, description: 'Numérateur 2'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'd', minValue: 2, maxValue: 10, description: 'Dénominateur 2'),
     ],
     difficulty: 3,
@@ -225,14 +250,14 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 11. COMBINAISONS
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'combinaison',
     latexPattern: '\\binom{{{VAR:n}}}{{{VAR:p}}}',
     description: 'Combinaison de p éléments parmi n',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'n', minValue: 3, maxValue: 8, description: 'Nombre total'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'p', minValue: 2, maxValue: 6, description: 'Nombre choisi'),
     ],
     difficulty: 4,
@@ -251,14 +276,14 @@ final List<OperationTemplate> allOperations = [
   ),
 
   // 12. PUISSANCES
-  OperationTemplate(
+  NumericalOperationTemplate(
     operationType: 'puissance',
     latexPattern: '{VAR:a}^{{{VAR:n}}}',
     description: 'a puissance n',
-    parameters: const [
-      OperationParameter(
+    parameters: [
+      NumericalOperationParameter(
           name: 'a', minValue: 2, maxValue: 10, description: 'Base'),
-      OperationParameter(
+      NumericalOperationParameter(
           name: 'n', minValue: 2, maxValue: 6, description: 'Exposant'),
     ],
     difficulty: 3,
@@ -267,7 +292,7 @@ final List<OperationTemplate> allOperations = [
 ];
 
 /// Générateur de quiz d'opérations mathématiques
-class OperationsQuizGenerator {
+class OperationsQuizGenerator extends BaseSkillsGenerator {
   /// Trouve tous les facteurs d'un nombre
   static List<int> _findFactors(int n) {
     final factors = <int>[];
@@ -303,6 +328,17 @@ class OperationsQuizGenerator {
     // Calculer les numérateurs pour que la somme donne targetResult
     final a = (targetResult * ppcm) ~/ b;
     final c = (targetResult * ppcm) ~/ d;
+
+    // Vérifier que le calcul est exact
+    final numerateur = a * d + c * b;
+    final denominateur = b * d;
+
+    // Si ce n'est pas exact, ajuster pour garantir un résultat entier
+    if (numerateur % denominateur != 0) {
+      // Ajuster c pour que la division soit exacte
+      final newC = (targetResult * denominateur - a * d) ~/ b;
+      return {'a': a, 'b': b, 'c': newC, 'd': d};
+    }
 
     return {'a': a, 'b': b, 'c': c, 'd': d};
   }
@@ -357,7 +393,7 @@ class OperationsQuizGenerator {
   /// Génère un quiz de 6 opérations avec résultats uniques
   static List<Map<String, dynamic>> generateQuiz() {
     final random = math.Random();
-    final selectedOperations = <OperationTemplate>[];
+    final selectedOperations = <NumericalOperationTemplate>[];
     final usedResults = <int>{};
 
     // Sélectionner 6 opérations différentes
@@ -453,7 +489,7 @@ class OperationsQuizGenerator {
     }
 
     final random = math.Random();
-    final selectedOperations = <OperationTemplate>[];
+    final selectedOperations = <NumericalOperationTemplate>[];
     final usedResults = <int>{};
 
     // Sélectionner 6 opérations du niveau demandé

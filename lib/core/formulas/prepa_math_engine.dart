@@ -1748,11 +1748,8 @@ Map<int, int> getFormulaCountByLevel() {
 
 /// Niveaux éducatifs disponibles dans l'application
 enum NiveauEducatif {
-  primaire('Primaire', 'Niveau primaire'),
-  college('Collège', 'Niveau collège'),
   lycee('Lycée', 'Niveau lycée'),
-  prepa('Prépa', 'Niveau prépa'),
-  superieur('Supérieur', 'Niveau supérieur');
+  prepa('Prépa', 'Niveau prépa');
 
   const NiveauEducatif(this.nom, this.description);
   final String nom;
@@ -1761,13 +1758,7 @@ enum NiveauEducatif {
 
 /// Catégories de matières éducatives
 enum CategorieMatiere {
-  mathematiques('Mathématiques', 'Sciences mathématiques'),
-  francais('Français', 'Littérature et langue française'),
-  histoire('Histoire', 'Histoire et géographie'),
-  sciences('Sciences', 'Sciences naturelles et physiques'),
-  langues('Langues', 'Langues étrangères'),
-  economie('Économie', 'Sciences économiques'),
-  anglais('Anglais', 'Langue anglaise');
+  mathematiques('Mathématiques', 'Sciences mathématiques');
 
   const CategorieMatiere(this.nom, this.description);
   final String nom;
@@ -1776,13 +1767,10 @@ enum CategorieMatiere {
 
 /// Types de jeux disponibles dans l'application
 enum TypeDeJeu {
-  correspondanceVisAVis('Correspondance vis-à-vis', 'Jeu de correspondance'),
-  ordreChronologique('Ordre chronologique', 'Jeu de séquence temporelle'),
-  combinaisonsMatematiques('Combinaisons mathématiques', 'Jeu de combinaisons'),
-  formulairesLatex('Formulaires LaTeX', 'Jeu de formules mathématiques'),
-  figuresDeStyle('Figures de Style', 'Jeu de littérature'),
+  habileteSeries('Habileté Séries', 'Jeu de formules mathématiques de séries'),
   habileteNumerique('Habileté Numérique', 'Jeu d\'opérations mathématiques'),
-  habileteFractions('Habileté Fractions', 'Jeu d\'opérations sur les fractions');
+  habileteFractions(
+      'Habileté Fractions', 'Jeu d\'opérations sur les fractions');
 
   const TypeDeJeu(this.nom, this.description);
   final String nom;
@@ -1938,7 +1926,7 @@ class PrepaMathFormulaManager {
       description: 'Formules mathématiques unifiées pour la prépa',
       niveau: NiveauEducatif.prepa,
       categorie: CategorieMatiere.mathematiques,
-      typeDeJeu: TypeDeJeu.formulairesLatex,
+      typeDeJeu: TypeDeJeu.habileteSeries,
       tags: ['calcul', 'prépa', 'unifié'],
     );
   }
