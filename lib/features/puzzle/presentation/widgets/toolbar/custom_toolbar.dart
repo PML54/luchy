@@ -57,6 +57,7 @@ import 'package:luchy/features/puzzle/presentation/controllers/image_controller.
 // Feature imports
 import 'package:luchy/features/puzzle/presentation/screens/binome_formules_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/figures_style_screen.dart';
+import 'package:luchy/features/puzzle/presentation/screens/fraction_skills_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/numerical_skills_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/puzzle_game_screen.dart';
 import 'package:luchy/l10n/app_localizations.dart';
@@ -330,6 +331,8 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
         return 4; // Type spécial pour formulaires LaTeX
       case TypeDeJeu.habileteNumerique:
         return 5; // Type spécial pour habileté numérique
+      case TypeDeJeu.habileteFractions:
+        return 6; // Type spécial pour habileté fractions
       default:
         return 2;
     }
@@ -460,6 +463,13 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const NumericalSkillsScreen(),
+        ),
+      );
+    } else if (questionnaire.typeDeJeu == TypeDeJeu.habileteFractions) {
+      // Si c'est habileté fractions, naviguer vers l'écran dédié
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const FractionSkillsScreen(),
         ),
       );
     } else {

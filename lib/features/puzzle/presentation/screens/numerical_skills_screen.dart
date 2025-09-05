@@ -80,6 +80,7 @@ class _NumericalSkillsScreenState extends ConsumerState<NumericalSkillsScreen> {
       _quizData = OperationsQuizGenerator.generateQuiz();
       _itemCount = _quizData.length;
       _initializePuzzle();
+      _startTime = DateTime.now(); // Réinitialiser le temps de départ
     });
   }
 

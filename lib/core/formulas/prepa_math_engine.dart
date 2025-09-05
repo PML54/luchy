@@ -1781,7 +1781,8 @@ enum TypeDeJeu {
   combinaisonsMatematiques('Combinaisons mathématiques', 'Jeu de combinaisons'),
   formulairesLatex('Formulaires LaTeX', 'Jeu de formules mathématiques'),
   figuresDeStyle('Figures de Style', 'Jeu de littérature'),
-  habileteNumerique('Habileté Numérique', 'Jeu d\'opérations mathématiques');
+  habileteNumerique('Habileté Numérique', 'Jeu d\'opérations mathématiques'),
+  habileteFractions('Habileté Fractions', 'Jeu d\'opérations sur les fractions');
 
   const TypeDeJeu(this.nom, this.description);
   final String nom;

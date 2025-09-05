@@ -754,6 +754,21 @@ class EducationalImageGenerator {
         colonneDroite: [], // Généré dynamiquement
       ),
 
+      // === HABILETÉ FRACTIONS - OPÉRATIONS SUR LES FRACTIONS ===
+      QuestionnairePreset(
+        id: 'habilete_fractions_operations',
+        nom: 'Habileté Fractions',
+        titre: 'HABILETÉ FRACTIONS - OPÉRATIONS',
+        description:
+            'Quiz d\'opérations sur les fractions (sommes, produits, quotients, différences, puissances, simplifications)',
+        niveau: NiveauEducatif.lycee,
+        categorie: CategorieMatiere.mathematiques,
+        typeDeJeu: TypeDeJeu.habileteFractions,
+        sousTheme: 'Opérations sur fractions',
+        colonneGauche: [], // Généré dynamiquement
+        colonneDroite: [], // Généré dynamiquement
+      ),
+
       QuestionnairePreset(
         id: 'lycee_francais_figures_style',
         nom: 'Français',
