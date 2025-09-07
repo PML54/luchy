@@ -21,6 +21,10 @@
 /// - AppBar bleue avec boutons de validation et refresh
 ///
 /// HISTORIQUE RÉCENT:
+/// - 2025-01-27: NOUVEAU - Support niveaux de difficulté pour quizz
+/// - Sélecteur de difficulté dans AppBar avec bouton réglages
+/// - Indicateur niveau actuel dans titre
+/// - Régénération automatique questions selon niveau
 /// - 2025-01-27: Refonte complète de l'interface pour correspondre au quiz formules
 /// - Adaptation de la structure GridView 2 colonnes
 /// - Intégration du système de validation identique
@@ -31,19 +35,22 @@
 /// - Structure identique au quiz formules pour cohérence
 /// - Gestion des opérations complexes (fractions, combinaisons)
 /// - Validation des résultats entiers
+/// - Niveaux: Facile (4 questions), Moyen (6), Difficile (8)
 ///
 /// 🚀 PROCHAINES ÉTAPES:
 /// - Intégrer avec le système de progression SQLite
 /// - Ajouter animations de réussite
 /// - Optimiser l'affichage des opérations complexes
+/// - Ajouter statistiques par niveau
 ///
 /// 🔗 FICHIERS LIÉS:
 /// - lib/core/operations/numerical_skills_engine.dart: Moteur d'opérations
 /// - lib/features/puzzle/presentation/screens/binome_formules_screen.dart: Structure de référence
+/// - lib/features/puzzle/presentation/widgets/quiz_difficulty_selector.dart: Sélecteur difficulté
 /// - lib/core/database/: Système de persistance
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐ (4/5 étoiles)
-/// 📅 Dernière modification: 2025-01-27
+/// 📅 Dernière modification: 2025-01-27 22:30
 /// </cursor>
 
 import 'package:flutter/material.dart';
@@ -52,6 +59,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:luchy/core/operations/numerical_skills_engine.dart';
 import 'package:luchy/features/puzzle/domain/providers/game_providers.dart';
 import 'package:luchy/features/puzzle/presentation/controllers/image_controller.dart';
+import 'package:luchy/features/puzzle/presentation/widgets/quiz_difficulty_selector.dart';
 
 class NumericalSkillsScreen extends ConsumerStatefulWidget {
   const NumericalSkillsScreen({super.key});
@@ -76,8 +84,11 @@ class _NumericalSkillsScreenState extends ConsumerState<NumericalSkillsScreen> {
   }
 
   void _generateNewQuiz() {
+    final gameSettings = ref.read(gameSettingsProvider);
+    final difficultyLevel = gameSettings.quizDifficultyLevel;
+
     setState(() {
-      _quizData = OperationsQuizGenerator.generateQuiz();
+      _quizData = OperationsQuizGenerator.generateAdaptiveQuiz(difficultyLevel);
       _itemCount = _quizData.length;
       _initializePuzzle();
       _startTime = DateTime.now(); // Réinitialiser le temps de départ
@@ -290,12 +301,17 @@ class _NumericalSkillsScreenState extends ConsumerState<NumericalSkillsScreen> {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: _quitToNormalPuzzle,
           ),
-          title: const Text(
-            'Habileté Numérique',
-            style: TextStyle(color: Colors.white),
+          title: CurrentDifficultyIndicator(
+            showIcon: true,
+            showDescription: false,
           ),
           iconTheme: const IconThemeData(color: Colors.white),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.tune, color: Colors.white),
+              onPressed: () => _showDifficultySelector(context),
+              tooltip: 'Changer le niveau de difficulté',
+            ),
             IconButton(
               icon: const Icon(Icons.thumb_up, color: Colors.white),
               onPressed: () {
@@ -459,6 +475,32 @@ class _NumericalSkillsScreenState extends ConsumerState<NumericalSkillsScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showDifficultySelector(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Niveau de difficulté'),
+        content: const QuizDifficultySelector(
+          showTitle: false,
+          cardHeight: 100,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fermer'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _generateNewQuiz(); // Régénérer avec le nouveau niveau
+            },
+            child: const Text('Appliquer'),
+          ),
+        ],
       ),
     );
   }

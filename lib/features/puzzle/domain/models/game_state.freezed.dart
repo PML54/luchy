@@ -20,7 +20,10 @@ mixin _$GameSettings {
   int get difficultyRows => throw _privateConstructorUsedError;
   bool get useCustomGridSize => throw _privateConstructorUsedError;
   bool get hasSeenDocumentation => throw _privateConstructorUsedError;
-  int get puzzleType => throw _privateConstructorUsedError;
+  int get puzzleType =>
+      throw _privateConstructorUsedError; // 1=classique, 2=éducatif (colonnes 1-2), 3=combinaisons
+  NiveauDifficulte get quizDifficultyLevel =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -40,7 +43,8 @@ abstract class $GameSettingsCopyWith<$Res> {
       int difficultyRows,
       bool useCustomGridSize,
       bool hasSeenDocumentation,
-      int puzzleType});
+      int puzzleType,
+      NiveauDifficulte quizDifficultyLevel});
 }
 
 /// @nodoc
@@ -63,6 +67,7 @@ class _$GameSettingsCopyWithImpl<$Res, $Val extends GameSettings>
     Object? useCustomGridSize = null,
     Object? hasSeenDocumentation = null,
     Object? puzzleType = null,
+    Object? quizDifficultyLevel = null,
   }) {
     return _then(_value.copyWith(
       difficultyCols: null == difficultyCols
@@ -85,6 +90,10 @@ class _$GameSettingsCopyWithImpl<$Res, $Val extends GameSettings>
           ? _value.puzzleType
           : puzzleType // ignore: cast_nullable_to_non_nullable
               as int,
+      quizDifficultyLevel: null == quizDifficultyLevel
+          ? _value.quizDifficultyLevel
+          : quizDifficultyLevel // ignore: cast_nullable_to_non_nullable
+              as NiveauDifficulte,
     ) as $Val);
   }
 }
@@ -102,7 +111,8 @@ abstract class _$$GameSettingsImplCopyWith<$Res>
       int difficultyRows,
       bool useCustomGridSize,
       bool hasSeenDocumentation,
-      int puzzleType});
+      int puzzleType,
+      NiveauDifficulte quizDifficultyLevel});
 }
 
 /// @nodoc
@@ -123,6 +133,7 @@ class __$$GameSettingsImplCopyWithImpl<$Res>
     Object? useCustomGridSize = null,
     Object? hasSeenDocumentation = null,
     Object? puzzleType = null,
+    Object? quizDifficultyLevel = null,
   }) {
     return _then(_$GameSettingsImpl(
       difficultyCols: null == difficultyCols
@@ -145,6 +156,10 @@ class __$$GameSettingsImplCopyWithImpl<$Res>
           ? _value.puzzleType
           : puzzleType // ignore: cast_nullable_to_non_nullable
               as int,
+      quizDifficultyLevel: null == quizDifficultyLevel
+          ? _value.quizDifficultyLevel
+          : quizDifficultyLevel // ignore: cast_nullable_to_non_nullable
+              as NiveauDifficulte,
     ));
   }
 }
@@ -157,7 +172,8 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
       required this.difficultyRows,
       required this.useCustomGridSize,
       required this.hasSeenDocumentation,
-      required this.puzzleType});
+      required this.puzzleType,
+      required this.quizDifficultyLevel});
 
   @override
   final int difficultyCols;
@@ -169,10 +185,13 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
   final bool hasSeenDocumentation;
   @override
   final int puzzleType;
+// 1=classique, 2=éducatif (colonnes 1-2), 3=combinaisons
+  @override
+  final NiveauDifficulte quizDifficultyLevel;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameSettings(difficultyCols: $difficultyCols, difficultyRows: $difficultyRows, useCustomGridSize: $useCustomGridSize, hasSeenDocumentation: $hasSeenDocumentation, puzzleType: $puzzleType)';
+    return 'GameSettings(difficultyCols: $difficultyCols, difficultyRows: $difficultyRows, useCustomGridSize: $useCustomGridSize, hasSeenDocumentation: $hasSeenDocumentation, puzzleType: $puzzleType, quizDifficultyLevel: $quizDifficultyLevel)';
   }
 
   @override
@@ -184,7 +203,8 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
       ..add(DiagnosticsProperty('difficultyRows', difficultyRows))
       ..add(DiagnosticsProperty('useCustomGridSize', useCustomGridSize))
       ..add(DiagnosticsProperty('hasSeenDocumentation', hasSeenDocumentation))
-      ..add(DiagnosticsProperty('puzzleType', puzzleType));
+      ..add(DiagnosticsProperty('puzzleType', puzzleType))
+      ..add(DiagnosticsProperty('quizDifficultyLevel', quizDifficultyLevel));
   }
 
   @override
@@ -201,12 +221,14 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
             (identical(other.hasSeenDocumentation, hasSeenDocumentation) ||
                 other.hasSeenDocumentation == hasSeenDocumentation) &&
             (identical(other.puzzleType, puzzleType) ||
-                other.puzzleType == puzzleType));
+                other.puzzleType == puzzleType) &&
+            (identical(other.quizDifficultyLevel, quizDifficultyLevel) ||
+                other.quizDifficultyLevel == quizDifficultyLevel));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, difficultyCols, difficultyRows,
-      useCustomGridSize, hasSeenDocumentation, puzzleType);
+      useCustomGridSize, hasSeenDocumentation, puzzleType, quizDifficultyLevel);
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -219,11 +241,13 @@ class _$GameSettingsImpl with DiagnosticableTreeMixin implements _GameSettings {
 
 abstract class _GameSettings implements GameSettings {
   const factory _GameSettings(
-      {required final int difficultyCols,
-      required final int difficultyRows,
-      required final bool useCustomGridSize,
-      required final bool hasSeenDocumentation,
-      required final int puzzleType}) = _$GameSettingsImpl;
+          {required final int difficultyCols,
+          required final int difficultyRows,
+          required final bool useCustomGridSize,
+          required final bool hasSeenDocumentation,
+          required final int puzzleType,
+          required final NiveauDifficulte quizDifficultyLevel}) =
+      _$GameSettingsImpl;
 
   @override
   int get difficultyCols;
@@ -234,7 +258,9 @@ abstract class _GameSettings implements GameSettings {
   @override
   bool get hasSeenDocumentation;
   @override
-  int get puzzleType;
+  int get puzzleType; // 1=classique, 2=éducatif (colonnes 1-2), 3=combinaisons
+  @override
+  NiveauDifficulte get quizDifficultyLevel;
 
   /// Create a copy of GameSettings
   /// with the given fields replaced by the non-null parameter values.

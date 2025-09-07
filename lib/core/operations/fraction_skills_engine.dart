@@ -11,14 +11,20 @@
 /// - FractionSkillsGenerator: Générateur de quiz fractions
 /// - Opérations: Sommes, produits, quotients, différences, puissances, simplifications
 /// - Validation: Vérification des résultats fractionnaires
+/// - Niveaux de difficulté: Support enum NiveauDifficulte
 ///
 /// ÉTAT ACTUEL:
 /// - Opérations de base sur les fractions implémentées
 /// - Génération de résultats fractionnaires irréductibles
 /// - Support des opérations complexes (puissances, simplifications)
 /// - Système de validation des résultats uniques
+/// - Support niveaux de difficulté (Facile, Moyen, Difficile)
 ///
 /// HISTORIQUE RÉCENT:
+/// - 2025-01-27: NOUVEAU - Support niveaux de difficulté pour quizz
+/// - Méthodes generateQuizByDifficultyLevel() et generateAdaptiveQuiz()
+/// - Adaptation nombre questions selon niveau (4-8 questions)
+/// - Filtrage opérations selon difficulté
 /// - 2025-01-27: Création du moteur d'opérations sur les fractions
 /// - Implémentation des opérations de base (+, -, ×, ÷)
 /// - Ajout des puissances et simplifications de fractions
@@ -28,21 +34,26 @@
 /// - Éviter les divisions par zéro
 /// - Résultats fractionnaires uniques pour éviter les doublons
 /// - Complexité des calculs de simplification
+/// - Niveaux: Facile (4 questions), Moyen (6), Difficile (8)
 ///
 /// 🚀 PROCHAINES ÉTAPES:
 /// - Intégration avec le système de progression
 /// - Ajout d'opérations plus complexes (racines de fractions)
 /// - Optimisation des algorithmes de génération
+/// - Ajouter statistiques par niveau
 ///
 /// 🔗 FICHIERS LIÉS:
 /// - lib/features/puzzle/presentation/screens/fraction_skills_screen.dart: Interface utilisateur
 /// - lib/core/operations/numerical_skills_engine.dart: Moteur de référence
+/// - lib/features/puzzle/domain/models/game_state.dart: NiveauDifficulte
 ///
 /// CRITICALITÉ: ⭐⭐⭐⭐ (4/5 étoiles)
-/// 📅 Dernière modification: 2025-01-27
+/// 📅 Dernière modification: 2025-01-27 22:30
 /// </cursor>
 
 import 'dart:math' as math;
+
+import 'package:luchy/features/puzzle/domain/models/game_state.dart';
 
 import 'base_skills_engine.dart';
 
@@ -376,7 +387,9 @@ class FractionSkillsGenerator extends BaseSkillsGenerator {
   }
 
   /// Génère des paramètres pour une opération de fractions
-  static Map<String, dynamic> _generateFractionParams(String operationType) {
+  static Map<String, dynamic> _generateFractionParams(String operationType,
+      [math.Random? random]) {
+    final rng = random ?? _random;
     switch (operationType) {
       case 'somme_fractions':
       case 'difference_fractions':
@@ -396,7 +409,7 @@ class FractionSkillsGenerator extends BaseSkillsGenerator {
 
       case 'puissance_fraction':
         final frac = _generateSimpleFraction();
-        final exponent = 2 + _random.nextInt(3); // 2 à 4
+        final exponent = 2 + rng.nextInt(3); // 2 à 4
         return {
           'frac': frac,
           'exponent': exponent,
@@ -407,8 +420,8 @@ class FractionSkillsGenerator extends BaseSkillsGenerator {
 
       case 'simplification_fraction':
         // Générer une fraction non simplifiée
-        final numerator = (2 + _random.nextInt(8)) * (2 + _random.nextInt(8));
-        final denominator = (2 + _random.nextInt(8)) * (2 + _random.nextInt(8));
+        final numerator = (2 + rng.nextInt(8)) * (2 + rng.nextInt(8));
+        final denominator = (2 + rng.nextInt(8)) * (2 + rng.nextInt(8));
         final frac = Fraction(numerator, denominator);
         return {
           'frac': frac,
@@ -587,6 +600,107 @@ class FractionSkillsGenerator extends BaseSkillsGenerator {
         'result': result,
         'resultLatex': result.toLatex(),
         'params': params,
+      });
+    }
+
+    return questions;
+  }
+
+  /// Génère un quiz adapté au niveau de difficulté
+  static List<Map<String, dynamic>> generateAdaptiveQuiz(
+      NiveauDifficulte niveau) {
+    final random = math.Random();
+    final questions = <Map<String, dynamic>>[];
+
+    // Sélectionner les opérations selon le niveau éducatif
+    List<FractionOperation> operations;
+    int nombreQuestions;
+
+    // Sélectionner les opérations selon le niveau
+    switch (niveau) {
+      case NiveauDifficulte.facile:
+        operations =
+            allFractionOperations.where((op) => op.difficulty <= 2).toList();
+        nombreQuestions = 4; // Moins de questions pour commencer
+        break;
+      case NiveauDifficulte.moyen:
+        operations = allFractionOperations
+            .where((op) => op.difficulty >= 2 && op.difficulty <= 4)
+            .toList();
+        nombreQuestions = 6; // Nombre standard
+        break;
+      case NiveauDifficulte.difficile:
+        operations =
+            allFractionOperations.where((op) => op.difficulty >= 3).toList();
+        nombreQuestions = 6; // Maximum 6 questions
+        break;
+    }
+
+    if (operations.isEmpty) {
+      operations = allFractionOperations; // Fallback
+    }
+
+    final selectedOperations = <FractionOperation>[];
+    final usedResults = <String>{}; // Utiliser String pour les fractions
+
+    // Sélectionner les opérations
+    while (selectedOperations.length < nombreQuestions &&
+        selectedOperations.length < operations.length) {
+      final operation = operations[random.nextInt(operations.length)];
+      if (!selectedOperations.contains(operation)) {
+        selectedOperations.add(operation);
+      }
+    }
+
+    // Compléter si nécessaire avec des opérations aléatoires
+    while (selectedOperations.length < nombreQuestions) {
+      final operation =
+          allFractionOperations[random.nextInt(allFractionOperations.length)];
+      if (!selectedOperations.contains(operation)) {
+        selectedOperations.add(operation);
+      }
+    }
+
+    // Générer les questions
+    for (final operation in selectedOperations) {
+      Map<String, dynamic> params = {};
+      Fraction result;
+      int attempts = 0;
+      const maxAttempts = 50;
+
+      do {
+        params = _generateFractionParams(operation.operationType, random);
+        result = operation.calculateResult(params);
+        attempts++;
+      } while (
+          usedResults.contains(result.toString()) && attempts < maxAttempts);
+
+      if (attempts >= maxAttempts) {
+        // Si on n'arrive pas à générer un résultat unique, on continue quand même
+        usedResults.add(result.toString());
+      } else {
+        usedResults.add(result.toString());
+      }
+
+      // Générer LaTeX
+      String latex = operation.latexPattern;
+      for (final entry in params.entries) {
+        String value;
+        if (entry.value is Fraction) {
+          value = (entry.value as Fraction).toLatex();
+        } else {
+          value = entry.value.toString();
+        }
+        latex = latex.replaceAll('{VAR:${entry.key}}', value);
+      }
+
+      questions.add({
+        'operation': operation,
+        'latex': latex,
+        'result': result,
+        'resultLatex': result.toLatex(),
+        'params': params,
+        'difficulty': niveau.nom, // Ajouter le niveau pour l'affichage
       });
     }
 

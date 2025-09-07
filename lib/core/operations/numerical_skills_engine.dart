@@ -1,4 +1,63 @@
+/// <cursor>
+///
+/// MOTEUR D'OPÉRATIONS NUMÉRIQUES
+///
+/// Générateur d'opérations mathématiques de base pour les quiz éducatifs.
+/// Crée des opérations variées avec résultats entiers pour l'apprentissage.
+///
+/// COMPOSANTS PRINCIPAUX:
+/// - NumericalOperationTemplate: Structure des opérations
+/// - OperationsQuizGenerator: Générateur de quiz
+/// - Types d'opérations: Carrés, racines, fractions, combinaisons, etc.
+/// - Validation: Système de validation des résultats
+/// - Niveaux de difficulté: Support enum NiveauDifficulte
+///
+/// ÉTAT ACTUEL:
+/// - 15+ types d'opérations mathématiques
+/// - Génération aléatoire avec paramètres configurables
+/// - Support LaTeX pour affichage des opérations
+/// - Système de difficulté intégré (1-5)
+/// - Support niveaux de difficulté (Facile, Moyen, Difficile)
+///
+/// HISTORIQUE RÉCENT:
+/// - 2025-01-27: RÉVOLUTION - Support 14 niveaux éducatifs français
+/// - Méthode generateQuizByNiveauEducatif() avec adaptation par cycle
+/// - Primaire: opérations de base (1-200), 4 questions
+/// - Collège: opérations moyennes (1-100), 6 questions
+/// - Lycée: opérations avancées (1-500), 6 questions
+/// - Supérieur: toutes opérations (1-1000), 8 questions
+/// - Adaptation automatique des plages de nombres par niveau
+/// - 2025-01-27: NOUVEAU - Support niveaux de difficulté pour quizz
+/// - 2025-01-27: Refonte complète de l'architecture
+/// - Ajout de nouveaux types d'opérations
+/// - Amélioration du système de génération
+/// - Intégration avec l'interface utilisateur
+///
+/// 🔧 POINTS D'ATTENTION:
+/// - Gestion des débordements numériques
+/// - Validation des résultats uniques
+/// - Performance avec grandes quantités d'opérations
+/// - Cohérence des paramètres LaTeX
+/// - Adaptation fine par niveau éducatif (CP à Bac+2)
+///
+/// 🚀 PROCHAINES ÉTAPES:
+/// - Implémenter système d'estimation automatique
+/// - Ajouter plus de types d'opérations par niveau
+/// - Optimiser les performances
+/// - Ajouter statistiques par niveau éducatif
+///
+/// 🔗 FICHIERS LIÉS:
+/// - lib/features/puzzle/presentation/screens/numerical_skills_screen.dart: Interface
+/// - lib/core/operations/base_skills_engine.dart: Classe de base
+/// - lib/features/puzzle/domain/models/game_state.dart: NiveauEducatif
+///
+/// CRITICALITÉ: ⭐⭐⭐⭐ (4/5 étoiles)
+/// 📅 Dernière modification: 2025-01-27 23:15
+/// </cursor>
+
 import 'dart:math' as math;
+
+import 'package:luchy/features/puzzle/domain/models/game_state.dart';
 
 import 'base_skills_engine.dart';
 
@@ -390,15 +449,31 @@ class OperationsQuizGenerator extends BaseSkillsGenerator {
     return {'a': a, 'b': b, 'c': c, 'd': d};
   }
 
-  /// Génère un quiz de 6 opérations avec résultats uniques
+  /// Génère un quiz de 6 opérations avec résultats entiers uniquement
   static List<Map<String, dynamic>> generateQuiz() {
+    return generateIntegerQuiz(6);
+  }
+
+  /// Génère un quiz d'opérations entières uniquement
+  static List<Map<String, dynamic>> generateIntegerQuiz(int numberOfQuestions) {
     final random = math.Random();
     final selectedOperations = <NumericalOperationTemplate>[];
     final usedResults = <int>{};
 
-    // Sélectionner 6 opérations différentes
-    while (selectedOperations.length < 6) {
-      final operation = allOperations[random.nextInt(allOperations.length)];
+    // Filtrer les opérations pour ne garder que celles donnant des résultats entiers
+    final integerOperations = allOperations
+        .where((op) =>
+            op.operationType != 'produit_fractions' &&
+            op.operationType != 'somme_fractions' &&
+            op.operationType != 'fraction' &&
+            op.operationType != 'quotient_fractions' &&
+            op.operationType != 'difference_fractions')
+        .toList();
+
+    // Sélectionner les opérations différentes
+    while (selectedOperations.length < numberOfQuestions) {
+      final operation =
+          integerOperations[random.nextInt(integerOperations.length)];
       if (!selectedOperations
           .any((op) => op.operationType == operation.operationType)) {
         selectedOperations.add(operation);
@@ -579,6 +654,121 @@ class OperationsQuizGenerator extends BaseSkillsGenerator {
         'latex': latex,
         'result': result,
         'params': params,
+      });
+    }
+
+    return questions;
+  }
+
+  /// Génère un quiz adapté au niveau de difficulté
+  static List<Map<String, dynamic>> generateAdaptiveQuiz(
+      NiveauDifficulte niveau) {
+    final random = math.Random();
+    final questions = <Map<String, dynamic>>[];
+
+    // Filtrer les opérations pour ne garder que celles donnant des résultats entiers
+    final integerOperations = allOperations
+        .where((op) =>
+            op.operationType != 'produit_fractions' &&
+            op.operationType != 'somme_fractions' &&
+            op.operationType != 'fraction' &&
+            op.operationType != 'quotient_fractions' &&
+            op.operationType != 'difference_fractions')
+        .toList();
+
+    // Sélectionner les opérations selon le niveau éducatif
+    List<NumericalOperationTemplate> operations;
+    int nombreQuestions;
+
+    // Sélectionner les opérations selon le niveau
+    switch (niveau) {
+      case NiveauDifficulte.facile:
+        operations =
+            integerOperations.where((op) => op.difficulty <= 2).toList();
+        nombreQuestions = 4; // Moins de questions pour commencer
+        break;
+      case NiveauDifficulte.moyen:
+        operations = integerOperations
+            .where((op) => op.difficulty >= 2 && op.difficulty <= 4)
+            .toList();
+        nombreQuestions = 6; // Nombre standard
+        break;
+      case NiveauDifficulte.difficile:
+        operations =
+            integerOperations.where((op) => op.difficulty >= 3).toList();
+        nombreQuestions = 6; // Maximum 6 questions
+        break;
+    }
+
+    if (operations.isEmpty) {
+      operations = integerOperations; // Fallback sur les opérations entières
+    }
+
+    final selectedOperations = <NumericalOperationTemplate>[];
+    final usedResults = <int>{};
+
+    // Sélectionner les opérations
+    while (selectedOperations.length < nombreQuestions &&
+        selectedOperations.length < operations.length) {
+      final operation = operations[random.nextInt(operations.length)];
+      if (!selectedOperations
+          .any((op) => op.operationType == operation.operationType)) {
+        selectedOperations.add(operation);
+      }
+    }
+
+    // Compléter si nécessaire
+    while (selectedOperations.length < nombreQuestions) {
+      final operation = allOperations[random.nextInt(allOperations.length)];
+      if (!selectedOperations
+          .any((op) => op.operationType == operation.operationType)) {
+        selectedOperations.add(operation);
+      }
+    }
+
+    // Générer les questions
+    for (final operation in selectedOperations) {
+      Map<String, int> params = {};
+      int result;
+      int attempts = 0;
+      const maxAttempts = 50;
+
+      do {
+        params = {};
+
+        if (operation.operationType == 'racine') {
+          params = _generatePerfectSquare(random);
+        } else {
+          for (final param in operation.parameters) {
+            params[param.name] = param.minValue +
+                random.nextInt(param.maxValue - param.minValue + 1);
+          }
+        }
+
+        result = operation.calculateResult(params);
+        attempts++;
+      } while ((usedResults.contains(result) || result < 0) &&
+          attempts < maxAttempts);
+
+      if (attempts >= maxAttempts) {
+        // Si on n'arrive pas à générer un résultat unique, on continue quand même
+        usedResults.add(result);
+      } else {
+        usedResults.add(result);
+      }
+
+      // Générer LaTeX
+      String latex = operation.latexPattern;
+      for (final entry in params.entries) {
+        latex = latex.replaceAll('{VAR:${entry.key}}', entry.value.toString());
+      }
+
+      questions.add({
+        'operation': operation,
+        'latex': latex,
+        'result': result,
+        'params': params,
+        'difficulty': niveau.nom, // Ajouter le niveau pour l'affichage
       });
     }
 

@@ -140,6 +140,18 @@ class GameSettingsNotifier extends StateNotifier<GameSettings> {
     await _saveToDatabase();
   }
 
+  /// Définit le niveau de difficulté pour les quizz
+  Future<void> setQuizDifficultyLevel(NiveauDifficulte niveau) async {
+    state = state.copyWith(quizDifficultyLevel: niveau);
+    await _saveToDatabase();
+  }
+
+  /// Réinitialise le niveau de difficulté au niveau par défaut
+  Future<void> resetQuizDifficultyToDefault() async {
+    state = state.copyWith(quizDifficultyLevel: NiveauDifficulte.moyen);
+    await _saveToDatabase();
+  }
+
   Future<void> _saveToDatabase() async {
     // Sauvegarde désactivée - utilisation valeurs en mémoire uniquement
     return;

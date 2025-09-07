@@ -1825,6 +1825,32 @@ class QuestionnairePreset {
       tags: [sousTheme],
     );
   }
+
+  /// Crée une variante du questionnaire avec un niveau de difficulté différent
+  QuestionnairePreset withNiveauEducatif(NiveauEducatif newNiveau) {
+    return QuestionnairePreset(
+      id: '${id}_${newNiveau.name}',
+      nom: '$nom (${newNiveau.nom})',
+      description: '$description - Niveau ${newNiveau.nom.toLowerCase()}',
+      titre: '$titre - ${newNiveau.nom}',
+      sousTheme: sousTheme,
+      typeDeJeu: typeDeJeu,
+      niveau: newNiveau,
+      categorie: categorie,
+      nombreQuestions: nombreQuestions,
+      dureeLimite: dureeLimite,
+      colonneGauche: colonneGauche,
+      colonneDroite: colonneDroite,
+      ratioLargeurColonnes: ratioLargeurColonnes,
+    );
+  }
+
+  /// Génère toutes les variantes de difficulté pour ce questionnaire
+  List<QuestionnairePreset> generateAllDifficultyVariants() {
+    return NiveauEducatif.values
+        .map((niveau) => withNiveauEducatif(niveau))
+        .toList();
+  }
 }
 
 /// Configuration prédéfinie pour un contenu éducatif
