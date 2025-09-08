@@ -59,6 +59,7 @@ import 'package:luchy/features/puzzle/presentation/screens/binome_formules_scree
 import 'package:luchy/features/puzzle/presentation/screens/fraction_skills_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/numerical_skills_screen.dart';
 import 'package:luchy/features/puzzle/presentation/screens/puzzle_game_screen.dart';
+import 'package:luchy/features/puzzle/presentation/screens/trigonometry_skills_screen.dart';
 import 'package:luchy/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -330,8 +331,8 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
         return 5; // Type spécial pour habileté numérique
       case TypeDeJeu.habileteFractions:
         return 6; // Type spécial pour habileté fractions
-      default:
-        return 2;
+      case TypeDeJeu.habileteTrigonometrie:
+        return 7; // Type spécial pour habileté trigonométrie
     }
   }
 
@@ -396,8 +397,9 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
       case TypeDeJeu.habileteFractions:
         iconData = Icons.calculate_outlined;
         break;
-      default:
-        iconData = Icons.quiz;
+      case TypeDeJeu.habileteTrigonometrie:
+        iconData = Icons.trending_up;
+        break;
     }
 
     return Icon(
@@ -440,6 +442,13 @@ class _EducationalPresetDialogState extends State<EducationalPresetDialog> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const FractionSkillsScreen(),
+        ),
+      );
+    } else if (questionnaire.typeDeJeu == TypeDeJeu.habileteTrigonometrie) {
+      // Si c'est habileté trigonométrie, naviguer vers l'écran dédié
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const TrigonometrySkillsScreen(),
         ),
       );
     } else {
