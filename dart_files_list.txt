@@ -1,0 +1,84 @@
+# LISTE DES FICHIERS DART - PROJET LUCHY
+# Généré automatiquement le 2025-09-08
+# Total:       48 fichiers
+#
+# Pour mettre à jour cette liste:
+# ./update_dart_files_list.sh
+
+## FICHIERS PRINCIPAUX
+lib/main.dart
+
+## CONFIGURATION
+lib/app/config/app_config.dart
+lib/app/config/app_config.freezed.dart
+lib/app/config/index.dart
+
+## CORE - BASE DE DONNÉES
+lib/core/database/database_service.dart
+lib/core/database/models/database_models.dart
+lib/core/database/providers/database_providers.dart
+lib/core/database/repositories/game_settings_repository.dart
+
+## CORE - CONSTANTES
+lib/core/constants/image_list.dart
+
+## CORE - FORMULES
+lib/core/formulas/prepa_math_engine.dart
+
+## CORE - OPÉRATIONS
+lib/core/operations/base_skills_engine.dart
+lib/core/operations/fraction_skills_engine.dart
+lib/core/operations/numerical_skills_engine.dart
+lib/core/operations/trigonometry_skills_engine_new.dart
+
+## CORE - UTILITAIRES
+lib/core/utils/educational_image_generator.dart
+lib/core/utils/image_optimizer.dart
+lib/core/utils/latex_to_image_converter.dart
+lib/core/utils/profiler.dart
+lib/core/utils/smart_crop_algorithm.dart
+lib/core/utils/smart_crop_config.dart
+
+## CORE - WIDGETS
+lib/core/widgets/binomial_widget.dart
+
+## FEATURES - COMMON
+lib/features/common/domain/models/device_config.dart
+lib/features/common/domain/models/device_config.freezed.dart
+lib/features/common/domain/providers/device_config_provider.dart
+
+## FEATURES - PUZZLE DOMAIN
+lib/features/puzzle/domain/models/game_state.dart
+lib/features/puzzle/domain/models/game_state.freezed.dart
+lib/features/puzzle/domain/models/image_processing_data.dart
+lib/features/puzzle/domain/models/image_processing_data.freezed.dart
+lib/features/puzzle/domain/providers/game_providers.dart
+
+## FEATURES - PUZZLE PRESENTATION - CONTROLLERS
+lib/features/puzzle/presentation/controllers/image_controller.dart
+
+## FEATURES - PUZZLE PRESENTATION - SCREENS
+lib/features/puzzle/presentation/screens/binome_formules_screen.dart
+lib/features/puzzle/presentation/screens/figures_style_screen.dart
+lib/features/puzzle/presentation/screens/fraction_skills_screen.dart
+lib/features/puzzle/presentation/screens/help_screen.dart
+lib/features/puzzle/presentation/screens/numerical_skills_screen.dart
+lib/features/puzzle/presentation/screens/puzzle_game_screen.dart
+
+## FEATURES - PUZZLE PRESENTATION - WIDGETS
+lib/features/puzzle/presentation/widgets/board/puzzle_board.dart
+lib/features/puzzle/presentation/widgets/common_skills_widgets.dart
+lib/features/puzzle/presentation/widgets/dialogs/verification_results_dialog.dart
+lib/features/puzzle/presentation/widgets/image/image_preview.dart
+lib/features/puzzle/presentation/widgets/image/image_processing_report_widget.dart
+lib/features/puzzle/presentation/widgets/quiz_difficulty_selector.dart
+lib/features/puzzle/presentation/widgets/toolbar/custom_toolbar.dart
+lib/features/puzzle/presentation/widgets/toolbar/educational_appbar.dart
+
+## LOCALISATION
+lib/l10n/app_localizations_en.dart
+lib/l10n/app_localizations_fr.dart
+lib/l10n/app_localizations.dart
+
+## TESTS
+test/widget_test.dart

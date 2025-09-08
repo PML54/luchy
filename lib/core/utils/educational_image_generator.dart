@@ -634,21 +634,6 @@ class EducationalImageGenerator {
         colonneGauche: [], // Généré dynamiquement
         colonneDroite: [], // Généré dynamiquement
       ),
-
-      // === HABILETÉ TRIGONOMÉTRIE - CALCULS TRIGONOMÉTRIQUES ===
-      QuestionnairePreset(
-        id: 'habilete_trigonometrie_calculs',
-        nom: 'Habileté Trigonométrie',
-        titre: 'HABILETÉ TRIGONOMÉTRIE - CALCULS',
-        description:
-            'Quiz de calculs trigonométriques avec valeurs remarquables (sin, cos, tan)',
-        niveau: NiveauEducatif.lycee,
-        categorie: CategorieMatiere.mathematiques,
-        typeDeJeu: TypeDeJeu.habileteTrigonometrie,
-        sousTheme: 'Valeurs remarquables',
-        colonneGauche: [], // Généré dynamiquement
-        colonneDroite: [], // Généré dynamiquement
-      ),
     ];
   }
 

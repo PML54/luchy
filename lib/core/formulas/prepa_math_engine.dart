@@ -1770,9 +1770,7 @@ enum TypeDeJeu {
   habileteSeries('Habileté Séries', 'Jeu de formules mathématiques de séries'),
   habileteNumerique('Habileté Numérique', 'Jeu d\'opérations mathématiques'),
   habileteFractions(
-      'Habileté Fractions', 'Jeu d\'opérations sur les fractions'),
-  habileteTrigonometrie('Habileté Trigonométrie',
-      'Jeu de calculs trigonométriques avec valeurs remarquables');
+      'Habileté Fractions', 'Jeu d\'opérations sur les fractions');
 
   const TypeDeJeu(this.nom, this.description);
   final String nom;
