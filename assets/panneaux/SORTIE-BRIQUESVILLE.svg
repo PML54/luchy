@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg10159"
+   sodipodi:docname="sortie-Briquesville.svg"
+   viewBox="0 0 701.40473 203.41417"
+   version="1.1"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   width="18.558001cm"
+   height="5.382cm"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title8296">Panneau de sortie de Briquesville</title>
+  <defs
+     id="defs24" />
+  <sodipodi:namedview
+     id="base"
+     fit-margin-left="0"
+     inkscape:zoom="0.35"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="907.14286"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     showgrid="false"
+     fit-margin-right="0"
+     showguides="true"
+     bordercolor="#666666"
+     inkscape:window-x="-8"
+     inkscape:guide-bbox="true"
+     fit-margin-bottom="0"
+     inkscape:window-width="1600"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     pagecolor="#ffffff"
+     inkscape:cy="415.71429"
+     inkscape:document-units="px"
+     inkscape:window-height="837"
+     fit-margin-top="0"
+     inkscape:pagecheckerboard="0"
+     units="cm"
+     width="18.558cm" />
+  <g
+     id="layer1"
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     transform="translate(-21.089,-43.259)">
+    <rect
+       id="rect10692"
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.0578;stroke-linecap:round"
+       ry="27.121"
+       height="202.34"
+       width="700.34003"
+       y="43.790001"
+       x="21.600014" />
+    <rect
+       id="rect10696"
+       style="fill:#000000;stroke:#000000;stroke-width:1.0123;stroke-linecap:round"
+       ry="25.283001"
+       height="188.63"
+       width="688.01001"
+       y="50.640007"
+       x="27.769997" />
+    <rect
+       id="rect10698"
+       style="fill:#ffffff"
+       ry="0"
+       height="140"
+       width="640"
+       y="74.960014"
+       x="51.769997" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:62.4998px;line-height:1.25;font-family:sans-serif;letter-spacing:6.92873px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.56249"
+       x="58.385334"
+       y="164.95808"
+       id="text1628"><tspan
+         sodipodi:role="line"
+         id="tspan1626"
+         x="58.385334"
+         y="164.95808"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';stroke-width:1.56249">BRIQUESVILLE</tspan></text>
+    <path
+       style="fill:none;stroke:#ff0000;stroke-width:18.365;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 61.025565,205.7874 682.61223,84.24407"
+       id="path1450" />
+  </g>
+  <metadata
+     id="metadata21">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>France</rdf:li>
+            <rdf:li>panneau</rdf:li>
+            <rdf:li>agglomération</rdf:li>
+            <rdf:li>ville</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:title>Panneau de sortie de Briquesville</dc:title>
+        <dc:date>2022-02-15</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>ComputerHotline</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

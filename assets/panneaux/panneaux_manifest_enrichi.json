@@ -1,0 +1,2818 @@
+[
+  {
+    "id": "B_GAMME-NORMALE",
+    "nom": "B gamme-normale",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B_GAMME-NORMALE.svg",
+    "description": "Dimensions d'un panneau de signalisation de prescription de gamme normale (France)",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B0",
+    "nom": "Circulation interdite",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B0.svg",
+    "description": "Panneau de signalisation routière B0 (France) : Circulation interdite à tout véhicule dans les deux sens.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B1",
+    "nom": "Sens interdit",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B1.svg",
+    "description": "Panneau de sens interdit (France)",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B1J",
+    "nom": "France road sign B1j",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B1J.svg",
+    "description": "Diagram of prohibitory road signs of France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B2A",
+    "nom": "Sens interdit à tout véhicule sauf cycles",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B2A.svg",
+    "description": "Panneau d'interdiction de tourner à gauche à la prochaine intersection (France)",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B2B",
+    "nom": "France road sign B2b",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B2B.svg",
+    "description": "Panneau B2b. Interdiction de tourner à droite à la prochaine intersection (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B2C",
+    "nom": "France road sign B2c",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B2C.svg",
+    "description": "Panneau B2c. Interdiction de faire demi-tour sur la route suivie jusqu’à la prochaine intersection (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B3",
+    "nom": "Interdiction de dépasser",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B3.svg",
+    "description": "Panneau B3. Interdiction de dépasser tous les véhicules à moteur autres que ceux à deux roues sans side-car (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B3A",
+    "nom": "Interdiction de dépasser pour PL",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B3A.svg",
+    "description": "Panneau de signalisation routière B3a (France) : Interdiction aux véhicules automobiles, véhicules articulés, trains doubles ou ensemble de véhicules, affectés au transport de marchandises dont le poids total autorisé en charge ou le poids total roulant autorisé est supérieur à 3,5 tonnes de dépasser tous les véhicules à moteur autres que ceux à deux roues sans side-car.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B4",
+    "nom": "Fin d’interdiction de dépasser",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B4.svg",
+    "description": "Passing without stopping prohibited road sign with the word \"customs\" in: \"DOUANE\" (French and Dutch) and \"ZOLL\" (German).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B5A",
+    "nom": "France road sign B5a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B5A.svg",
+    "description": "Panneau B5a. Arrêt au poste de gendarmerie (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B5B",
+    "nom": "Vitesse maximale conseillée",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B5B.svg",
+    "description": "Panneau B5b. Arrêt au poste de police (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B5C",
+    "nom": "France road sign B5c",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B5C.svg",
+    "description": "Panneau B5c. Arrêt au poste de péage (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B5C2",
+    "nom": "France road sign B5c2",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B5C2.svg",
+    "description": "Diagrams of prohibitory road signs of France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6A1",
+    "nom": "Interdiction de tourner à gauche",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6A1.svg",
+    "description": "Panneau B6a1. Stationnement interdit (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6A2",
+    "nom": "Interdiction de tourner à droite",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6A2.svg",
+    "description": "Panneau B6a2. Stationnement interdit du 1er au 15 du mois (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6A3",
+    "nom": "France road sign B6a3",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6A3.svg",
+    "description": "Panneau B6a3. Stationnement interdit du 16 à la fin du mois (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6B1",
+    "nom": "Arrêt interdit",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6B1.svg",
+    "description": "Entrée d'une zone à stationnement interdit(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6B2",
+    "nom": "France road sign B6b2",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6B2.svg",
+    "description": "Entrée d'une zone à stationnement unilatéral à alternance semi - mensuelle(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6B3-ANCIEN",
+    "nom": "France road sign B6b3-ancien",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6B3-ANCIEN.svg",
+    "description": "Entrée d'une zone à stationnement de durée limitée(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6B3",
+    "nom": "France road sign B6b3",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6B3.svg",
+    "description": "Diagrams of prohibitory road signs of France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6B4",
+    "nom": "France road sign B6b4",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6B4.svg",
+    "description": "Entrée d'une zone à stationnement payant(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6B5-ANCIEN",
+    "nom": "France road sign B6b5-ancien",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6B5-ANCIEN.svg",
+    "description": "Entrée d'une zone à stationnement unilatéral à alternance semi-mensuelle et à durée limitée(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6B5",
+    "nom": "Arrêt et stationnement interdits",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6B5.svg",
+    "description": "Diagrams of prohibitory road signs of France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B6D",
+    "nom": "Stationnement interdit",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B6D.svg",
+    "description": "Panneau B6d. Arrêt et stationnement interdits (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B7A",
+    "nom": "France road sign B7a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B7A.svg",
+    "description": "Panneau de signalisation routière B7a (France): Accès interdit aux véhicules à moteur à l’exception des cyclomoteurs.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B7B",
+    "nom": "Interdiction de stationner sur les jours impairs",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B7B.svg",
+    "description": "Panneau de signalisation routière B7b (France) : Accès interdit à tous les véhicules à moteur.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B8",
+    "nom": "Accès interdit aux piétons",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B8.svg",
+    "description": "Panneau de signalisation routière B8 (France) : Accès interdit aux véhicules affectés au transport de marchandises.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9A",
+    "nom": "France road sign B9a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9A.svg",
+    "description": "Panneau de signalisation routière B9a (France) : Accès interdit aux piétons.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9B",
+    "nom": "Accès interdit aux cycles",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9B.svg",
+    "description": "Panneau de signalisation routière B9b (France) : Accès interdit aux cycles.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9C",
+    "nom": "Accès interdit aux cyclomoteurs",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9C.svg",
+    "description": "Panneau de signalisation routière B9c (France): Accès interdit aux véhicules à traction animale.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9D",
+    "nom": "Accès interdit aux motocyclettes",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9D.svg",
+    "description": "Panneau de signalisation routière B9d (France): Accès interdit aux véhicules agricoles à moteur.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9E",
+    "nom": "Accès interdit aux véhicules à moteur",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9E.svg",
+    "description": "Panneau de signalisation routière B9e (France) : Accès interdit aux voitures à bras à l’exclusion de celles visées à l’article R. 412-34 du code de la route.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9F",
+    "nom": "France road sign B9f",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9F.svg",
+    "description": "Panneau de signalisation routière B9f (France) : Accès interdit aux véhicules de transport en commun de personnes.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9G",
+    "nom": "France road sign B9g",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9G.svg",
+    "description": "Panneau de signalisation routière B9g (France): Accès interdit aux cyclomoteurs.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9H",
+    "nom": "France road sign B9h",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9H.svg",
+    "description": "Panneau de signalisation routière B9h (France) : Accès interdit aux motocyclettes et motocyclettes légères, au sens de l’article R.311-1 du code de la route.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B9I",
+    "nom": "France road sign B9i",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B9I.svg",
+    "description": "Panneau de signalisation routière B9i (France) : Accès interdit aux véhicules tractant une caravane ou une remorque de plus de 250 kg, tel que le poids total roulant autorisé, véhicule et caravane ou remorque, ne dépasse pas 3,5 t.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B10A",
+    "nom": "France road sign B10a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B10A.svg",
+    "description": "Panneau de signalisation routière B10a (France) : Accès interdit aux véhicules, véhicules articulés, trains doubles ou ensemble de véhicules dont la longueur est supérieure au nombre indiqué.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B11",
+    "nom": "France road sign B11",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B11.svg",
+    "description": "Panneau de signalisation routière B11 (France) : Accès interdit aux véhicules dont la largeur, chargement compris, est supérieure au nombre indiqué.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B12",
+    "nom": "France road sign B12 2m",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B12.svg",
+    "description": "Panneau de signalisation routière B12 (France) : Accès interdit aux véhicules dont la hauteur, chargement compris, est supérieure au nombre indiqué : 2 mètres",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B12_2",
+    "nom": "France road sign B12",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B12_2.svg",
+    "description": "Panneau de signalisation routière B12 (France) : Accès interdit aux véhicules dont la hauteur, chargement compris, est supérieure au nombre indiqué.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B13",
+    "nom": "Vitesse maximale autorisée (générique)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B13.svg",
+    "description": "Panneau de signalisation routière B13 (France). Accès interdit aux véhicules, véhicules articulés, trains doubles ou ensemble de véhicules dont le poids total autorisé en charge ou le poids total roulant autorisé excède le nombre indiqué.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B13A",
+    "nom": "France road sign B13a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B13A.svg",
+    "description": "Panneau de signalisation français de prescription. B13a - Accès interdit aux véhicules pesant sur un essieu plus que le nombre indiqué.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14",
+    "nom": "France road sign B14 (10)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14.svg",
+    "description": "Panneau de limitation de vitesse à 10 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_2",
+    "nom": "France road sign B14 (100)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_2.svg",
+    "description": "Panneau de limitation de vitesse à 100 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_3",
+    "nom": "France road sign B14 (110)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_3.svg",
+    "description": "Panneau de limitation de vitesse à 110 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_4",
+    "nom": "France road sign B14 (130)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_4.svg",
+    "description": "Panneau de limitation de limitation de vitesse à 130km/h utilisé en France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_5",
+    "nom": "France road sign B14 (15)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_5.svg",
+    "description": "Panneau de limitation de vitesse à 15 km/h utilisé notamment dans certaines rues de Paris.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_6",
+    "nom": "France road sign B14 (20)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_6.svg",
+    "description": "Panneau de limitation de vitesse à 20 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_7",
+    "nom": "France road sign B14 (30)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_7.svg",
+    "description": "Panneau de limitation de vitesse à 30 km/h utilisé en France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_8",
+    "nom": "France road sign B14 (40)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_8.svg",
+    "description": "Panneau de limitation de vitesse à 40 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_9",
+    "nom": "France road sign B14 (45)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_9.svg",
+    "description": "Panneau de limitation de vitesse à 45 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_10",
+    "nom": "France road sign B14 (5)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_10.svg",
+    "description": "Panneau de limitation de vitesse à 5 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_11",
+    "nom": "France road sign B14 (50)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_11.svg",
+    "description": "Panneau de limitation de vitesse à 50 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_12",
+    "nom": "France road sign B14 (60)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_12.svg",
+    "description": "Panneau de limitation de vitesse à 60 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_13",
+    "nom": "France road sign B14 (70)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_13.svg",
+    "description": "Panneau de limitation de vitesse à 70 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_14",
+    "nom": "France road sign B14 (80)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_14.svg",
+    "description": "Panneau de limitation de vitesse à 80 km/h utilisé en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B14_15",
+    "nom": "France road sign B14 (90)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B14_15.svg",
+    "description": "Panneau de limitation de vitesse à 90km/h utilisé à France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B15",
+    "nom": "Fin de limitation de vitesse",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B15.svg",
+    "description": "Panneau de signalisation routière B15 (France): Cédez le passage à la circulation venant en sens inverse.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B16",
+    "nom": "France road sign B16",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B16.svg",
+    "description": "Panneau de signalisation routière B16 (France): Signaux sonores interdits.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B17",
+    "nom": "France road sign B17",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B17.svg",
+    "description": "Panneau de signalisation routière B17 (France): Interdiction aux véhicules de circuler sans maintenir entre eux un intervalle au moins égal au nombre indiqué.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B18A",
+    "nom": "France road sign B18a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B18A.svg",
+    "description": "Panneau de signalisation routière B18a (France): Accès interdit aux véhicules transportant des marchandises explosives ou facilement inflammables, de nature et en quantité définies par l'arrêté du 1er juin 2001 relatif au transport des marchandises dangereuses par route, et signalés comme tels.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B18B",
+    "nom": "France road sign B18b",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B18B.svg",
+    "description": "Panneau de signalisation routière B18b (France): Accès interdit aux véhicules transportant des marchandises susceptibles de polluer les eaux, de nature et en quantité définies par l'arrêté du 1er juin 2001 relatif au transport des marchandises dangereuses par route, et signalés comme tels.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B18C",
+    "nom": "France road sign B18c",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B18C.svg",
+    "description": "Panneau de signalisation routière B18c (France): Accès interdit aux véhicules transportant des marchandises dangereuses définies par l'arrêté du 1er juin 2001 relatif au transport des marchandises dangereuses par route, et signalés comme tels.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B19",
+    "nom": "France road sign B19",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B19.svg",
+    "description": "Panneau de signalisation routière B19 (France): Autres interdictions dont la nature est indiquée par une inscription sur le panneau.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B31",
+    "nom": "Fin d’obligation",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B31.svg",
+    "description": "Panneau de fin de toutes les interdictions précédemment signalées - B31 (France)",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B33",
+    "nom": "France road sign B33 (110)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B33.svg",
+    "description": "Panneau de signalisation routière B33 (France) : Fin de limitation de vitesse.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B33_2",
+    "nom": "France road sign B33 (30)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B33_2.svg",
+    "description": "Panneau de signalisation routière B33 (France) : Fin de limitation de vitesse.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B33_3",
+    "nom": "France road sign B33 (50)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B33_3.svg",
+    "description": "Panneau de signalisation routière B33 (France) : Fin de limitation de vitesse.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B33_4",
+    "nom": "France road sign B33 (70)",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B33_4.svg",
+    "description": "Panneau de signalisation routière B33 (France) : Fin de limitation de vitesse.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B34",
+    "nom": "France road sign B34",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B34.svg",
+    "description": "Panneau de signalisation routière B34 (France) : Fin d’interdiction de dépasser notifiée par le panneau B3.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B34A",
+    "nom": "France road sign B34a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B34A.svg",
+    "description": "Panneau de signalisation routière B34a (France) : Fin d’interdiction de dépasser notifiée par le panneau B3a.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B35",
+    "nom": "France road sign B35",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B35.svg",
+    "description": "Panneau de signalisation routière B35 (France) : Fin d’interdiction de l’usage de l’avertisseur sonore.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B39",
+    "nom": "France road sign B39",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B39.svg",
+    "description": "Panneau de signalisation routière B39 (France) : Fin d’interdiction dont la nature est indiquée sur le panneau.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B50A",
+    "nom": "France road sign B50a",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B50A.svg",
+    "description": "Sortie de zone à stationnement interdit(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B50B",
+    "nom": "France road sign B50b",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B50B.svg",
+    "description": "Sortie de zone à stationnement unilatéral à alternance semi-mensuelle(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B50C",
+    "nom": "France road sign B50c-ancien",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B50C.svg",
+    "description": "Sortie de zone à stationnement de durée limitée avec contrôle par disque(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B50C_2",
+    "nom": "France road sign B50c",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B50C_2.svg",
+    "description": "Diagrams of prohibitory road signs of France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B50D",
+    "nom": "France road sign B50d",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B50D.svg",
+    "description": "Sortie de zone à stationnement payant(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B50E",
+    "nom": "France road sign B50e-ancien",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B50E.svg",
+    "description": "Sortie de zone à stationnement unilatéral à alternance semi-mensuelle et à durée limitée avec contrôle par disque(France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B50E_2",
+    "nom": "France road sign B50e",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B50E_2.svg",
+    "description": "Diagrams of prohibitory road signs of France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "IMPLANTATION_PANNEAU_B_AGGLO",
+    "nom": "Implantation panneau B agglo",
+    "type": "Interdiction",
+    "image": "assets/panneaux/IMPLANTATION_PANNEAU_B_AGGLO.svg",
+    "description": "Caractéristiques d'implantation d'un panneau de signalisation de prescription en agglomération en France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "IMPLANTATION_PANNEAU_B_RC",
+    "nom": "Implantation panneau B RC",
+    "type": "Interdiction",
+    "image": "assets/panneaux/IMPLANTATION_PANNEAU_B_RC.svg",
+    "description": "Caractéristiques d'implantation d'un panneau de signalisation de prescription en rase campagne en France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "IMPLANTATION_PANNEAU_B_SUR-PORTIQUE",
+    "nom": "Implantation panneau B sur-portique",
+    "type": "Interdiction",
+    "image": "assets/panneaux/IMPLANTATION_PANNEAU_B_SUR-PORTIQUE.svg",
+    "description": "Caractéristiques d'implantation d'un panneau de signalisation de prescription sur un portique en France.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "K10B",
+    "nom": "K10b",
+    "type": "Interdiction",
+    "image": "assets/panneaux/K10B.svg",
+    "description": "Signal servant à régler manuellement la circulation - Arrêt (France)",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "L0006",
+    "nom": "L0006",
+    "type": "Interdiction",
+    "image": "assets/panneaux/L0006.svg",
+    "description": "panneau L0006 interdisant le stationnement devant un garage",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "LIMITE_130",
+    "nom": "Limite 130",
+    "type": "Interdiction",
+    "image": "assets/panneaux/LIMITE_130.svg",
+    "description": "Panneau de signalisation routière en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B13A_2",
+    "nom": "Signal B13A",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B13A_2.svg",
+    "description": "Panneau de signalisation routière B13a (France): Accès interdit aux véhicules pesant sur un essieu plus que le nombre indiqué.",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B12_3",
+    "nom": "B12",
+    "type": "Interdiction",
+    "image": "assets/panneaux/B12_3.svg",
+    "description": "B12. Accès interdit aux véhicules dont la hauteur, chargement compris, est supérieure au nombre indiqué. (France).",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "DIMENSIONS_D'UN_SYMBOLE_ROUTIER_EN_FRANCE",
+    "nom": "Dimensions d'un symbole routier en France",
+    "type": "Interdiction",
+    "image": "assets/panneaux/DIMENSIONS_D_UN_SYMBOLE_ROUTIER_EN_FRANCE.svg",
+    "description": "Dimensions d'un symbole routier en France",
+    "category": "Category:SVG prohibitory road signs of France"
+  },
+  {
+    "id": "B21",
+    "nom": "France road sign B21-1",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21.svg",
+    "description": "Panneau de signalisation routière B21.1 (France): Obligation de tourner à droite avant le panneau.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21_2",
+    "nom": "France road sign B21-2",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21_2.svg",
+    "description": "Panneau de signalisation routière B21.2 (France): Obligation de tourner à gauche avant le panneau.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21A1",
+    "nom": "France road sign B21a1",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21A1.svg",
+    "description": "Panneau de prescription d'obligation de contournement par la droite B21a1 (France)",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21A2",
+    "nom": "France road sign B21a2",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21A2.svg",
+    "description": "Panneau de signalisation routière B21.a2 (France): Contournement obligatoire par la gauche.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21B",
+    "nom": "Obligation de tourner à gauche",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21B.svg",
+    "description": "Panneau de signalisation routière B21b (France): Direction obligatoire à la prochaine intersection : tout droit.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21C1",
+    "nom": "France road sign B21c1",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21C1.svg",
+    "description": "Panneau de signalisation routière B21c1 (France): Direction obligatoire à la prochaine intersection : à droite.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21C2",
+    "nom": "France road sign B21c2",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21C2.svg",
+    "description": "Panneau de signalisation routière B21c2 (France) : Direction obligatoire à la prochaine intersection : à gauche.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21D1",
+    "nom": "France road sign B21d1",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21D1.svg",
+    "description": "Panneau de signalisation routière B21d1 (France) : Directions obligatoires à la prochaine intersection : tout droit ou à droite.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21D2",
+    "nom": "France road sign B21d2",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21D2.svg",
+    "description": "Panneau de signalisation routière B21d2 (France) : Directions obligatoires à la prochaine intersection : tout droit ou à gauche.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B21E",
+    "nom": "France road sign B21e",
+    "type": "Obligation",
+    "image": "assets/panneaux/B21E.svg",
+    "description": "Panneau de signalisation routière B21e (France) : Directions obligatoires à la prochaine intersection : à droite ou à gauche.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B22A",
+    "nom": "Sens giratoire obligatoire",
+    "type": "Obligation",
+    "image": "assets/panneaux/B22A.svg",
+    "description": "Panneau de signalisation routière B22a (France) : Piste ou bande obligatoire pour les cycles sans side-car ou remorque.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B22B",
+    "nom": "France road sign B22b",
+    "type": "Obligation",
+    "image": "assets/panneaux/B22B.svg",
+    "description": "Panneau de signalisation routière B22b (France): Chemin obligatoire pour piétons.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B22C",
+    "nom": "France road sign B22c",
+    "type": "Obligation",
+    "image": "assets/panneaux/B22C.svg",
+    "description": "Panneau de signalisation routière B22c (France) : Chemin obligatoire pour cavaliers.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B25",
+    "nom": "France road sign B25 (30)",
+    "type": "Obligation",
+    "image": "assets/panneaux/B25.svg",
+    "description": "Panneau de signalisation routière B25 (France): Vitesse minimale obligatoire.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B26",
+    "nom": "Chaînes à neige obligatoires",
+    "type": "Obligation",
+    "image": "assets/panneaux/B26.svg",
+    "description": "Panneau de signalisation routière B26 (France) : Chaînes à neige obligatoires sur au moins deux roues motrices.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B27A",
+    "nom": "France road sign B27a",
+    "type": "Obligation",
+    "image": "assets/panneaux/B27A.svg",
+    "description": "Panneau de signalisation routière B27a (France): Voie réservée aux véhicules des services réguliers de transport en commun.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B27B",
+    "nom": "France road sign B27b",
+    "type": "Obligation",
+    "image": "assets/panneaux/B27B.svg",
+    "description": "Panneau de signalisation routière B27b (France) : Voie réservée aux tramways.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B29",
+    "nom": "France road sign B29",
+    "type": "Obligation",
+    "image": "assets/panneaux/B29.svg",
+    "description": "Panneau de signalisation routière B29 (France) : Autres obligations dont la nature est mentionnée par une inscription sur le panneau.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B40",
+    "nom": "France road sign B40",
+    "type": "Obligation",
+    "image": "assets/panneaux/B40.svg",
+    "description": "Panneau de signalisation routière B40 (France) : Fin de piste ou bande obligatoire pour cycle.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B41",
+    "nom": "France road sign B41",
+    "type": "Obligation",
+    "image": "assets/panneaux/B41.svg",
+    "description": "Panneau de signalisation routière B41 (France) : Fin de chemin obligatoire pour piétons.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B42",
+    "nom": "France road sign B42",
+    "type": "Obligation",
+    "image": "assets/panneaux/B42.svg",
+    "description": "Road sign B42 (France): No horse riders past this point.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B43",
+    "nom": "France road sign B43 (30)",
+    "type": "Obligation",
+    "image": "assets/panneaux/B43.svg",
+    "description": "Panneau de signalisation routière B43 (France) : Fin de vitesse minimale obligatoire.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B44",
+    "nom": "France road sign B44",
+    "type": "Obligation",
+    "image": "assets/panneaux/B44.svg",
+    "description": "Panneau de signalisation routière B44 (France) : Fin d’obligation de l’usage des chaînes à neige.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B45A",
+    "nom": "France road sign B45a",
+    "type": "Obligation",
+    "image": "assets/panneaux/B45A.svg",
+    "description": "Panneau de signalisation routière B45a (France) : Fin de voie réservée aux véhicules des services réguliers de transport en commun.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B45B",
+    "nom": "France road sign B45b",
+    "type": "Obligation",
+    "image": "assets/panneaux/B45B.svg",
+    "description": "Panneau de signalisation routière B45b (France) : Fin de voie réservée aux tramways.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B49",
+    "nom": "France road sign B49",
+    "type": "Obligation",
+    "image": "assets/panneaux/B49.svg",
+    "description": "Panneau de signalisation routière B49 (France) : Fin d’obligation dont la nature est mentionnée par une inscription sur le panneau.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117",
+    "nom": "France road sign C117-B21b",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117.svg",
+    "description": "Panneau de signalisation français d’indication. C117-b21b  Présignalisation d'une section de route comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses. Ce panneau indique aux conducteurs de ces véhicules la ou les directions conseillées au prochain carrefour. Il est obligatoirement complété par un panonceau M11c indiquant la catégorie du tunnel.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117_2",
+    "nom": "France road sign C117-b21c1",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117_2.svg",
+    "description": "Panneau de signalisation français d’indication. C117-b21c1 Présignalisation d'une section de route comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses. Ce panneau indique aux conducteurs de ces véhicules la ou les directions conseillées au prochain\ncarrefour. Il est obligatoirement complété par un panonceau M11c indiquant la catégorie du tunnel.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117_3",
+    "nom": "France road sign C117-b21c2",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117_3.svg",
+    "description": "Panneau de signalisation français d’indication. C117-b21c2 Présignalisation d'une section de route comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses. Ce panneau indique aux conducteurs de ces véhicules la ou les directions conseillées au prochain carrefour. Il est obligatoirement complété par un panonceau M11c indiquant la catégorie du tunnel.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117_4",
+    "nom": "France road sign C117-b21d1",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117_4.svg",
+    "description": "Panneau de signalisation français d’indication. C117-b21d1 Présignalisation d'une section de route comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses. Ce panneau indique aux conducteurs de ces véhicules la ou les directions conseillées au prochain carrefour. Il est obligatoirement complété par un panonceau M11c indiquant la catégorie du tunnel.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117_5",
+    "nom": "France road sign C117-b21d2",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117_5.svg",
+    "description": "Panneau de signalisation français d’indication. C117-b21d2 Présignalisation d'une section de route comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses. Ce panneau indique aux conducteurs de ces véhicules la ou les directions conseillées au prochain carrefour. Il est obligatoirement complété par un panonceau M11c indiquant la catégorie du tunnel.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117_6",
+    "nom": "France road sign C117-b21e",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117_6.svg",
+    "description": "Panneau de signalisation français d’indication. C117-b21e Présignalisation d'une section de route comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses. Ce panneau indique aux conducteurs de ces véhicules la ou les directions conseillées au prochain carrefour. Il est obligatoirement complété par un panonceau M11c indiquant la catégorie du tunnel.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B29_2",
+    "nom": "Signal B29 VL",
+    "type": "Obligation",
+    "image": "assets/panneaux/B29_2.svg",
+    "description": "Diagrams of imperative road signs of France.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "B49_2",
+    "nom": "Signal B49 VL",
+    "type": "Obligation",
+    "image": "assets/panneaux/B49_2.svg",
+    "description": "Diagrams of imperative road signs of France.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117A",
+    "nom": "Signal C117a",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117A.svg",
+    "description": "Panneau de présignalisation d'une section comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117B",
+    "nom": "Signal C117b",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117B.svg",
+    "description": "Panneau de présignalisation d'une section comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "C117C",
+    "nom": "Signal C117c",
+    "type": "Obligation",
+    "image": "assets/panneaux/C117C.svg",
+    "description": "Panneau de présignalisation d'une section comportant un tunnel dont l'accès est interdit à certains véhicules transportant des marchandises dangereuses.",
+    "category": "Category:SVG mandatory road signs of France"
+  },
+  {
+    "id": "A_GAMME_NORMALE",
+    "nom": "A gamme normale",
+    "type": "Danger",
+    "image": "assets/panneaux/A_GAMME_NORMALE.svg",
+    "description": "Caractéristiques d'un panneau de signalisation de danger de gamme normale en France",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A1A",
+    "nom": "Virage dangereux à droite",
+    "type": "Danger",
+    "image": "assets/panneaux/A1A.svg",
+    "description": "Panneau de signalisation de virage à droite défini dans l'arrêté du 6 juin 1977 (France), actuellement en vigueur",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A1B",
+    "nom": "Virage dangereux à gauche",
+    "type": "Danger",
+    "image": "assets/panneaux/A1B.svg",
+    "description": "Panneau A1b de signalisation de virage à gauche défini dans l'arrêté du 6 juin 1977 (France) - Modèle actuellement en vigueur.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A1C",
+    "nom": "Succession de virages (1er à droite)",
+    "type": "Danger",
+    "image": "assets/panneaux/A1C.svg",
+    "description": "Panneau A1c d'annonbce de succession de virages (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A1D",
+    "nom": "France road sign A1d",
+    "type": "Danger",
+    "image": "assets/panneaux/A1D.svg",
+    "description": "Panneau d'annonce de succession de virages, le premier tournant à gauche (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A2A",
+    "nom": "Cassure de profil (dos d’âne)",
+    "type": "Danger",
+    "image": "assets/panneaux/A2A.svg",
+    "description": "Panneau A2a d'annonce de cassis ou de dos d'âne (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A2B",
+    "nom": "France road sign A2b",
+    "type": "Danger",
+    "image": "assets/panneaux/A2B.svg",
+    "description": "Panneau A2b d'annonce de raletisseur de type dos d'âne (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A3",
+    "nom": "Ralentisseur",
+    "type": "Danger",
+    "image": "assets/panneaux/A3.svg",
+    "description": "Panneau A3 d'annonce de chaussée rétrécie (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A3A",
+    "nom": "France road sign A3a",
+    "type": "Danger",
+    "image": "assets/panneaux/A3A.svg",
+    "description": "Panneau A3a d'annonce de chaussée rétrécie par la droite (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A3B",
+    "nom": "France road sign A3b",
+    "type": "Danger",
+    "image": "assets/panneaux/A3B.svg",
+    "description": "Panneau A3b d'annonce de chaussée rétrécie par la gauche (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A4",
+    "nom": "Rétrécissement de chaussée",
+    "type": "Danger",
+    "image": "assets/panneaux/A4.svg",
+    "description": "Panneau A4 de signalisation de chaussée glissante (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A6",
+    "nom": "France road sign A6",
+    "type": "Danger",
+    "image": "assets/panneaux/A6.svg",
+    "description": "Panneau A6 de signalisation d epont mobile (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A6_2",
+    "nom": "France Road Sign A6",
+    "type": "Danger",
+    "image": "assets/panneaux/A6_2.svg",
+    "description": "Panneau de danger A6 utilisé en France pour la signalisation avancée d'un pont mobile.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A7",
+    "nom": "Pont mobile",
+    "type": "Danger",
+    "image": "assets/panneaux/A7.svg",
+    "description": "Panneau A7 de signalisation de passage à niveau avec barrière (France) - modèle en vigueur",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A8",
+    "nom": "Feux tricolores",
+    "type": "Danger",
+    "image": "assets/panneaux/A8.svg",
+    "description": "Panneau A8 de signalisation de passage à niveau sans barrière (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A9",
+    "nom": "Descente dangereuse",
+    "type": "Danger",
+    "image": "assets/panneaux/A9.svg",
+    "description": "Panneau A9b de signalisation de passage de voies de tramway (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A13A",
+    "nom": "Chantier mobile",
+    "type": "Danger",
+    "image": "assets/panneaux/A13A.svg",
+    "description": "Panneau A13a signalant la traversée d'enfants (France) - modèle en vigueur",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A13B",
+    "nom": "Travaux",
+    "type": "Danger",
+    "image": "assets/panneaux/A13B.svg",
+    "description": "Panneau de signalisation de passage pour péton(s) (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A14",
+    "nom": "Passage pour piétons",
+    "type": "Danger",
+    "image": "assets/panneaux/A14.svg",
+    "description": "Panneau A14 signalant un danger (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A15A1",
+    "nom": "France road sign A15a1",
+    "type": "Danger",
+    "image": "assets/panneaux/A15A1.svg",
+    "description": "Panneau A15a1 signalant le passage d'animaux domestiques (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A15A2",
+    "nom": "France road sign A15a2",
+    "type": "Danger",
+    "image": "assets/panneaux/A15A2.svg",
+    "description": "Panneau A15a2 signalant le passage d'animaux domestiques (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A15B",
+    "nom": "France road sign A15b",
+    "type": "Danger",
+    "image": "assets/panneaux/A15B.svg",
+    "description": "Panneau A15b signalant le passage d'animaux sauvages (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A15C",
+    "nom": "France road sign A15c",
+    "type": "Danger",
+    "image": "assets/panneaux/A15C.svg",
+    "description": "Road sign A15c in France (1.26 in Belarus)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A16",
+    "nom": "France road sign A16",
+    "type": "Danger",
+    "image": "assets/panneaux/A16.svg",
+    "description": "Panneau A16 de signalisation de descente dangereuse (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A17",
+    "nom": "France road sign A17",
+    "type": "Danger",
+    "image": "assets/panneaux/A17.svg",
+    "description": "Panneau A17 de signalisation de feux tricolores (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A18",
+    "nom": "Circulation dans les deux sens",
+    "type": "Danger",
+    "image": "assets/panneaux/A18.svg",
+    "description": "Panneau A18 d’annonce de circulation dans les deux sens (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A19",
+    "nom": "France road sign A19",
+    "type": "Danger",
+    "image": "assets/panneaux/A19.svg",
+    "description": "Panneau A19 signalant un risque de chute de pierres (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A20",
+    "nom": "France road sign A20",
+    "type": "Danger",
+    "image": "assets/panneaux/A20.svg",
+    "description": "Panneau A20 de signalisation d edébouché sur un quai ou une berge (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A21",
+    "nom": "Passage à niveau sans barrières",
+    "type": "Danger",
+    "image": "assets/panneaux/A21.svg",
+    "description": "Panneau A21a de signalisation de débouché de cyclistes (France) - modèle périmé",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A21B",
+    "nom": "France road sign A21b",
+    "type": "Danger",
+    "image": "assets/panneaux/A21B.svg",
+    "description": "Panneau A21b de signalisation de débouché de cyclistes (France) - modèle périmé",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A23",
+    "nom": "Gravillons",
+    "type": "Danger",
+    "image": "assets/panneaux/A23.svg",
+    "description": "Panneau A23 de signalisation de traversée d'une aire aérienne (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "A24",
+    "nom": "Vent latéral",
+    "type": "Danger",
+    "image": "assets/panneaux/A24.svg",
+    "description": "Panneau A24 de signalisation de vent latéral (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AB1",
+    "nom": "Intersections prioritaires (priorité à droite)",
+    "type": "Danger",
+    "image": "assets/panneaux/AB1.svg",
+    "description": "Crossroads ahead with priority to the right.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AB2",
+    "nom": "Priorité ponctuelle",
+    "type": "Danger",
+    "image": "assets/panneaux/AB2.svg",
+    "description": "Crossroads ahead with priority.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AB25",
+    "nom": "France road sign AB25",
+    "type": "Danger",
+    "image": "assets/panneaux/AB25.svg",
+    "description": "Roundabout ahead.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AB25_2",
+    "nom": "France Road Sign AB25",
+    "type": "Danger",
+    "image": "assets/panneaux/AB25_2.svg",
+    "description": "Panneau de priorité AB25 utilisé en France pour la signalisation avancée des carrefours à sens giratoire avec priorité aux usagers circulant dans l'anneau.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK14",
+    "nom": "France road sign AK14",
+    "type": "Danger",
+    "image": "assets/panneaux/AK14.svg",
+    "description": "Panneau temporaire de signalisation de danger (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK17",
+    "nom": "France road sign AK17",
+    "type": "Danger",
+    "image": "assets/panneaux/AK17.svg",
+    "description": "Panneau temporaire d'annonce de signaux lumineux réglant la circulation (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK2",
+    "nom": "France road sign AK2",
+    "type": "Danger",
+    "image": "assets/panneaux/AK2.svg",
+    "description": "Panneau temporaire de signalisation d ecassis ou dos d'âne (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK22",
+    "nom": "France road sign AK22",
+    "type": "Danger",
+    "image": "assets/panneaux/AK22.svg",
+    "description": "Projection de gravillons",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK3",
+    "nom": "France road sign AK3",
+    "type": "Danger",
+    "image": "assets/panneaux/AK3.svg",
+    "description": "Panneau temporaire de signalisation de chaussée rétrécie (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK30",
+    "nom": "France road sign AK30",
+    "type": "Danger",
+    "image": "assets/panneaux/AK30.svg",
+    "description": "Panneau AK30",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK31",
+    "nom": "France road sign AK31",
+    "type": "Danger",
+    "image": "assets/panneaux/AK31.svg",
+    "description": "Panneau temporaire d'annonce d'un accident (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK32",
+    "nom": "France road sign AK32",
+    "type": "Danger",
+    "image": "assets/panneaux/AK32.svg",
+    "description": "Panneau AK32",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK3A",
+    "nom": "France road sign AK3a",
+    "type": "Danger",
+    "image": "assets/panneaux/AK3A.svg",
+    "description": "Panneau AK3a d'annonce temporaire de chaussée rétréciepar la droite (France).\nFichier dérivé de File:France road sign A3a.svg.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK3B",
+    "nom": "France road sign AK3b",
+    "type": "Danger",
+    "image": "assets/panneaux/AK3B.svg",
+    "description": "Panneau AK3a d'annonce temporaire de chaussée rétréciepar la droite (France).\nFichier dérivé de File:France road sign A3a.svg.",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK4",
+    "nom": "France road sign AK4",
+    "type": "Danger",
+    "image": "assets/panneaux/AK4.svg",
+    "description": "Panneau temporaire de signalisation de chaussée glissante (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "AK5",
+    "nom": "France road sign AK5",
+    "type": "Danger",
+    "image": "assets/panneaux/AK5.svg",
+    "description": "Panneau de signalisation temporaire de travaux (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "SIGNAL_AK30",
+    "nom": "Signal AK30",
+    "type": "Danger",
+    "image": "assets/panneaux/SIGNAL_AK30.svg",
+    "description": "Panneau temporaire de signalisation de bouchon (France)",
+    "category": "Category:SVG warning road signs of France"
+  },
+  {
+    "id": "ID1A",
+    "nom": "France road sign ID1a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID1A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID1B",
+    "nom": "France road sign ID1b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID1B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID1C",
+    "nom": "France road sign ID1c",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID1C.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID2",
+    "nom": "France road sign ID2",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID2.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID3",
+    "nom": "France road sign ID3",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID3.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID4",
+    "nom": "France road sign ID4",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID4.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID5A",
+    "nom": "France road sign ID5a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID5A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID5B",
+    "nom": "France road sign ID5b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID5B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID6",
+    "nom": "France road sign ID6",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID6.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID7",
+    "nom": "France road sign ID7",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID7.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID8",
+    "nom": "France road sign ID8",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID8.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID9",
+    "nom": "France road sign ID9",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID9.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID10",
+    "nom": "France road sign ID10",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID10.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID11",
+    "nom": "France road sign ID11",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID11.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID12A",
+    "nom": "France road sign ID12a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID12A.svg",
+    "description": "Diagrams of informatory road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID12B",
+    "nom": "France road sign ID12b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID12B.svg",
+    "description": "Diagrams of informatory road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID13A",
+    "nom": "France road sign ID13a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID13A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID13B",
+    "nom": "France road sign ID13b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID13B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID14A",
+    "nom": "France road sign ID14a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID14A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID14B",
+    "nom": "France road sign ID14b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID14B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID14C",
+    "nom": "France road sign ID14c",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID14C.svg",
+    "description": "Diagrams of informatory road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID14D",
+    "nom": "France road sign ID14d",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID14D.svg",
+    "description": "Idéogramme de signalisation routière française ID14d : Poste de recharge de véhicules électriques",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID14E",
+    "nom": "France road sign ID14e",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID14E.svg",
+    "description": "Idéogramme de signalisation routière française ID14e : Poste de recharge de véhicules électriques assurant également le ravitaillement en gaz de pétrole liquéfié (GPL)",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A",
+    "nom": "France road sign ID15a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A1",
+    "nom": "France road sign ID15a1",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A1.svg",
+    "description": "Idéogramme de signalisation routière française ID15a (Parc naturel régional d’Armorique), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A2",
+    "nom": "France road sign ID15a2",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A2.svg",
+    "description": "Idéogramme de signalisation routière française ID15a2 (Parc naturel régional des Ballons des Vosges), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A3",
+    "nom": "France road sign ID15a3",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A3.svg",
+    "description": "Idéogramme de signalisation routière française ID15a3 (Parc naturel régional de la Brenne), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A4",
+    "nom": "France road sign ID15a4",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A4.svg",
+    "description": "Idéogramme de signalisation routière française ID15a4 (Parc naturel régional de la Brière), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A5",
+    "nom": "France road sign ID15a5",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A5.svg",
+    "description": "Idéogramme de signalisation routière française ID15a5 (Parc Naturel Régional des Boucles de la Seine Normande), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A6",
+    "nom": "France road sign ID15a6",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A6.svg",
+    "description": "Idéogramme de signalisation routière française ID15a6 (Parc Naturel Régional de la Camargue), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A7",
+    "nom": "France road sign ID15a7",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A7.svg",
+    "description": "Idéogramme de signalisation routière française ID15a7 (Parc Naturel Régional de la Chartreuse), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A8",
+    "nom": "France road sign ID15a8",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A8.svg",
+    "description": "Idéogramme de signalisation routière française ID15a8 (Parc Naturel Régional de la Corse), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A9",
+    "nom": "France road sign ID15a9",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A9.svg",
+    "description": "Idéogramme de signalisation routière française ID15a9 (Parc Naturel Régional de la Forêt d’Orient), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A10",
+    "nom": "France road sign ID15a10",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A10.svg",
+    "description": "Idéogramme de signalisation routière française ID15a10 (Parc Naturel Régional des Grandes Causses), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A11",
+    "nom": "France road sign ID15a11",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A11.svg",
+    "description": "Idéogramme de signalisation routière française ID15a11 (Parc Naturel Régional de la Haute Vallée de Chevreuse), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A12",
+    "nom": "France road sign ID15a12",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A12.svg",
+    "description": "Idéogramme de signalisation routière française ID15a12 (Parc Naturel Régional du Haut Jura), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A13",
+    "nom": "France road sign ID15a13",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A13.svg",
+    "description": "Idéogramme de signalisation routière française ID15a13 (Parc Naturel Régional du Haut Languedoc), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A14",
+    "nom": "France road sign ID15a14",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A14.svg",
+    "description": "Idéogramme de signalisation routière française ID15a14 (Parc Naturel Régional des Landes de Gascogne), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A15",
+    "nom": "France road sign ID15a15",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A15.svg",
+    "description": "Idéogramme de signalisation routière française ID15a15 (Parc Naturel Régional du Livradois-Forez), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A16",
+    "nom": "France road sign ID15a16",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A16.svg",
+    "description": "Idéogramme de signalisation routière française ID15a16 (Parc Naturel Régional de la Lorraine), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A17",
+    "nom": "France road sign ID15a17",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A17.svg",
+    "description": "Idéogramme de signalisation routière française ID15a17 (Parc Naturel Régional du Lubéron), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A18",
+    "nom": "France road sign ID15a18",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A18.svg",
+    "description": "Idéogramme de signalisation routière française ID15a18 (Parc Naturel Régional du Marais du Cotentin et du Bessin), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A20",
+    "nom": "France road sign ID15a20",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A20.svg",
+    "description": "Idéogramme de signalisation routière française ID15a20 (Parc Naturel Régional de la Martinique), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A21",
+    "nom": "France road sign ID15a21",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A21.svg",
+    "description": "Idéogramme de signalisation routière française ID15a21 (Parc Naturel Régional de la Montagne de Reims), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A22",
+    "nom": "France road sign ID15a22",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A22.svg",
+    "description": "Idéogramme de signalisation routière française ID15a22 (Parc Naturel Régional du Morvan)",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A23",
+    "nom": "France road sign ID15a23",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A23.svg",
+    "description": "Idéogramme de signalisation routière française ID15a23 (Parc Naturel Régional de l’Avesnois), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A24",
+    "nom": "France road sign ID15a24",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A24.svg",
+    "description": "Idéogramme de signalisation routière française ID15a24 (Parc Naturel Régional de Normandie-Maine), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A25",
+    "nom": "France road sign ID15a25",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A25.svg",
+    "description": "Idéogramme de signalisation routière française ID15a25 (Parc Naturel Régional du Pilat), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A26",
+    "nom": "France road sign ID15a26",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A26.svg",
+    "description": "Idéogramme de signalisation routière française ID15a26 (Parc Naturel Régional du Queyras), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A27",
+    "nom": "France road sign ID15a27",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A27.svg",
+    "description": "Idéogramme de signalisation routière française ID15a27 (Parc Naturel Régional du Vercors), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A28",
+    "nom": "France road sign ID15a28",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A28.svg",
+    "description": "Idéogramme de signalisation routière française ID15a28 (Parc Naturel Régional du Vexin Français), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A29",
+    "nom": "France road sign ID15a29",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A29.svg",
+    "description": "Idéogramme de signalisation routière française ID15a29 (Parc Naturel Régional des Volcans d’Auvergne), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A30",
+    "nom": "France road sign ID15a30",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A30.svg",
+    "description": "Idéogramme de signalisation routière française ID15a30 (Parc Naturel Régional des Vosges du Nord), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A31",
+    "nom": "France road sign ID15a31",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A31.svg",
+    "description": "Idéogramme de signalisation routière française ID15a31 (Parc Naturel Régional du Massif des Bauges), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A32",
+    "nom": "France road sign ID15a32",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A32.svg",
+    "description": "Idéogramme de signalisation routière française ID15a32 (Parc Naturel Régional Loire - Anjou - Touraine), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A33",
+    "nom": "France road sign ID15a33",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A33.svg",
+    "description": "Idéogramme de signalisation routière française ID15a33 (Parc Naturel Régional du Verdon), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A34",
+    "nom": "France road sign ID15a34",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A34.svg",
+    "description": "Idéogramme de signalisation routière française ID15a34 (Parc Naturel Régional du Perche)",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A35",
+    "nom": "France road sign ID15a35",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A35.svg",
+    "description": "Idéogramme de signalisation routière française ID15a35 (Parc Naturel Régional du Périgord Limousin), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A36",
+    "nom": "France road sign ID15a36",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A36.svg",
+    "description": "Idéogramme de signalisation routière française ID15a36 (Parc Naturel Régional de Scarpe-Escaut), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A37",
+    "nom": "France road sign ID15a37",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A37.svg",
+    "description": "Idéogramme de signalisation routière française ID15a37 (Parc Naturel Régional du Gâtinais Français), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A38",
+    "nom": "France road sign ID15a38",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A38.svg",
+    "description": "Idéogramme de signalisation routière française ID15a38 (Parc Naturel Régional des Causses du Quercy), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A39",
+    "nom": "France road sign ID15a39",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A39.svg",
+    "description": "Idéogramme de signalisation routière française ID15a39 (Parc Naturel Régional des Monts d’Ardèche), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A40",
+    "nom": "France road sign ID15a40",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A40.svg",
+    "description": "Idéogramme de signalisation routière française ID15a40 (Parc Naturel Régional de la Guyane), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A41",
+    "nom": "France road sign ID15a41",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A41.svg",
+    "description": "Idéogramme de signalisation routière française ID15a41 (Parc Naturel Régional des Caps et Marais d’Opale), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A42",
+    "nom": "France road sign ID15a42",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A42.svg",
+    "description": "Idéogramme de signalisation routière française ID15a42 (Parc Naturel Régional de la Narbonnaise en Méditerranée), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A43",
+    "nom": "France road sign ID15a43",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A43.svg",
+    "description": "Idéogramme de signalisation routière française ID15a43 (Parc Naturel Régional Oise-Pays de France), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A44",
+    "nom": "France road sign ID15a44",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A44.svg",
+    "description": "Idéogramme de signalisation routière française ID15a44 (Parc Naturel Régional de Millevaches en Limousin), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A45",
+    "nom": "France road sign ID15a45",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A45.svg",
+    "description": "Idéogramme de signalisation routière française ID15a45 (Parc Naturel Régional des Pyrénées Catalanes), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A46",
+    "nom": "France road sign ID15a46",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A46.svg",
+    "description": "Idéogramme de signalisation routière française ID15a46 (Parc Naturel Régional des Alpilles), version vectorielle",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15B",
+    "nom": "France road sign ID15b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15C",
+    "nom": "France road sign ID15c",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15C.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15C_2",
+    "nom": "ID15c reserve naturelle France",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15C_2.svg",
+    "description": "Idéogramme d'identification des réserves naturelles en France, d'après l'arrêté du 24 novembre 1967 modifié.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15D",
+    "nom": "France road sign ID15d",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15D.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15D_2",
+    "nom": "ID15d conservatoire littoral France",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15D_2.svg",
+    "description": "Idéogramme d'identification des terrains du conservatoire du littoral et des rivages lacustres, d'après l'arrêté du 24 novembre 1967 modifié.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15E",
+    "nom": "France road sign ID15e",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15E.svg",
+    "description": "Diagrams of informatory road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15F",
+    "nom": "France road sign ID15f",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15F.svg",
+    "description": "Idéogramme de signalisation routière française ID15f. Site ayant reçu le « Grand Site de France » mentionné à l'article L. 341-15-1 du Code de l'environnement",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID16A",
+    "nom": "France road sign ID16a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID16A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID16B",
+    "nom": "France road sign ID16b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID16B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID16C",
+    "nom": "France road sign ID16c",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID16C.svg",
+    "description": "Diagrams of informatory road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID16D",
+    "nom": "France road sign ID16d",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID16D.svg",
+    "description": "Diagrams of informatory road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID16E",
+    "nom": "France road sign ID16e",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID16E.svg",
+    "description": "Ideogram of road sign of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID17",
+    "nom": "France road sign ID17",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID17.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID18",
+    "nom": "France road sign ID18",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID18.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID19",
+    "nom": "France road sign ID19",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID19.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID20A",
+    "nom": "France road sign ID20a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID20A.svg",
+    "description": "Diagrams of ideogram road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID20B",
+    "nom": "France road sign ID20b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID20B.svg",
+    "description": "Road sign ideogram of road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID20C",
+    "nom": "France road sign ID20c",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID20C.svg",
+    "description": "Road sign ideogram of road signs of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID20D",
+    "nom": "France road sign ID20d",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID20D.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID20E",
+    "nom": "France road sign ID20e",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID20E.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID21A",
+    "nom": "France road sign ID21a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID21A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID21B",
+    "nom": "France road sign ID21b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID21B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID22",
+    "nom": "France road sign ID22",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID22.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID23",
+    "nom": "France road sign ID23",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID23.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID23_2",
+    "nom": "France road sign ID23 (2011)",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID23_2.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID24",
+    "nom": "France road sign ID24",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID24.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID25",
+    "nom": "France road sign ID25",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID25.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID26A",
+    "nom": "France road sign ID26a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID26A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID26B",
+    "nom": "France road sign ID26b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID26B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID27",
+    "nom": "France road sign ID27",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID27.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID28",
+    "nom": "France road sign ID28",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID28.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID29",
+    "nom": "France road sign ID29",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID29.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID30",
+    "nom": "France road sign ID30",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID30.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID31",
+    "nom": "France road sign ID31",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID31.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID32",
+    "nom": "France road sign ID32",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID32.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID33A",
+    "nom": "France road sign ID33a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID33A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID33B",
+    "nom": "France road sign ID33b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID33B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID34A",
+    "nom": "France road sign ID34a",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID34A.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID34B",
+    "nom": "France road sign ID34b",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID34B.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID35",
+    "nom": "France road sign ID35",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID35.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID36",
+    "nom": "France road sign ID36",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID36.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID37",
+    "nom": "France road sign ID37",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID37.svg",
+    "description": "Road sign ideogram of France.",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID38",
+    "nom": "France road sign ID38",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID38.svg",
+    "description": "Idéogramme de signalisation routière française ID38 : Point du réseau de distribution « écotaxe ».",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID39",
+    "nom": "France road sign ID39",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID39.svg",
+    "description": "Car sharing road sign ideogram of France",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A19",
+    "nom": "France road sign ID15a19",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A19.svg",
+    "description": "Idéogramme de signalisation routière française ID15a19 (Parc Naturel Régional des Pyrénées Ariégeoises)",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A47",
+    "nom": "France road sign ID15a47",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A47.svg",
+    "description": "Idéogramme de signalisation routière française ID15a47 (Parc Naturel Régional de la Sainte Baume)",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ID15A48",
+    "nom": "France road sign ID15a48",
+    "type": "Idéogramme",
+    "image": "assets/panneaux/ID15A48.svg",
+    "description": "Idéogramme de signalisation routière française ID15a48 (Parc naturel régional Corbières-Fenouillèdes)",
+    "category": "Category:Diagrams of road sign ideograms of France"
+  },
+  {
+    "id": "ANGLES_MORTS_SUR_UN_CAMION",
+    "nom": "Angles morts sur un camion",
+    "type": "Autre",
+    "image": "assets/panneaux/ANGLES_MORTS_SUR_UN_CAMION.svg",
+    "description": "Q135403563 - \n\nBlind spot on a truck",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "ANGLES_MORTS_À_L'AUTOBUS",
+    "nom": "Angles morts à l'autobus",
+    "type": "Autre",
+    "image": "assets/panneaux/ANGLES_MORTS___L_AUTOBUS.svg",
+    "description": "Q135403563 - \n\nBlind spot at autobus",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "COURBE-DE-VISIBILITÉ",
+    "nom": "Courbe-de-visibilité",
+    "type": "Autre",
+    "image": "assets/panneaux/COURBE-DE-VISIBILIT_.svg",
+    "description": "Courbe de visibilité en marquage routier",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "COURBES-DE-VISIBILITÉ",
+    "nom": "Courbes-de-visibilité",
+    "type": "Autre",
+    "image": "assets/panneaux/COURBES-DE-VISIBILIT_.svg",
+    "description": "Courbe de visibilité en marquage routier",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "DISTANCE-COMPO",
+    "nom": "Distance-compo",
+    "type": "Autre",
+    "image": "assets/panneaux/DISTANCE-COMPO.svg",
+    "description": "composition d'une indication de distance sur un panneau de signalistion directionnel en France.",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "DISTANCE-COMPO2",
+    "nom": "Distance-compo2",
+    "type": "Autre",
+    "image": "assets/panneaux/DISTANCE-COMPO2.svg",
+    "description": "Espacement entre chiffres dans une indication de distance sur un panneau de signalisation en France.",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "SH-VIRAGES-RECOUVREMENT-2",
+    "nom": "SH-Virages-recouvrement-2",
+    "type": "Autre",
+    "image": "assets/panneaux/SH-VIRAGES-RECOUVREMENT-2.svg",
+    "description": "Marquage d'un virage avec zone de recouvrement des distances de visibilité, en France.",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "SH-VIRAGES-RECOUVREMENT",
+    "nom": "SH-Virages-recouvrement",
+    "type": "Autre",
+    "image": "assets/panneaux/SH-VIRAGES-RECOUVREMENT.svg",
+    "description": "Marquage d'un virage avec zone de recouvrement des distances de visibilité, en France.",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "VIRAGE_CAS1",
+    "nom": "Virage cas1",
+    "type": "Autre",
+    "image": "assets/panneaux/VIRAGE_CAS1.svg",
+    "description": "Classe A de signalisation des virages en France",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "VIRAGE_CAS2",
+    "nom": "Virage cas2",
+    "type": "Autre",
+    "image": "assets/panneaux/VIRAGE_CAS2.svg",
+    "description": "Classe A de signalisation des virages en France",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "VISIBILITÉ-EN-COURBE",
+    "nom": "Visibilité-en-courbe",
+    "type": "Autre",
+    "image": "assets/panneaux/VISIBILIT_-EN-COURBE.svg",
+    "description": "Distance de visibilité en courbe",
+    "category": "Category:Diagrams of road signs of France"
+  },
+  {
+    "id": "VIRAGE_CAS_3",
+    "nom": "Virage cas 3",
+    "type": "Autre",
+    "image": "assets/panneaux/VIRAGE_CAS_3.svg",
+    "description": "Classe C de signalisation des virages en France",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "VIRAGE_CAS_4",
+    "nom": "Virage cas 4",
+    "type": "Autre",
+    "image": "assets/panneaux/VIRAGE_CAS_4.svg",
+    "description": "Classe D de signalisation des virages en France",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "DISQUE-DE-STATIONNEMENT-FRANCE",
+    "nom": "Disque-de-stationnement-France",
+    "type": "Autre",
+    "image": "assets/panneaux/DISQUE-DE-STATIONNEMENT-FRANCE.svg",
+    "description": "Modèle de disque de stationnement utilisé en France",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "E42",
+    "nom": "E42",
+    "type": "Autre",
+    "image": "assets/panneaux/E42.svg",
+    "description": "Cartouche E42 - Route nationale (France)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "E43",
+    "nom": "E43",
+    "type": "Autre",
+    "image": "assets/panneaux/E43.svg",
+    "description": "Cartouche E43 - Route départementale (France)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "E44",
+    "nom": "E44",
+    "type": "Autre",
+    "image": "assets/panneaux/E44.svg",
+    "description": "Cartouche E44 - Voie communale (France)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "E44B",
+    "nom": "E44b",
+    "type": "Autre",
+    "image": "assets/panneaux/E44B.svg",
+    "description": "Cartouche E44 - Chemin rural (France)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "E45",
+    "nom": "E45",
+    "type": "Autre",
+    "image": "assets/panneaux/E45.svg",
+    "description": "Cartouche E45 - Voie forestière (France)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "ENTRÉE-BRIQUESVILLE",
+    "nom": "Entrée-Briquesville",
+    "type": "Autre",
+    "image": "assets/panneaux/ENTR_E-BRIQUESVILLE.svg",
+    "description": "Panneau d'entrée dans Briquesville",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "E39",
+    "nom": "France road sign E39",
+    "type": "Autre",
+    "image": "assets/panneaux/E39.svg",
+    "description": "Localisation d'un État appartenant à l'Union européenne",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "EB10",
+    "nom": "Entrée d’agglomération",
+    "type": "Autre",
+    "image": "assets/panneaux/EB10.svg",
+    "description": "Panneau de signalisation routière EB10 (France) : Panneau d'entrée d'agglomération.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "EB20",
+    "nom": "Sortie d’agglomération",
+    "type": "Autre",
+    "image": "assets/panneaux/EB20.svg",
+    "description": "Panneau de signalisation routière EB20 (France) : Panneau de sortie d'agglomération.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR-INTERFILE",
+    "nom": "France road sign SR-interfile",
+    "type": "Autre",
+    "image": "assets/panneaux/SR-INTERFILE.svg",
+    "description": "Panneau d’information, de type « SR » pour informer les usagers de la route, notamment les conducteurs de deux ou trois roues motorisés, des règles de la circulation inter-files \nsource : https://www.interieur.gouv.fr/sites/minint/files/medias/documents/2021-08/2021-circulation-panneau-CIF-securite-routiere.pdf",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR3A",
+    "nom": "France road sign SR3a",
+    "type": "Autre",
+    "image": "assets/panneaux/SR3A.svg",
+    "description": "Diagram of informatory road sign of France. SR3a sign.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR3B",
+    "nom": "France road sign SR3b",
+    "type": "Autre",
+    "image": "assets/panneaux/SR3B.svg",
+    "description": "Diagram of informatory road sign of France. SR3b sign.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR3C1",
+    "nom": "France road sign SR3c1",
+    "type": "Autre",
+    "image": "assets/panneaux/SR3C1.svg",
+    "description": "Diagram of informatory road sign of France. SR3c1 sign.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR3C2",
+    "nom": "France road sign SR3c2",
+    "type": "Autre",
+    "image": "assets/panneaux/SR3C2.svg",
+    "description": "Panneau de signalisation français d’information - Signal SR3d",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR3C3",
+    "nom": "France road sign SR3c3",
+    "type": "Autre",
+    "image": "assets/panneaux/SR3C3.svg",
+    "description": "Panneau de signalisation français d’information - Signal SR3c3",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR3D",
+    "nom": "France road sign SR3d",
+    "type": "Autre",
+    "image": "assets/panneaux/SR3D.svg",
+    "description": "Diagram of informatory road sign of France. SR3d sign.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SR3E",
+    "nom": "France road sign SR3e",
+    "type": "Autre",
+    "image": "assets/panneaux/SR3E.svg",
+    "description": "Panneau de signalisation français d’information - Signal SR3e",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA13A",
+    "nom": "France road sign XA13a",
+    "type": "Autre",
+    "image": "assets/panneaux/XA13A.svg",
+    "description": "Présence d’enfants susceptibles de traverser la chaussée.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA13B",
+    "nom": "France road sign XA13b",
+    "type": "Autre",
+    "image": "assets/panneaux/XA13B.svg",
+    "description": "Présence de piétons à un passage pour piétons ou rappel d’un passage pour piétons.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA14",
+    "nom": "France road sign XA14",
+    "type": "Autre",
+    "image": "assets/panneaux/XA14.svg",
+    "description": "Présence d’autres dangers possibles",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA15B",
+    "nom": "France road sign XA15b",
+    "type": "Autre",
+    "image": "assets/panneaux/XA15B.svg",
+    "description": "Présence d'un ou plusieurs animaux errants sur la chaussée.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA16",
+    "nom": "France road sign XA16",
+    "type": "Autre",
+    "image": "assets/panneaux/XA16.svg",
+    "description": "Rappel d’une descente dangereuse (exemple 10%)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA17",
+    "nom": "France road sign XA17",
+    "type": "Autre",
+    "image": "assets/panneaux/XA17.svg",
+    "description": "Annonce d'un feu de régulation d’accès ou de feux tricolores réglant une circulation alternée.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA18",
+    "nom": "France road sign XA18",
+    "type": "Autre",
+    "image": "assets/panneaux/XA18.svg",
+    "description": "Annonce d’une route bidirectionnelle.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA1A",
+    "nom": "France road sign XA1a",
+    "type": "Autre",
+    "image": "assets/panneaux/XA1A.svg",
+    "description": "Panneau de signalisation de virage à droite spécifique à la signalisation dynamique défini dans l'arrêté du 6 juin 1977 (France), actuellement en vigueur",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA1B",
+    "nom": "France road sign XA1b",
+    "type": "Autre",
+    "image": "assets/panneaux/XA1B.svg",
+    "description": "Panneau de signalisation de virage à gauche spécifique à la signalisation dynamique défini dans l'arrêté du 6 juin 1977 (France), actuellement en vigueur",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA1C",
+    "nom": "France road sign XA1c",
+    "type": "Autre",
+    "image": "assets/panneaux/XA1C.svg",
+    "description": "Panneau XA1c d'annonce de succession de virages spécifique à la signalisation dynamique  (France)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA1D",
+    "nom": "France road sign XA1d",
+    "type": "Autre",
+    "image": "assets/panneaux/XA1D.svg",
+    "description": "Panneau XA1d d'annonce de succession de virages spécifique à la signalisation dynamique  (France)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA2",
+    "nom": "France road sign XA2",
+    "type": "Autre",
+    "image": "assets/panneaux/XA2.svg",
+    "description": "Rappel d’un danger de cassis ou dos d’âne.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA20",
+    "nom": "France road sign XA20",
+    "type": "Autre",
+    "image": "assets/panneaux/XA20.svg",
+    "description": "Rappel d’un débouché sur un quai ou une berge",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA24",
+    "nom": "France road sign XA24",
+    "type": "Autre",
+    "image": "assets/panneaux/XA24.svg",
+    "description": "Présence de vent particulièrement fort.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA25",
+    "nom": "France road sign XA25",
+    "type": "Autre",
+    "image": "assets/panneaux/XA25.svg",
+    "description": "Panneau spécifique à la signalisation dynamique annonçant un danger proche de dégradation des conditions de circulation liée à des chutes de neige ou à de la pluie verglaçante",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA26",
+    "nom": "France road sign XA26",
+    "type": "Autre",
+    "image": "assets/panneaux/XA26.svg",
+    "description": "Annonce d’une présence proche d’un ou de plusieurs piétons sur la chaussée",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA3",
+    "nom": "France road sign XA3",
+    "type": "Autre",
+    "image": "assets/panneaux/XA3.svg",
+    "description": "Rappel d’un rétrécissement de chaussée.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA3A",
+    "nom": "France road sign XA3a",
+    "type": "Autre",
+    "image": "assets/panneaux/XA3A.svg",
+    "description": "Rappel d’un rétrécissement de chaussée par la droite.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA3B",
+    "nom": "France road sign XA3b",
+    "type": "Autre",
+    "image": "assets/panneaux/XA3B.svg",
+    "description": "Rappel d’un rétrécissement de chaussée par la gauche.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA4",
+    "nom": "France road sign XA4",
+    "type": "Autre",
+    "image": "assets/panneaux/XA4.svg",
+    "description": "Annonce d’une chaussée particulièrement glissante.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA6",
+    "nom": "France road sign XA6",
+    "type": "Autre",
+    "image": "assets/panneaux/XA6.svg",
+    "description": "Annonce d’une fermeture de pont mobile.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "XA7",
+    "nom": "France road sign XA7",
+    "type": "Autre",
+    "image": "assets/panneaux/XA7.svg",
+    "description": "Annonce de la fermeture d’un passage à niveau muni de barrières généralement complété par un panonceau XM9z",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "PANNEAU_DE_DÉBUT_DE_VOIE_RÉSERVÉE_AUX_VÉHICULES_À_OCCUPATION_MULTIPLE",
+    "nom": "Panneau de début de voie réservée aux véhicules à occupation multiple",
+    "type": "Autre",
+    "image": "assets/panneaux/PANNEAU_DE_D_BUT_DE_VOIE_R_SERV_E_AUX_V_HICULES___OCCUPATION_MULTIPLE.svg",
+    "description": "panneau de début de voie réservée aux véhicules à occupation multiple tel que dans l'Arrêté du 24 août 2020 relatif à l'expérimentation d'une signalisation relative aux voies de circulation réservées à certaines catégories de véhicules sur certains axes",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "PANNEAU_DE_FIN_DE_VOIE_RÉSERVÉE_AUX_VÉHICULES_À_OCCUPATION_MULTIPLE_EN_FRANCE",
+    "nom": "Panneau de fin de voie réservée aux véhicules à occupation multiple en France",
+    "type": "Autre",
+    "image": "assets/panneaux/PANNEAU_DE_FIN_DE_VOIE_R_SERV_E_AUX_V_HICULES___OCCUPATION_MULTIPLE_EN_FRANCE.svg",
+    "description": "Panneau de fin de voie réservée aux véhicules à occupation multiple en France tel que décrit dans l'Arrêté du 24 août 2020 relatif à l'expérimentation d'une signalisation relative aux voies de circulation réservées à certaines catégories de véhicules sur certains axes",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "C24A",
+    "nom": "Panneau-C24a-2",
+    "type": "Autre",
+    "image": "assets/panneaux/C24A.svg",
+    "description": "Chaussée à sens unique à 2 voies",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "C24A_2",
+    "nom": "Panneau-C24a-4",
+    "type": "Autre",
+    "image": "assets/panneaux/C24A_2.svg",
+    "description": "Chaussée à 4 voies (sens unique)",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "PERS-HANDICAP",
+    "nom": "Pers-handicap",
+    "type": "Autre",
+    "image": "assets/panneaux/PERS-HANDICAP.svg",
+    "description": "Pictogramme pour emplacement de stationnement de personne handicapée en France, en France.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "PICTO-VOITURE-ÉLECTRIQUE",
+    "nom": "Picto-voiture-électrique",
+    "type": "Autre",
+    "image": "assets/panneaux/PICTO-VOITURE-_LECTRIQUE.svg",
+    "description": "Pictogramme pour emplacement de stationnement de voiture électrique, en France.",
+    "category": "Category:SVG road signs in France"
+  },
+  {
+    "id": "SORTIE-BRIQUESVILLE",
+    "nom": "Sortie-Briquesville",
+    "type": "Autre",
+    "image": "assets/panneaux/SORTIE-BRIQUESVILLE.svg",
+    "description": "Panneau de sortie de Briquesville",
+    "category": "Category:SVG road signs in France"
+  }
+]

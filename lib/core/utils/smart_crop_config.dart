@@ -1,0 +1,240 @@
+/// <curseur>
+/// LUCHY - Configuration du recadrage intelligent
+///
+/// Système de recadrage adaptatif basé sur les mesures UI réelles
+/// pour optimiser l'affichage des images selon l'appareil et l'orientation.
+///
+/// COMPOSANTS PRINCIPAUX:
+/// - DeviceRatioConfig: Configuration par appareil/orientation
+/// - SmartCropConfig: Gestionnaire central des configurations
+/// - getRatioConfig(): Sélection automatique selon contexte
+/// - isInRange(): Vérification tolérance ratios
+///
+/// ÉTAT ACTUEL:
+/// - iPhone: Ratios mesurés empiriquement (Portrait 1.90, Paysage 0.37)
+/// - iPad: Ratios estimés selon écrans natifs
+/// - Android: Configurations adaptatives par taille
+/// - Tolérance: 10% par défaut, ajustable
+///
+/// HISTORIQUE RÉCENT:
+/// - Mesures iPhone réelles via overlay debug
+/// - Calculs ratios optimaux portrait/paysage
+/// - Configuration modulaire par appareil
+/// - Null safety amélioré pour contexte optionnel
+/// - Documentation mise à jour format <curseur>
+///
+/// 🔧 POINTS D'ATTENTION:
+/// - Device detection: Utiliser MediaQuery et Platform
+/// - Tolerance ranges: Équilibrer précision vs flexibilité
+/// - Performance: Cache des configs pour éviter recalculs
+/// - Extensibilité: Faciliter ajout nouveaux appareils
+///
+/// 🚀 PROCHAINES ÉTAPES:
+/// - Ajouter détection automatique type appareil
+/// - Implémenter cache intelligent configurations
+/// - Optimiser pour tablettes Android spécifiques
+/// - Considérer ratios adaptatifs selon contenu image
+///
+/// 🔗 FICHIERS LIÉS:
+/// - core/utils/smart_crop_algorithm.dart: Algorithme recadrage
+/// - core/utils/image_optimizer.dart: Intégration optimisation
+/// - features/puzzle/presentation/screens/: Détection contexte UI
+///
+/// CRITICALITÉ: ⭐⭐⭐⭐ (Optimisation expérience utilisateur)
+/// 📅 Dernière modification: 2025-08-25 17:45
+/// </curseur>
+
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+
+/// Configuration des ratios cibles pour un appareil/orientation donné
+class DeviceRatioConfig {
+  final double targetRatio;
+  final double tolerance;
+  final double minRatio;
+  final double maxRatio;
+  final String description;
+
+  const DeviceRatioConfig({
+    required this.targetRatio,
+    required this.tolerance,
+    required this.description,
+  })  : minRatio = targetRatio * (1 - tolerance),
+        maxRatio = targetRatio * (1 + tolerance);
+
+  /// Vérifie si un ratio est dans la plage acceptable
+  bool isInRange(double ratio) {
+    return ratio >= minRatio && ratio <= maxRatio;
+  }
+
+  /// Calcule la distance par rapport au ratio cible (0 = parfait)
+  double distanceFromTarget(double ratio) {
+    return (ratio - targetRatio).abs() / targetRatio;
+  }
+
+  @override
+  String toString() {
+    return '$description: ${targetRatio.toStringAsFixed(2)} [${minRatio.toStringAsFixed(2)}-${maxRatio.toStringAsFixed(2)}]';
+  }
+}
+
+/// Gestionnaire central des configurations de recadrage intelligent
+class SmartCropConfig {
+  // ========== CONFIGURATIONS IPHONE ==========
+
+  /// iPhone Portrait - Basé sur mesures réelles UI
+  static const DeviceRatioConfig iPhonePortrait = DeviceRatioConfig(
+    targetRatio: 1.90,
+    tolerance: 0.10, // ±10%
+    description: 'iPhone Portrait (mesure réelle)',
+  );
+
+  /// iPhone Paysage - Basé sur mesures réelles UI
+  static const DeviceRatioConfig iPhoneLandscape = DeviceRatioConfig(
+    targetRatio: 0.37,
+    tolerance: 0.10, // ±10%
+    description: 'iPhone Paysage (mesure réelle)',
+  );
+
+  // ========== CONFIGURATIONS IPAD ==========
+
+  /// iPad Portrait - Estimé selon écran natif 4:3
+  static const DeviceRatioConfig iPadPortrait = DeviceRatioConfig(
+    targetRatio: 1.25, // Légèrement plus carré que iPhone
+    tolerance: 0.08, // ±8% (plus strict sur tablette)
+    description: 'iPad Portrait (estimé)',
+  );
+
+  /// iPad Paysage - Estimé selon écran natif 4:3
+  static const DeviceRatioConfig iPadLandscape = DeviceRatioConfig(
+    targetRatio: 0.75, // Plus large que iPhone paysage
+    tolerance: 0.08, // ±8%
+    description: 'iPad Paysage (estimé)',
+  );
+
+  // ========== CONFIGURATIONS ANDROID ==========
+
+  /// Android Phone Portrait - Écrans allongés modernes
+  static const DeviceRatioConfig androidPhonePortrait = DeviceRatioConfig(
+    targetRatio: 2.0, // Plus allongé que iPhone
+    tolerance: 0.12, // ±12% (plus de variabilité Android)
+    description: 'Android Phone Portrait',
+  );
+
+  /// Android Phone Paysage
+  static const DeviceRatioConfig androidPhoneLandscape = DeviceRatioConfig(
+    targetRatio: 0.35, // Très large pour écrans allongés
+    tolerance: 0.12, // ±12%
+    description: 'Android Phone Paysage',
+  );
+
+  /// Android Tablet Portrait - Basé sur ratio 16:10 dominant
+  static const DeviceRatioConfig androidTabletPortrait = DeviceRatioConfig(
+    targetRatio: 1.4, // Entre iPhone et iPad
+    tolerance: 0.10, // ±10%
+    description: 'Android Tablet Portrait',
+  );
+
+  /// Android Tablet Paysage
+  static const DeviceRatioConfig androidTabletLandscape = DeviceRatioConfig(
+    targetRatio: 0.65, // Ratio 16:10 inversé
+    tolerance: 0.10, // ±10%
+    description: 'Android Tablet Paysage',
+  );
+
+  // ========== DÉTECTION AUTOMATIQUE ==========
+
+  /// Détecte automatiquement la configuration optimale
+  static DeviceRatioConfig getRatioConfig(BuildContext context) {
+    // SMART_CROP: getRatioConfig called
+
+    // Vérifier si le contexte est encore valide
+    if (context.debugDoingBuild || !context.mounted) {
+      // SMART_CROP: Context is not valid, using fallback
+      return iPhonePortrait; // Fallback sécurisé
+    }
+
+    // SMART_CROP: Context is valid
+    final mediaQuery = MediaQuery.of(context);
+
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height;
+    final screenDiagonal = _calculateDiagonal(screenWidth, screenHeight);
+
+    // SMART_CROP: Screen info collected
+
+    // Détection plateforme
+    if (Platform.isIOS) {
+      // SMART_CROP: iOS platform detected
+      return _getIOSConfig(screenDiagonal, isLandscape);
+    } else if (Platform.isAndroid) {
+      // SMART_CROP: Android platform detected
+      return _getAndroidConfig(screenDiagonal, isLandscape);
+    }
+
+    // SMART_CROP: Unknown platform, using fallback
+    // Fallback par défaut
+    return isLandscape ? iPhoneLandscape : iPhonePortrait;
+  }
+
+  /// Configuration iOS selon la taille d'écran
+  static DeviceRatioConfig _getIOSConfig(double diagonal, bool isLandscape) {
+    // iPad si diagonal > 9 pouces (environ 700+ pixels)
+    if (diagonal > 700) {
+      return isLandscape ? iPadLandscape : iPadPortrait;
+    }
+    // iPhone sinon
+    return isLandscape ? iPhoneLandscape : iPhonePortrait;
+  }
+
+  /// Configuration Android selon la taille d'écran
+  static DeviceRatioConfig _getAndroidConfig(
+      double diagonal, bool isLandscape) {
+    // Tablette si diagonal > 7 pouces (environ 600+ pixels)
+    if (diagonal > 600) {
+      return isLandscape ? androidTabletLandscape : androidTabletPortrait;
+    }
+    // Smartphone sinon
+    return isLandscape ? androidPhoneLandscape : androidPhonePortrait;
+  }
+
+  /// Calcule la diagonale de l'écran (approximation)
+  static double _calculateDiagonal(double width, double height) {
+    return (width * width + height * height) /
+        (width + height); // Approximation rapide
+  }
+
+  // ========== UTILITAIRES ==========
+
+  /// Liste toutes les configurations disponibles
+  static List<DeviceRatioConfig> getAllConfigs() {
+    return [
+      iPhonePortrait,
+      iPhoneLandscape,
+      iPadPortrait,
+      iPadLandscape,
+      androidPhonePortrait,
+      androidPhoneLandscape,
+      androidTabletPortrait,
+      androidTabletLandscape,
+    ];
+  }
+
+  /// Trouve la meilleure configuration pour un ratio donné
+  static DeviceRatioConfig findBestConfig(double imageRatio) {
+    var bestConfig = iPhonePortrait;
+    var bestDistance = double.infinity;
+
+    for (final config in getAllConfigs()) {
+      final distance = config.distanceFromTarget(imageRatio);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestConfig = config;
+      }
+    }
+
+    return bestConfig;
+  }
+}

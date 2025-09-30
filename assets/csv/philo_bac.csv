@@ -1,0 +1,131 @@
+col1;col2;col3
+Socrate;maïeutique;Méthode d’interrogation qui fait émerger la vérité chez l’interlocuteur.
+Platon;Idées;Réalités intelligibles et éternelles, modèles du monde sensible.
+Aristote;substance;Ce qui existe par soi et supporte les attributs.
+Épicure;ataraxie;Sérénité de l’âme par la gestion rationnelle des plaisirs.
+Stoïciens;logos;Raison universelle à laquelle il faut se conformer.
+Épictète;prohairesis;Pouvoir intérieur de choix indépendant des événements.
+Sénèque;constance;Stabilité de l’âme face à l’adversité.
+Marc-Aurèle;exercices;Pratiques stoïciennes pour gouverner jugements et affects.
+Pyrrhon;suspension;Suspension du jugement pour atteindre la tranquillité.
+Parménide;être;"L’être est un et immuable ; le devenir trompe."
+Héraclite;devenir;Tout s’écoule : tension des contraires dans le réel.
+Démocrite;atomes;Le réel est composé d’atomes et de vide.
+Protagoras;relativisme;“L’homme est la mesure” : vérité relative aux sujets.
+Gorgias;nihilisme;Rien n’existe ou n’est connaissable : thèse provocatrice.
+Cicéron;rhétorique;Art du discours pour délibérer et persuader.
+Lucrèce;nature;Poème atomiste : explication naturaliste des phénomènes.
+Augustin;intériorité;La vérité se cherche en soi, mémoire et illumination.
+Anselme;ontologique;Preuve a priori de l’existence de Dieu par l’idée de parfait.
+Thomas-d-Aquin;synthèse;Harmoniser foi et raison à partir d’Aristote.
+Occam;rasoir;Ne pas multiplier les entités sans nécessité.
+Machiavel;raison-d-État;Art de gouverner réaliste, séparé de la morale privée.
+Montaigne;essais;"Enquête sur soi et le monde ; scepticisme modéré."
+Érasme;humanisme;Dignité de l’homme, éducation et retour aux textes.
+More;utopie;Cité idéale pour critiquer la société réelle.
+Descartes;doute;Doute méthodique menant au cogito et à l’évidence.
+Pascal;misère-grandeur;Ambivalence de l’homme entre misère et dignité.
+Spinoza;conatus;Tendance de chaque chose à persévérer dans son être.
+Hobbes;état-nature;Guerre de tous, à dépasser par le contrat social.
+Locke;tabula-rasa;L’esprit est une “table rase” : idées issues de l’expérience.
+Rousseau;contrat;Souveraineté du peuple et volonté générale.
+Montesquieu;séparation-pouvoirs;Diviser les pouvoirs pour prévenir la tyrannie.
+Voltaire;tolérance;Combat contre le fanatisme et pour la liberté de penser.
+Diderot;encyclopédie;Diffusion critique des savoirs, esprit des Lumières.
+Hume;induction;L’induction repose sur l’habitude, non la nécessité.
+Kant;impératif;Agir selon des maximes universalisables (devoir).
+Hegel;dialectique;Mouvement de l’Esprit par dépassements successifs.
+Schopenhauer;vouloir;Le monde est volonté aveugle : ascèse et compassion.
+Comte;positivisme;Savoir fondé sur faits et lois, non causes ultimes.
+Tocqueville;démocratie;Analyse des mœurs et risques du despotisme doux.
+Marx;aliénation;Travailleur séparé du produit, du processus et de soi.
+Nietzsche;morale-valeurs;Généalogie des valeurs et critique du ressentiment.
+Freud;inconscient;Part psychique active faite de désirs refoulés.
+Durkheim;fait-social;Faits sociaux extérieurs et contraignants.
+Bergson;durée;Temps vécu continu, irréductible au temps mesuré.
+Husserl;épochè;Mettre entre parenthèses pour décrire l’expérience.
+Heidegger;Dasein;Être-là concerné par son existence et la mort.
+Sartre;liberté;L’homme est condamné à être libre et responsable.
+Merleau-Ponty;perception;Le corps est la condition de toute perception.
+Camus;absurde;Écart entre quête de sens et silence du monde.
+Beauvoir;deuxième-sexe;Construction sociale du féminin et émancipation.
+Arendt;totalitarisme;Analyse des régimes totalitaires et de l’action politique.
+Foucault;pouvoir;Pouvoir diffus inscrit dans des dispositifs.
+Ricoeur;identité-récit;On se comprend à travers les récits que l’on fait de soi.
+Bourdieu;habitus;Dispositions durables orientant pratiques et jugements.
+Levinas;visage;Primauté éthique de la responsabilité envers autrui.
+Bentham;utilité;Évaluer les actes par le calcul des plaisirs et peines.
+Mill;utilitarisme;Maximiser le bonheur pour le plus grand nombre.
+Rawls;justice-équité;Principes choisis derrière un voile d’ignorance.
+Nozick;État-minimal;État limité à la protection des droits et contrats.
+Weber;éthique-responsabilité;Distinguer éthique de conviction et de responsabilité.
+Bachelard;obstacle;Obstacles épistémologiques à surmonter pour connaître.
+Koyré;révolution;Du monde clos à l’univers infini : mutation scientifique.
+Canguilhem;normal-pathologique;Le normal est institué par le vivant, pas donné.
+Popper;falsifiabilité;Une théorie est scientifique si elle peut être réfutée.
+Saussure;signe;Distinction signifiant/signifié et arbitraire du signe.
+Wittgenstein;jeux-langage;Le sens dépend des usages dans des formes de vie.
+Platon-esthétique;mimesis;L’art imite et peut éloigner de la vérité.
+Aristote-esthétique;catharsis;La tragédie purifie les passions du spectateur.
+Kant-esthétique;sublime;Plaisir mêlé de crainte devant l’immensité.
+Hegel-esthétique;Esprit;L’art manifeste un stade de l’Esprit.
+Nietzsche-esthétique;tragédie;Opposition apollinien/dionysiaque dans l’art grec.
+Benjamin;aura;Perte de l’aura à l’ère de la reproduction technique.
+Ellul;technique;La technique suit sa logique propre, ambivalente.
+Simondon;individuation;Individus et objets se forment par processus techniques.
+Illich;convivialité;Outils au service de l’autonomie et des liens sociaux.
+Rousseau-politique;volonté-générale;Volonté visant l’intérêt commun, non la somme des intérêts.
+Kant-droit;paix-cosmopolitique;Projet d’un droit républicain et cosmopolitique.
+Hegel-droit;éthicité;Institutions où la liberté se réalise.
+Tocqueville-politique;tyrannie-majorité;Risque d’oppression de la majorité en démocratie.
+Spinoza-religion;critique-superstition;Lire les Écritures avec la raison contre la superstition.
+Kierkegaard;angoisse;Angoisse du choix existentiel devant Dieu.
+Bergson-religion;fonction-fabulatrice;Imagination sociale qui soude les groupes.
+Comte-religion;religion-humanité;Remplacer le théologique par le culte de l’humanité.
+Jonas;responsabilité;Éthique tournée vers les effets futurs de la technique.
+Hans;précaution;Principe de précaution face aux risques globaux.
+Durkheim-morale;contrainte;La morale est un fait social contraignant.
+Freud-culture;malaise;La civilisation réprime les pulsions, source de malaise.
+Arendt-travail;labeur;Distinction labeur, œuvre, action dans la vie active.
+La-Boétie;servitude-volontaire;On se soumet par habitude et consentement, non par force seule.
+Condorcet;progrès;Foi dans le progrès indéfini par la raison et l’instruction.
+Alain;bonheur;Le bonheur se construit par l’action et la volonté.
+Alain-morale;devoir;Le devoir prime sur l’inclination dans l’action juste.
+Simone-Weil;travail;Le travail peut asservir ou libérer selon l’organisation.
+Simone-Weil-morale;attention;L’attention est la base de la justice envers autrui.
+Habermas;espace-public;Espace de discussion rationnelle pour former l’opinion.
+Ricœur;justice;Justice comme équilibre entre égalité et reconnaissance.
+Gramsci;hégémonie;Domination culturelle qui fabrique le consentement.
+Althusser;idéologie;Appareils idéologiques d’État qui reproduisent l’ordre social.
+Merleau-Ponty-monde;chair;Le monde est perçu à partir d’un corps vivant.
+Lévi-Strauss;structure;Structures inconscientes organisent les cultures.
+Barthes;mythologies;Les médias transforment le culturel en “naturel”.
+Cassirer;symbolique;L’homme est un animal symbolique (langage, mythe, art).
+Mounier;personne;La personne est relation et engagement, pas individu isolé.
+Aron;histoire;Comprendre l’histoire par les choix et les responsabilités.
+Simone-Weil-politique;force;La force déshumanise celui qui la subit et celui qui l’exerce.
+Sartre-politique;engagement;Assumer publiquement la responsabilité de ses choix.
+Camus-politique;révolte;Révolte mesurée qui refuse l’injustice sans nihilisme.
+Rousseau-éducation;Émile;Former un citoyen libre par une éducation naturelle.
+Hegel-histoire;ruse-raison;La raison se sert des passions pour se réaliser.
+Marx-histoire;lutte-classes;Conflit des classes comme moteur historique.
+Bourdieu-école;reproduction;L’école reproduit des inégalités sociales.
+Rawls-droit;libertés-fondamentales;Priorité des libertés de base dans la justice.
+Nozick-droits;propriété;Droits inviolables de propriété et d’échange.
+Simone-Weil-justice;enracinement;Besoin d’enracinement pour une vie juste et digne.
+Zénon-d-Élée;paradoxes;Paradoxes du mouvement pour défendre l’unité immobile.
+Anaximandre;apeiron;Principe indéterminé et infini à l’origine des choses.
+Anaxagore;noûs;L’intellect ordonne le cosmos et met le monde en mouvement.
+Thalès;eau;L’eau est le principe premier (archè) du monde.
+Diogène;cynisme;Vie simple et critique des conventions pour atteindre la liberté.
+Plotin;Un;Principe suprême d’où émanent l’Intellect et l’Âme.
+Boèce;consolation;La philosophie console face à l’adversité et au destin.
+Avicenne;essence-existence;Distinction entre essence et existence chez les êtres contingents.
+Averroès;commentaire;Grand commentateur d’Aristote, conciliation de la raison et de la foi.
+Maïmonide;guide;Lire les Écritures de façon rationnelle (Guide des égarés).
+Bacon;idoles;Biais de l’esprit à dépasser par la méthode expérimentale.
+Giordano-Bruno;infini;Univers infini et pluralité des mondes.
+Spinoza-politique;liberté-expression;Liberté d’exprimer ses idées comme condition de paix civile.
+Locke-politique;droits-naturels;Droits naturels (vie, liberté, propriété) fondent le pouvoir politique.
+Rousseau-morale;pitié;La pitié naturelle fonde la morale avant la raison.
+Pascal-connaissance;esprit-finesse;Connaître aussi par intuition et finesse, pas seulement par géométrie.

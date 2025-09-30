@@ -1,0 +1,440 @@
+<h1 id="schéma-de-fonctionnement---système-habileté-maths">SCHÉMA DE
+FONCTIONNEMENT - SYSTÈME “HABILETÉ MATHS”</h1>
+<p><strong>Date:</strong> 2025-09-08<br />
+<strong>Projet:</strong> Luchy - Application Flutter<br />
+<strong>Module:</strong> Nouveau système de quiz mathématiques</p>
+<hr />
+<h2 id="processus-construction-puis-découpage">PROCESSUS : CONSTRUCTION
+PUIS DÉCOUPAGE</h2>
+<p><strong>Le quiz puzzle est d’abord entièrement constitué puis
+découpé/mélangé ensuite.</strong></p>
+<hr />
+<h2 id="architecture-générale">ARCHITECTURE GÉNÉRALE</h2>
+<pre><code>FLUX COMPLET DU SYSTÈME
+
+1. GÉNÉRATION → 2. AFFICHAGE → 3. INTERACTION → 4. VALIDATION → 5. RÉSULTATS</code></pre>
+<hr />
+<h2 id="génération-des-quiz">1. GÉNÉRATION DES QUIZ</h2>
+<h3 id="structure-de-génération">Structure de génération</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ModernMathGenerator<span class="op">.</span>generateSimpleQuiz(difficulty<span class="op">:</span> level<span class="op">,</span> numberOfQuestions<span class="op">:</span> <span class="dv">6</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>├── Pour Niveau <span class="dv">1</span> (<span class="dv">1</span> chiffre) <span class="op">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>│   └── Génération normale aléatoire (<span class="dv">1-9</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>├── Pour Niveau <span class="dv">2</span> <span class="op">&amp;</span> <span class="dv">3</span> (<span class="dv">2-3</span> chiffres) <span class="op">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>│   ├── _generateSameUnitsOperations() → <span class="dv">3</span> opérations même unité</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>│   │   ├── Choix chiffre unités (<span class="dv">0-9</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>│   │   ├── _generateNumberWithTargetUnits() → Premier nombre</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>│   │   ├── _generateNumberForSum() → Second nombre calculé</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>│   │   └── Vérification résultat <span class="op">%</span> <span class="dv">10</span> <span class="op">==</span> chiffre_cible</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>│   │</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>│   └── Génération normale pour questions restantes</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>└── Sortie<span class="op">:</span> <span class="dt">List</span><span class="op">&lt;</span>QuizItem<span class="op">&gt;</span> avec variables substituées</span></code></pre></div>
+<h3 id="structure-quizitem">Structure QuizItem</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>QuizItem <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="st">&quot;add_23_17_timestamp&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  leftLatex<span class="op">:</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">VAR{a} + </span><span class="sc">\\</span><span class="st">VAR{b}&quot;</span>     <span class="co">// Template</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  variables<span class="op">:</span> [Variable(a<span class="op">=</span><span class="dv">23</span>)<span class="op">,</span> Variable(b<span class="op">=</span><span class="dv">17</span>)]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  expectedValue<span class="op">:</span> RationalValue(<span class="dv">40</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  getCleanLatex()<span class="op">:</span> <span class="st">&quot;23 + 17&quot;</span>          <span class="co">// Rendu final</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  metadata<span class="op">:</span> <span class="op">{</span>difficulty<span class="op">:</span> <span class="dv">2</span><span class="op">,</span> same_units_target<span class="op">:</span> <span class="dv">0</span><span class="op">}</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<hr />
+<h2 id="phase-de-construction-intégrale">2. PHASE DE CONSTRUCTION
+(Intégrale)</h2>
+<h3 id="étape-1-génération-complète-du-quiz-structuré">Étape 1 :
+Génération complète du quiz structuré</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>_operations <span class="op">=</span> ModernMathGenerator<span class="op">.</span>generateSimpleQuiz(difficulty<span class="op">,</span> <span class="dv">6</span>);</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Résultat : Quiz complet avec paires parfaites</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>[</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  QuizItem <span class="op">{</span> <span class="st">&quot;15 + 7&quot;</span><span class="op">,</span> expectedValue<span class="op">:</span> <span class="dv">22</span> <span class="op">},</span>     <span class="co">// Paire 0 → 0</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  QuizItem <span class="op">{</span> <span class="st">&quot;23 + 18&quot;</span><span class="op">,</span> expectedValue<span class="op">:</span> <span class="dv">41</span> <span class="op">},</span>    <span class="co">// Paire 1 → 1  </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  QuizItem <span class="op">{</span> <span class="st">&quot;34 + 29&quot;</span><span class="op">,</span> expectedValue<span class="op">:</span> <span class="dv">63</span> <span class="op">},</span>    <span class="co">// Paire 2 → 2</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  QuizItem <span class="op">{</span> <span class="st">&quot;45 + 16&quot;</span><span class="op">,</span> expectedValue<span class="op">:</span> <span class="dv">61</span> <span class="op">},</span>    <span class="co">// Paire 3 → 3</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  QuizItem <span class="op">{</span> <span class="st">&quot;52 + 28&quot;</span><span class="op">,</span> expectedValue<span class="op">:</span> <span class="dv">80</span> <span class="op">},</span>    <span class="co">// Paire 4 → 4</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  QuizItem <span class="op">{</span> <span class="st">&quot;67 + 14&quot;</span><span class="op">,</span> expectedValue<span class="op">:</span> <span class="dv">81</span> <span class="op">}</span>     <span class="co">// Paire 5 → 5</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<h3 id="étape-2-extraction-des-résultats-ordre-parfait">Étape 2 :
+Extraction des résultats (ordre parfait)</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>_results <span class="op">=</span> _operations<span class="op">.</span>map(op <span class="op">=&gt;</span> op<span class="op">.</span>expectedValue<span class="op">.</span>toString())<span class="op">.</span>toList();</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Résultat : [&quot;22&quot;, &quot;41&quot;, &quot;63&quot;, &quot;61&quot;, &quot;80&quot;, &quot;81&quot;]</span></span></code></pre></div>
+<hr />
+<h2 id="phase-de-découpagemélange">3. PHASE DE DÉCOUPAGE/MÉLANGE</h2>
+<h3 id="étape-3-création-des-arrangements-découpage-logique">Étape 3 :
+Création des arrangements (découpage logique)</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>_leftArrangement <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>];   <span class="co">// ORDRE FIXE (questions)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>_rightArrangement <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>];  <span class="co">// ORDRE À MÉLANGER (réponses)</span></span></code></pre></div>
+<h3 id="étape-4-mélange-de-la-colonne-droite-uniquement">Étape 4 :
+Mélange de la colonne droite uniquement</h3>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>_rightArrangement<span class="op">.</span>shuffle();</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Résultat possible : [3, 0, 5, 1, 4, 2]</span></span></code></pre></div>
+<hr />
+<h2 id="affichage-final-état-découpé">4. AFFICHAGE FINAL (État
+“Découpé”)</h2>
+<pre><code>GAUCHE (fixe)   │ DROITE      
+Position réelle │ Position    ← Mélangée !
+─────────────────┼─────────────
+0: &quot;15 + 7&quot;     │ 3: &quot;61&quot;     ← Décalage !
+1: &quot;23 + 18&quot;    │ 0: &quot;22&quot;     ← Décalage !
+2: &quot;34 + 29&quot;    │ 5: &quot;81&quot;     ← Décalage !
+3: &quot;45 + 16&quot;    │ 1: &quot;41&quot;     ← Décalage !
+4: &quot;52 + 28&quot;    │ 4: &quot;80&quot;     ← Décalage !
+5: &quot;67 + 14&quot;    │ 2: &quot;63&quot;     ← Décalage !
+
+État initial: Aucune paire ne correspond !</code></pre>
+<hr />
+<h2 id="affichage-interface">5. AFFICHAGE INTERFACE</h2>
+<h3 id="modernmathskillsscreen">ModernMathSkillsScreen</h3>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> _generateNewQuiz() <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  ├── Appel ModernMathGenerator<span class="op">.</span>generateSimpleQuiz()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  ├── Extraction des résultats<span class="op">:</span> operations<span class="op">.</span>map(op <span class="op">=&gt;</span> op<span class="op">.</span>expectedValue)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  ├── _ensureUniqueResults() → Évitement doublons UI</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  ├── Initialisation arrangements<span class="op">:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  │   ├── _leftArrangement <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">4</span><span class="op">,</span><span class="dv">5</span>] (ordre fixe)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  │   └── _rightArrangement <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">4</span><span class="op">,</span><span class="dv">5</span>]<span class="op">.</span>shuffle() (mélangé)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  └── setState() → Reconstruction UI</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="interface-2-colonnes">Interface 2 colonnes</h3>
+<pre><code>GAUCHE (2/3)    │ DROITE (1/3)
+Formules LaTeX  │ Résultats   
+[Fixes]         │ [Mobiles]   </code></pre>
+<hr />
+<h2 id="interaction-utilisateur">6. INTERACTION UTILISATEUR</h2>
+<h3 id="colonne-gauche-formules">Colonne gauche (Formules)</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>├── GestureDetector<span class="op">.</span>onTap()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>├── _showOperationTooltip(context<span class="op">,</span> operation)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>├── OverlayEntry avec fond semi<span class="op">-</span>transparent</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>├── Affichage Math<span class="op">.</span>tex() agrandi <span class="op">+</span> conditions</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>└── Tap n<span class="st">&#39;importe où → overlayEntry.remove()</span></span></code></pre></div>
+<h3 id="colonne-droite-résultats">Colonne droite (Résultats)</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>├── Draggable<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> (data<span class="op">:</span> index_ligne)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>│   ├── feedback<span class="op">:</span> Container avec Math<span class="op">.</span>tex() <span class="op">+</span> elevation</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>│   ├── childWhenDragging<span class="op">:</span> Version grisée</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>│   └── child<span class="op">:</span> Container normal</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>├── DragTarget<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>│   ├── onAcceptWithDetails(details)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>│   ├── _swapRightItems(index_actuel<span class="op">,</span> details<span class="op">.</span>data)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>│   └── setState() → Échange positions dans _rightArrangement</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>│</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>└── Rendu conditionnel selon _showValidation<span class="op">:</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    ├── Couleurs vert<span class="op">/</span>rouge selon isCorrect</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    ├── Icônes check<span class="op">/</span>close </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    └── Bordures épaisses</span></code></pre></div>
+<hr />
+<h2 id="validation-et-contrôle">7. VALIDATION ET CONTRÔLE</h2>
+<h3 id="logique-de-validation">Logique de validation</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> _validateAnswers() <span class="op">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  ├── _showValidation <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  ├── setState() → Déclenchement rendu validation</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  └── _buildValidationOverlay() → Affichage résultats</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> _getCorrectCount() <span class="op">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  ├── Parcours de _rightArrangement</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  ├── Pour chaque position i<span class="op">:</span> </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  │   └── <span class="cf">if</span> (_rightArrangement[i] <span class="op">==</span> i) correctCount<span class="op">++</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  ├── Logique<span class="op">:</span> position_actuelle <span class="op">==</span> position_attendue</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  └── Return<span class="op">:</span> nombre de bonnes réponses</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="validation-des-paires">Validation des paires</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// La validation vérifie que les indices correspondent</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> isCorrect <span class="op">=</span> _rightArrangement[row] <span class="op">==</span> row;</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">// État initial après mélange :</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>_rightArrangement <span class="op">=</span> [<span class="dv">3</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">2</span>]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">//                   ↑  ↑  ↑  ↑  ↑  ↑</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">//  Position voulue: [0, 1, 2, 3, 4, 5]</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">//  </span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">//  row 0: _rightArrangement[0] = 3 ≠ 0 → FAUX</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">//  row 1: _rightArrangement[1] = 0 ≠ 1 → FAUX  </span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">//  row 2: _rightArrangement[2] = 5 ≠ 2 → FAUX</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">//  etc...</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">// État résolu (après drag &amp; drop) :</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>_rightArrangement <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>]</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">//  row 0: _rightArrangement[0] = 0 = 0 → VRAI</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">//  row 1: _rightArrangement[1] = 1 = 1 → VRAI</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co">//  etc...</span></span></code></pre></div>
+<h3 id="rendu-conditionnel">Rendu conditionnel</h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>├── isCorrect <span class="op">=</span> _showValidation <span class="op">&amp;&amp;</span> _rightArrangement[row] <span class="op">==</span> row</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>├── Couleur <span class="op">=</span> isCorrect <span class="op">?</span> Colors<span class="op">.</span>green <span class="op">:</span> Colors<span class="op">.</span>red</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>├── Icône <span class="op">=</span> isCorrect <span class="op">?</span> Icons<span class="op">.</span>check <span class="op">:</span> Icons<span class="op">.</span>close</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>└── Bordure <span class="op">=</span> isCorrect <span class="op">?</span> vert épais <span class="op">:</span> rouge épais</span></code></pre></div>
+<hr />
+<h2 id="feedback-et-résultats">8. FEEDBACK ET RÉSULTATS</h2>
+<h3 id="overlay-de-validation">Overlay de validation</h3>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Widget _buildValidationOverlay() <span class="op">{</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  ├── correctCount <span class="op">=</span> _getCorrectCount()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  ├── percentage <span class="op">=</span> (correctCount <span class="op">/</span> _itemCount <span class="op">*</span> <span class="dv">100</span>)<span class="op">.</span>toInt()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  ├── Condition<span class="op">:</span> percentage <span class="op">&gt;=</span> <span class="dv">70</span> <span class="op">?</span> <span class="st">&quot;Bravo !&quot;</span> <span class="op">:</span> <span class="st">&quot;Continue !&quot;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  ├── Couleurs<span class="op">:</span> vert si ≥<span class="dv">70</span><span class="op">%,</span> orange sinon</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  └── Affichage<span class="op">:</span> <span class="st">&quot;Résultat: X/6 (Y%)&quot;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h3 id="container-positionné-en-overlay">Container positionné en
+overlay</h3>
+<pre><code>Bravo ! / Continue !      
+Résultat: 4/6 (67%)       </code></pre>
+<hr />
+<h2 id="cycle-de-vie-complet">9. CYCLE DE VIE COMPLET</h2>
+<pre><code>Lancement Screen
+│
+├── initState()
+├── _generateNewQuiz() ← Premier chargement
+│   ├── Génération 6 QuizItem
+│   ├── Shuffle colonne droite
+│   └── Affichage initial
+│
+├── User: Tap &quot;Niveau = X&quot; → _cycleDifficulty()
+│   ├── _currentDifficulty = _currentDifficulty.nextLevel
+│   └── _generateNewQuiz() ← Régénération
+│
+├── User: Drag &amp; Drop → _swapRightItems()
+│   ├── Échange dans _rightArrangement
+│   └── setState() ← Mise à jour visuelle
+│
+├── User: Tap ✓ → _validateAnswers()
+│   ├── _showValidation = true
+│   ├── Calcul correctCount
+│   └── Affichage overlay résultats
+│
+└── User: Tap refresh → _generateNewQuiz()
+    ├── Reset _showValidation = false
+    ├── Nouvelles questions
+    └── Nouveau shuffle</code></pre>
+<hr />
+<h2 id="points-techniques-clés">10. POINTS TECHNIQUES CLÉS</h2>
+<h3 id="gestion-détat">Gestion d’état</h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>GESTION D<span class="st">&#39;ÉTAT:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>├── _operations<span class="op">:</span> <span class="dt">List</span><span class="op">&lt;</span>QuizItem<span class="op">&gt;</span> (données source)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>├── _results<span class="op">:</span> <span class="dt">List</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;</span> (résultats extraits)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>├── _leftArrangement<span class="op">:</span> <span class="dt">List</span><span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> (ordre fixe [<span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">4</span><span class="op">,</span><span class="dv">5</span>])</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>├── _rightArrangement<span class="op">:</span> <span class="dt">List</span><span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> (ordre mobile<span class="op">,</span> shuffle)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>├── _showValidation<span class="op">:</span> <span class="dt">bool</span> (mode validation actif)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>└── _currentDifficulty<span class="op">:</span> DifficultyLevel (niveau actuel)</span></code></pre></div>
+<h3 id="rendu-latex">Rendu LaTeX</h3>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>RENDU LATEX<span class="op">:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>├── Math<span class="op">.</span>tex(operation<span class="op">.</span>getCleanLatex()) ← Substitution variables</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>├── Math<span class="op">.</span>tex(result) ← Affichage résultats  </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>├── Polices adaptatives selon MediaQuery<span class="op">.</span>size<span class="op">.</span>width</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>└── Couleurs conditionnelles selon validation</span></code></pre></div>
+<h3 id="drag-drop">Drag &amp; Drop</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>DRAG <span class="op">&amp;</span> DROP<span class="op">:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>├── Draggable<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> avec data <span class="op">=</span> index ligne</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>├── DragTarget<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> avec onAcceptWithDetails</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>├── Feedback visuel pendant drag</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>└── Swap dans _rightArrangement uniquement</span></code></pre></div>
+<hr />
+<h2 id="comparaison-avec-puzzle-classique">11. COMPARAISON AVEC PUZZLE
+CLASSIQUE</h2>
+<pre><code>PUZZLE IMAGE CLASSIQUE:        PUZZLE HABILETÉ MATHS:
+1. Photo complète      VS      1. Quiz complet     
+2. Découpage 3x3               2. Mélange droite   
+3. Mélange pièces              3. Drag &amp; drop      
+4. Reconstitution              4. Réassociation    </code></pre>
+<hr />
+<h2 id="navigation-vers-le-puzzle">12. NAVIGATION VERS LE PUZZLE</h2>
+<h3 id="étapes-pour-accéder-au-puzzle">Étapes pour accéder au
+puzzle</h3>
+<ol type="1">
+<li><strong>Lancez l’application Luchy</strong>
+<ul>
+<li>Vous arrivez sur l’écran principal avec l’interface de puzzle</li>
+</ul></li>
+<li><strong>Cliquez sur le bouton École</strong>
+<ul>
+<li>Dans la barre d’outils en haut, il y a une icône
+<code>school_outlined</code></li>
+<li>Ce bouton s’appelle “Puzzle Habileté”</li>
+</ul></li>
+<li><strong>Sélectionnez “Habileté Maths”</strong>
+<ul>
+<li>Une liste s’ouvre avec tous les types de puzzle habileté</li>
+<li>Cherchez et cliquez sur <strong>“Habileté Maths”</strong> (avec
+icône <code>functions</code>)</li>
+</ul></li>
+<li><strong>Vous arrivez sur l’écran moderne</strong>
+<ul>
+<li>Interface avec bouton “Niveau = 1” dans la barre de titre</li>
+<li>Colonne gauche (formules LaTeX) et colonne droite (résultats à
+déplacer)</li>
+</ul></li>
+</ol>
+<h3 id="interface-de-navigation">Interface de navigation</h3>
+<pre><code>caméra  école  [niveau]     refresh check settings help        ← Barre d&#39;outils
+        ↑
+      Bouton École (Puzzle Habileté)</code></pre>
+<h3 id="menu-puzzle-habileté">Menu “Puzzle Habileté”</h3>
+<ul>
+<li><strong>Habileté Séries</strong> (ancien système LaTeX)</li>
+<li><strong>Habileté Numérique</strong> (ancien système)<br />
+</li>
+<li><strong>Habileté Fractions</strong> (ancien système)</li>
+<li><strong>Habileté Maths</strong> (nouveau système moderne) ←
+<strong>CIBLE</strong></li>
+</ul>
+<h3 id="une-fois-dans-habileté-maths">Une fois dans “Habileté
+Maths”</h3>
+<ul>
+<li>Bouton <strong>“Niveau = 1”</strong> → cliquez pour passer à 2, puis
+3, puis retour à 1</li>
+<li><strong>Colonne gauche</strong> : Formules (tapez pour voir
+tooltip)</li>
+<li><strong>Colonne droite</strong> : Résultats à réorganiser par drag
+&amp; drop</li>
+<li><strong>Boutons</strong> : refresh (nouvelles questions), check
+(validation)</li>
+</ul>
+<hr />
+<h2 id="réponse-directe-à-la-question">13. RÉPONSE DIRECTE À LA
+QUESTION</h2>
+<p><strong>OUI</strong>, le processus est exactement :</p>
+<ol type="1">
+<li><strong>CONSTRUCTION</strong> : Quiz complet avec paires
+parfaites</li>
+<li><strong>DÉCOUPAGE</strong> : Mélange de la colonne droite
+uniquement<br />
+</li>
+<li><strong>RECONSTITUTION</strong> : L’utilisateur doit retrouver
+l’ordre original</li>
+</ol>
+<p>C’est la même logique qu’un puzzle image : on a d’abord l’image
+complète, puis on la découpe et mélange, puis l’utilisateur reconstitue
+!</p>
+<p>La différence : ici le “découpage” est <strong>logique</strong>
+(mélange d’indices) plutôt que <strong>physique</strong> (découpe
+d’image).</p>
+<hr />
+<h2 id="architecture-des-formules">14. ARCHITECTURE DES FORMULES</h2>
+<h3 id="nouveau-système---habileté-maths">Nouveau système - “Habileté
+Maths”</h3>
+<h4 id="classe-principale-quizitem">Classe principale : QuizItem</h4>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> QuizItem <span class="op">{</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span> id;                    <span class="co">// Identifiant unique</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span> leftLatex;            <span class="co">// Formule LaTeX avec \VAR{}</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">List</span><span class="op">&lt;</span>Variable<span class="op">&gt;</span> variables;    <span class="co">// Variables de la formule</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> RationalValue expectedValue; <span class="co">// Résultat attendu</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span> answerLatexCanonical; <span class="co">// Réponse canonique</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">Map</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="at">dynamic</span><span class="op">&gt;</span> formatHints;     <span class="co">// Format d&#39;affichage</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> InteractionType interactionType;     <span class="co">// Type d&#39;interaction</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">List</span><span class="op">&lt;</span>QuizChoice<span class="op">&gt;</span> choices;            <span class="co">// Choix (vide pour drag&amp;drop)</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">Map</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="at">dynamic</span><span class="op">&gt;</span> metadata;      <span class="co">// Métadonnées</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="classes-de-support">Classes de support</h4>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Variables avec domaines</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Variable <span class="op">{</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span> name;       <span class="co">// &quot;a&quot;, &quot;b&quot;, etc.</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">int</span> value;         <span class="co">// Valeur actuelle</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">int</span> minValue;      <span class="co">// Valeur minimale</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">int</span> maxValue;      <span class="co">// Valeur maximale</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span><span class="op">?</span> role;      <span class="co">// Rôle optionnel</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Valeurs rationnelles exactes</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RationalValue <span class="op">{</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> BigInt numerator;   <span class="co">// Numérateur</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> BigInt denominator; <span class="co">// Dénominateur</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co">// Niveaux de difficulté</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> DifficultyLevel <span class="op">{</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  level1(<span class="dv">1</span><span class="op">,</span> <span class="st">&quot;1 chiffre&quot;</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">9</span>)<span class="op">,</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  level2(<span class="dv">2</span><span class="op">,</span> <span class="st">&quot;2 chiffres&quot;</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">99</span>)<span class="op">,</span> </span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  level3(<span class="dv">3</span><span class="op">,</span> <span class="st">&quot;3 chiffres&quot;</span><span class="op">,</span> <span class="dv">100</span><span class="op">,</span> <span class="dv">999</span>);</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="syntaxe-latex-moderne">Syntaxe LaTeX moderne</h4>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">// NOUVEAU: \VAR{nom_variable}</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>leftLatex<span class="op">:</span> <span class="st">&#39;</span><span class="sc">\\</span><span class="st">VAR{a} + </span><span class="sc">\\</span><span class="st">VAR{b}&#39;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Génération propre avec getCleanLatex()</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">// \VAR{a} + \VAR{b} → 15 + 7</span></span></code></pre></div>
+<h3 id="ancien-système---habileté-numériquefractions">Ancien système -
+“Habileté Numérique/Fractions”</h3>
+<h4 id="template-dopération">Template d’opération</h4>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> NumericalOperationTemplate <span class="op">{</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span> operationType;        <span class="co">// &quot;somme&quot;, &quot;produit&quot;, etc.</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span> latexPattern;         <span class="co">// Pattern avec {VAR:nom}</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">String</span> description;          <span class="co">// Description humaine</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">List</span><span class="op">&lt;</span>NumericalOperationParameter<span class="op">&gt;</span> parameters; <span class="co">// Paramètres</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">int</span> difficulty;              <span class="co">// Niveau de difficulté</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">final</span> <span class="dt">int</span> <span class="kw">Function</span>(<span class="dt">Map</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">int</span><span class="op">&gt;</span>) calculateResult; <span class="co">// Calcul</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 id="syntaxe-latex-ancienne">Syntaxe LaTeX ancienne</h4>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode dart"><code class="sourceCode dart"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ANCIEN: {VAR:nom_variable}</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>latexPattern<span class="op">:</span> <span class="st">&#39;{VAR:a} + {VAR:b}&#39;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>latexPattern<span class="op">:</span> <span class="st">&#39;</span><span class="sc">\\</span><span class="st">frac{{{VAR:a}}}{{{VAR:b}}}&#39;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>latexPattern<span class="op">:</span> <span class="st">&#39;</span><span class="sc">\\</span><span class="st">binom{{{VAR:n}}}{{{VAR:p}}}&#39;</span></span></code></pre></div>
+<h3 id="différences-clés">Différences clés</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Ancien Système</th>
+<th>Nouveau Système</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Syntaxe LaTeX</strong></td>
+<td><code>{VAR:nom}</code></td>
+<td><code>\\VAR{nom}</code></td>
+</tr>
+<tr>
+<td><strong>Structure</strong></td>
+<td>Template fixe</td>
+<td>QuizItem flexible</td>
+</tr>
+<tr>
+<td><strong>Précision</strong></td>
+<td><code>int</code> simple</td>
+<td><code>RationalValue</code> (BigInt)</td>
+</tr>
+<tr>
+<td><strong>Difficulté</strong></td>
+<td>Niveau fixe</td>
+<td><code>DifficultyLevel</code> enum</td>
+</tr>
+<tr>
+<td><strong>Interaction</strong></td>
+<td>QCM/fixe</td>
+<td>Drag &amp; drop dynamique</td>
+</tr>
+<tr>
+<td><strong>Variables</strong></td>
+<td>Paramètres simples</td>
+<td>Classe <code>Variable</code> complète</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="conclusion">CONCLUSION</h2>
+<p>Le nouveau système “Habileté Maths” est <strong>plus moderne,
+flexible et précis</strong> que l’ancien système. Il suit une logique de
+puzzle classique avec construction complète puis découpage/mélange,
+offrant une expérience utilisateur intuitive et éducative.</p>
+<p><strong>Date de création:</strong> 2025-09-08<br />
+<strong>Auteur:</strong> Assistant Claude Sonnet<br />
+<strong>Projet:</strong> Luchy Flutter App</p>

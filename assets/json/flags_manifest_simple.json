@@ -1,0 +1,602 @@
+[
+  {
+    "id": "fr",
+    "name": "France",
+    "alpha2": "FR",
+    "image": "assets/flags/fr.svg"
+  },
+  {
+    "id": "us",
+    "name": "États-Unis",
+    "alpha2": "US",
+    "image": "assets/flags/us.svg"
+  },
+  {
+    "id": "gb",
+    "name": "Royaume-Uni",
+    "alpha2": "GB",
+    "image": "assets/flags/gb.svg"
+  },
+  {
+    "id": "de",
+    "name": "Allemagne",
+    "alpha2": "DE",
+    "image": "assets/flags/de.svg"
+  },
+  {
+    "id": "it",
+    "name": "Italie",
+    "alpha2": "IT",
+    "image": "assets/flags/it.svg"
+  },
+  {
+    "id": "es",
+    "name": "Espagne",
+    "alpha2": "ES",
+    "image": "assets/flags/es.svg"
+  },
+  {
+    "id": "ca",
+    "name": "Canada",
+    "alpha2": "CA",
+    "image": "assets/flags/ca.svg"
+  },
+  {
+    "id": "au",
+    "name": "Australie",
+    "alpha2": "AU",
+    "image": "assets/flags/au.svg"
+  },
+  {
+    "id": "jp",
+    "name": "Japon",
+    "alpha2": "JP",
+    "image": "assets/flags/jp.svg"
+  },
+  {
+    "id": "cn",
+    "name": "Chine",
+    "alpha2": "CN",
+    "image": "assets/flags/cn.svg"
+  },
+  {
+    "id": "ru",
+    "name": "Russie",
+    "alpha2": "RU",
+    "image": "assets/flags/ru.svg"
+  },
+  {
+    "id": "br",
+    "name": "Brésil",
+    "alpha2": "BR",
+    "image": "assets/flags/br.svg"
+  },
+  {
+    "id": "mx",
+    "name": "Mexique",
+    "alpha2": "MX",
+    "image": "assets/flags/mx.svg"
+  },
+  {
+    "id": "in",
+    "name": "Inde",
+    "alpha2": "IN",
+    "image": "assets/flags/in.svg"
+  },
+  {
+    "id": "kr",
+    "name": "Corée du Sud",
+    "alpha2": "KR",
+    "image": "assets/flags/kr.svg"
+  },
+  {
+    "id": "nl",
+    "name": "Pays-Bas",
+    "alpha2": "NL",
+    "image": "assets/flags/nl.svg"
+  },
+  {
+    "id": "se",
+    "name": "Suède",
+    "alpha2": "SE",
+    "image": "assets/flags/se.svg"
+  },
+  {
+    "id": "no",
+    "name": "Norvège",
+    "alpha2": "NO",
+    "image": "assets/flags/no.svg"
+  },
+  {
+    "id": "dk",
+    "name": "Danemark",
+    "alpha2": "DK",
+    "image": "assets/flags/dk.svg"
+  },
+  {
+    "id": "fi",
+    "name": "Finlande",
+    "alpha2": "FI",
+    "image": "assets/flags/fi.svg"
+  },
+  {
+    "id": "ch",
+    "name": "Suisse",
+    "alpha2": "CH",
+    "image": "assets/flags/ch.svg"
+  },
+  {
+    "id": "at",
+    "name": "Autriche",
+    "alpha2": "AT",
+    "image": "assets/flags/at.svg"
+  },
+  {
+    "id": "be",
+    "name": "Belgique",
+    "alpha2": "BE",
+    "image": "assets/flags/be.svg"
+  },
+  {
+    "id": "pl",
+    "name": "Pologne",
+    "alpha2": "PL",
+    "image": "assets/flags/pl.svg"
+  },
+  {
+    "id": "cz",
+    "name": "République tchèque",
+    "alpha2": "CZ",
+    "image": "assets/flags/cz.svg"
+  },
+  {
+    "id": "hu",
+    "name": "Hongrie",
+    "alpha2": "HU",
+    "image": "assets/flags/hu.svg"
+  },
+  {
+    "id": "ro",
+    "name": "Roumanie",
+    "alpha2": "RO",
+    "image": "assets/flags/ro.svg"
+  },
+  {
+    "id": "bg",
+    "name": "Bulgarie",
+    "alpha2": "BG",
+    "image": "assets/flags/bg.svg"
+  },
+  {
+    "id": "hr",
+    "name": "Croatie",
+    "alpha2": "HR",
+    "image": "assets/flags/hr.svg"
+  },
+  {
+    "id": "si",
+    "name": "Slovénie",
+    "alpha2": "SI",
+    "image": "assets/flags/si.svg"
+  },
+  {
+    "id": "sk",
+    "name": "Slovaquie",
+    "alpha2": "SK",
+    "image": "assets/flags/sk.svg"
+  },
+  {
+    "id": "lt",
+    "name": "Lituanie",
+    "alpha2": "LT",
+    "image": "assets/flags/lt.svg"
+  },
+  {
+    "id": "lv",
+    "name": "Lettonie",
+    "alpha2": "LV",
+    "image": "assets/flags/lv.svg"
+  },
+  {
+    "id": "ee",
+    "name": "Estonie",
+    "alpha2": "EE",
+    "image": "assets/flags/ee.svg"
+  },
+  {
+    "id": "ie",
+    "name": "Irlande",
+    "alpha2": "IE",
+    "image": "assets/flags/ie.svg"
+  },
+  {
+    "id": "pt",
+    "name": "Portugal",
+    "alpha2": "PT",
+    "image": "assets/flags/pt.svg"
+  },
+  {
+    "id": "gr",
+    "name": "Grèce",
+    "alpha2": "GR",
+    "image": "assets/flags/gr.svg"
+  },
+  {
+    "id": "cy",
+    "name": "Chypre",
+    "alpha2": "CY",
+    "image": "assets/flags/cy.svg"
+  },
+  {
+    "id": "mt",
+    "name": "Malte",
+    "alpha2": "MT",
+    "image": "assets/flags/mt.svg"
+  },
+  {
+    "id": "lu",
+    "name": "Luxembourg",
+    "alpha2": "LU",
+    "image": "assets/flags/lu.svg"
+  },
+  {
+    "id": "li",
+    "name": "Liechtenstein",
+    "alpha2": "LI",
+    "image": "assets/flags/li.svg"
+  },
+  {
+    "id": "mc",
+    "name": "Monaco",
+    "alpha2": "MC",
+    "image": "assets/flags/mc.svg"
+  },
+  {
+    "id": "sm",
+    "name": "Saint-Marin",
+    "alpha2": "SM",
+    "image": "assets/flags/sm.svg"
+  },
+  {
+    "id": "va",
+    "name": "Vatican",
+    "alpha2": "VA",
+    "image": "assets/flags/va.svg"
+  },
+  {
+    "id": "ad",
+    "name": "Andorre",
+    "alpha2": "AD",
+    "image": "assets/flags/ad.svg"
+  },
+  {
+    "id": "is",
+    "name": "Islande",
+    "alpha2": "IS",
+    "image": "assets/flags/is.svg"
+  },
+  {
+    "id": "tr",
+    "name": "Turquie",
+    "alpha2": "TR",
+    "image": "assets/flags/tr.svg"
+  },
+  {
+    "id": "il",
+    "name": "Israël",
+    "alpha2": "IL",
+    "image": "assets/flags/il.svg"
+  },
+  {
+    "id": "sa",
+    "name": "Arabie saoudite",
+    "alpha2": "SA",
+    "image": "assets/flags/sa.svg"
+  },
+  {
+    "id": "ae",
+    "name": "Émirats arabes unis",
+    "alpha2": "AE",
+    "image": "assets/flags/ae.svg"
+  },
+  {
+    "id": "eg",
+    "name": "Égypte",
+    "alpha2": "EG",
+    "image": "assets/flags/eg.svg"
+  },
+  {
+    "id": "ma",
+    "name": "Maroc",
+    "alpha2": "MA",
+    "image": "assets/flags/ma.svg"
+  },
+  {
+    "id": "dz",
+    "name": "Algérie",
+    "alpha2": "DZ",
+    "image": "assets/flags/dz.svg"
+  },
+  {
+    "id": "tn",
+    "name": "Tunisie",
+    "alpha2": "TN",
+    "image": "assets/flags/tn.svg"
+  },
+  {
+    "id": "ly",
+    "name": "Libye",
+    "alpha2": "LY",
+    "image": "assets/flags/ly.svg"
+  },
+  {
+    "id": "sd",
+    "name": "Soudan",
+    "alpha2": "SD",
+    "image": "assets/flags/sd.svg"
+  },
+  {
+    "id": "et",
+    "name": "Éthiopie",
+    "alpha2": "ET",
+    "image": "assets/flags/et.svg"
+  },
+  {
+    "id": "ke",
+    "name": "Kenya",
+    "alpha2": "KE",
+    "image": "assets/flags/ke.svg"
+  },
+  {
+    "id": "za",
+    "name": "Afrique du Sud",
+    "alpha2": "ZA",
+    "image": "assets/flags/za.svg"
+  },
+  {
+    "id": "ng",
+    "name": "Nigeria",
+    "alpha2": "NG",
+    "image": "assets/flags/ng.svg"
+  },
+  {
+    "id": "gh",
+    "name": "Ghana",
+    "alpha2": "GH",
+    "image": "assets/flags/gh.svg"
+  },
+  {
+    "id": "sn",
+    "name": "Sénégal",
+    "alpha2": "SN",
+    "image": "assets/flags/sn.svg"
+  },
+  {
+    "id": "ci",
+    "name": "Côte d'Ivoire",
+    "alpha2": "CI",
+    "image": "assets/flags/ci.svg"
+  },
+  {
+    "id": "cm",
+    "name": "Cameroun",
+    "alpha2": "CM",
+    "image": "assets/flags/cm.svg"
+  },
+  {
+    "id": "cd",
+    "name": "République démocratique du Congo",
+    "alpha2": "CD",
+    "image": "assets/flags/cd.svg"
+  },
+  {
+    "id": "cg",
+    "name": "République du Congo",
+    "alpha2": "CG",
+    "image": "assets/flags/cg.svg"
+  },
+  {
+    "id": "ga",
+    "name": "Gabon",
+    "alpha2": "GA",
+    "image": "assets/flags/ga.svg"
+  },
+  {
+    "id": "td",
+    "name": "Tchad",
+    "alpha2": "TD",
+    "image": "assets/flags/td.svg"
+  },
+  {
+    "id": "cf",
+    "name": "République centrafricaine",
+    "alpha2": "CF",
+    "image": "assets/flags/cf.svg"
+  },
+  {
+    "id": "ne",
+    "name": "Niger",
+    "alpha2": "NE",
+    "image": "assets/flags/ne.svg"
+  },
+  {
+    "id": "bf",
+    "name": "Burkina Faso",
+    "alpha2": "BF",
+    "image": "assets/flags/bf.svg"
+  },
+  {
+    "id": "ml",
+    "name": "Mali",
+    "alpha2": "ML",
+    "image": "assets/flags/ml.svg"
+  },
+  {
+    "id": "gn",
+    "name": "Guinée",
+    "alpha2": "GN",
+    "image": "assets/flags/gn.svg"
+  },
+  {
+    "id": "sl",
+    "name": "Sierra Leone",
+    "alpha2": "SL",
+    "image": "assets/flags/sl.svg"
+  },
+  {
+    "id": "lr",
+    "name": "Libéria",
+    "alpha2": "LR",
+    "image": "assets/flags/lr.svg"
+  },
+  {
+    "id": "gm",
+    "name": "Gambie",
+    "alpha2": "GM",
+    "image": "assets/flags/gm.svg"
+  },
+  {
+    "id": "gw",
+    "name": "Guinée-Bissau",
+    "alpha2": "GW",
+    "image": "assets/flags/gw.svg"
+  },
+  {
+    "id": "cv",
+    "name": "Cap-Vert",
+    "alpha2": "CV",
+    "image": "assets/flags/cv.svg"
+  },
+  {
+    "id": "st",
+    "name": "São Tomé-et-Príncipe",
+    "alpha2": "ST",
+    "image": "assets/flags/st.svg"
+  },
+  {
+    "id": "gq",
+    "name": "Guinée équatoriale",
+    "alpha2": "GQ",
+    "image": "assets/flags/gq.svg"
+  },
+  {
+    "id": "ao",
+    "name": "Angola",
+    "alpha2": "AO",
+    "image": "assets/flags/ao.svg"
+  },
+  {
+    "id": "zm",
+    "name": "Zambie",
+    "alpha2": "ZM",
+    "image": "assets/flags/zm.svg"
+  },
+  {
+    "id": "zw",
+    "name": "Zimbabwe",
+    "alpha2": "ZW",
+    "image": "assets/flags/zw.svg"
+  },
+  {
+    "id": "bw",
+    "name": "Botswana",
+    "alpha2": "BW",
+    "image": "assets/flags/bw.svg"
+  },
+  {
+    "id": "na",
+    "name": "Namibie",
+    "alpha2": "NA",
+    "image": "assets/flags/na.svg"
+  },
+  {
+    "id": "sz",
+    "name": "Eswatini",
+    "alpha2": "SZ",
+    "image": "assets/flags/sz.svg"
+  },
+  {
+    "id": "ls",
+    "name": "Lesotho",
+    "alpha2": "LS",
+    "image": "assets/flags/ls.svg"
+  },
+  {
+    "id": "mg",
+    "name": "Madagascar",
+    "alpha2": "MG",
+    "image": "assets/flags/mg.svg"
+  },
+  {
+    "id": "mu",
+    "name": "Maurice",
+    "alpha2": "MU",
+    "image": "assets/flags/mu.svg"
+  },
+  {
+    "id": "sc",
+    "name": "Seychelles",
+    "alpha2": "SC",
+    "image": "assets/flags/sc.svg"
+  },
+  {
+    "id": "km",
+    "name": "Comores",
+    "alpha2": "KM",
+    "image": "assets/flags/km.svg"
+  },
+  {
+    "id": "dj",
+    "name": "Djibouti",
+    "alpha2": "DJ",
+    "image": "assets/flags/dj.svg"
+  },
+  {
+    "id": "so",
+    "name": "Somalie",
+    "alpha2": "SO",
+    "image": "assets/flags/so.svg"
+  },
+  {
+    "id": "er",
+    "name": "Érythrée",
+    "alpha2": "ER",
+    "image": "assets/flags/er.svg"
+  },
+  {
+    "id": "ug",
+    "name": "Ouganda",
+    "alpha2": "UG",
+    "image": "assets/flags/ug.svg"
+  },
+  {
+    "id": "tz",
+    "name": "Tanzanie",
+    "alpha2": "TZ",
+    "image": "assets/flags/tz.svg"
+  },
+  {
+    "id": "rw",
+    "name": "Rwanda",
+    "alpha2": "RW",
+    "image": "assets/flags/rw.svg"
+  },
+  {
+    "id": "bi",
+    "name": "Burundi",
+    "alpha2": "BI",
+    "image": "assets/flags/bi.svg"
+  },
+  {
+    "id": "mw",
+    "name": "Malawi",
+    "alpha2": "MW",
+    "image": "assets/flags/mw.svg"
+  },
+  {
+    "id": "mz",
+    "name": "Mozambique",
+    "alpha2": "MZ",
+    "image": "assets/flags/mz.svg"
+  }
+]

@@ -1,0 +1,304 @@
+col1;col2;col3;col5
+ADN;nucléotide;L’ADN est un polymère de nucléotides.;1A
+ARN;ribose;L’ARN contient du ribose, contrairement à l’ADN.;1A
+gène;locus;Un gène occupe un locus précis sur un chromosome.;1A
+allèle;fréquence;La fréquence allélique mesure la proportion d’un allèle.;1A
+mutation;substitution;Une mutation peut être une substitution de base.;1A
+méiose;gamète;La méiose produit des gamètes haploïdes.;1A
+mitose;anaphase;En anaphase, les chromatides sœurs se séparent.;1A
+ribosome;traduction;Le ribosome effectue la traduction de l’ARNm.;1A
+codon;triplet;Un codon est un triplet de nucléotides.;1A
+introns;épissage;Les introns sont retirés par épissage.;1A
+exons;mature;Les exons composent l’ARNm mature.;1A
+polymérase;transcription;L’ARN polymérase catalyse la transcription.;1A
+ARNt;anticodon;L’ARNt porte l’anticodon complémentaire du codon.;1A
+phénotype;caractère;Le phénotype s’exprime par des caractères observables.;1A
+génome;séquence;Le génome est l’ensemble des séquences d’ADN.;1A
+chromosome;centromère;Le centromère unit les chromatides sœurs.;1A
+zygote;diploïde;Le zygote est diploïde après la fécondation.;1A
+caryotype;paire;Le caryotype ordonne les chromosomes par paires.;1A
+duplication;néofonction;Une duplication peut mener à une néo‑fonctionnalisation.;1A
+transposon;mobilité;Les transposons sont des éléments génétiques mobiles.;1A
+transfert;horizontal;Des gènes peuvent circuler entre espèces (horizontal).;1A
+sélection;adaptation;La sélection naturelle favorise des adaptations.;1A
+dérive;hasard;La dérive génétique modifie les fréquences au hasard.;1A
+flux;migration;Le flux génétique provient de migrations.;1A
+isolement;reproductif;L’isolement reproductif empêche le croisement.;1A
+spéciation;divergence;La spéciation suit une divergence génétique durable.;1A
+Mendel;ségrégation;Mendel a décrit la ségrégation des allèles.;1A
+Darwin;variation;Darwin relie variations héréditaires et sélection.;1A
+hérédité;brassage;Brassage méiotique et fécondation créent la diversité.;1A
+mutation-silencieuse;synonyme;Mutation qui ne change pas l’acide aminé.;1A
+mutation-non-sens;stop;Mutation générant un codon stop prématuré.;1A
+mutation-décalage;frameshift;Insertion/suppression décale le cadre de lecture.;1A
+méiose I;disjonction;Disjonction des homologues en anaphase I.;1A
+chiasma;enjambement;Le chiasma matérialise le crossing‑over.;1A
+gènes-liés;liaison;Des gènes liés s’héritent ensemble.;1A
+carte-génétique;centimorgan;La distance génétique se mesure en cM.;1A
+endosymbiose;origine;Mitochondries et chloroplastes proviennent d’endosymbioses.;1A
+réplication;semi-conserv;La réplication de l’ADN est semi‑conservative.;1A
+hélicase;ouverture;L’hélicase sépare les brins d’ADN.;1A
+ligase;soudure;L’ADN ligase soude les fragments d’Okazaki.;1A
+épigénétique;méthylation;La méthylation module l’expression génique.;1A
+histone;acétylation;L’acétylation d’histones ouvre la chromatine.;1A
+microARN;silencing;Les microARN assurent un silencing post‑transcriptionnel.;1A
+horloge-moléculaire;taux-mutation;On estime le temps par un taux de mutation moyen.;1A
+phylogénie;clade;La phylogénie regroupe les espèces en clades.;1A
+stratigraphie;superposition;La superposition ordonne les couches.;1B
+fossile;repère;Les fossiles servent de repères biostratigraphiques.;1B
+discordance;lacune;Une discordance marque une lacune de sédimentation.;1B
+datation;radiochron;La radiochronologie date par isotopes.;1B
+demi-vie;constante;La demi‑vie d’un isotope est constante.;1B
+faille;rejet;Une faille se caractérise par un rejet.;1B
+plissement;anticlinal;Un anticlinal est un pli convexe vers le haut.;1B
+métamorphisme;faciès;Les faciès P‑T révèlent l’histoire des roches.;1B
+granite;intrusif;Le granite est magmatique intrusif.;1B
+basalte;effusif;Le basalte est volcanique effusif.;1B
+ophiolite;obduction;Une ophiolite provient d’obduction océan‑continent.;1B
+sédiment;dépôt;Les sédiments se déposent en bassins.;1B
+conglomérat;galet;Le conglomérat contient des galets arrondis.;1B
+grès;quartz;Le grès est riche en grains de quartz.;1B
+argilite;feuillet;Les argilites ont des feuillets fins.;1B
+schiste;foliation;Le schiste montre une foliation.;1B
+marbre;recristall;Le marbre recristallise du calcaire.;1B
+gneiss;bandes;Le gneiss alterne bandes claires et sombres.;1B
+dorsale;accrétion;Aux dorsales, l’accrétion forme la lithosphère.;1B
+subduction;fosse;La subduction s’accompagne d’une fosse océanique.;1B
+collision;orogène;La collision bâtit des chaînes orogéniques.;1B
+point-chaud;panache;Un point chaud est alimenté par un panache mantellique.;1B
+paléoclimat;proxy;On reconstitue les paléoclimats via des proxys.;1B
+paléoenvironnement;traces;Les traces sédimentaires renseignent les milieux passés.;1B
+magnétisme;inversion;Les inversions magnétiques datent les fonds océaniques.;1B
+orogenèse;métamorph;Les orogenèses induisent du métamorphisme régional.;1B
+rhéologie;ductile;Le manteau asthénosphérique est ductile.;1B
+onde-P;compression;Les ondes P sont compressives et rapides.;1B
+onde-S;cisaillement;Les ondes S cisaillent, plus lentes que P.;1B
+sismogramme;délai-SP;Le délai S‑P localise l’épicentre.;1B
+batholite;pluton;Un batholite est un énorme pluton granitique.;1B
+isostasie;équilibre;L’isostasie traduit l’équilibre flottant des blocs.;1B
+rift;amincissement;Un rift reflète l’amincissement lithosphérique.;1B
+tephra;cendre;Le téphra comprend bombes, lapilli et cendres.;1B
+caldeira;effondrement;Une caldeira provient d’un effondrement post‑éruptif.;1B
+horst;surrection;Un horst est un compartiment surélevé entre failles.;1B
+graben;affaissement;Un graben est un compartiment affaissé.;1B
+diagenèse;cimentation;La diagenèse compacte et cimente les sédiments.;1B
+granoclassement;énergie;Le granoclassement renseigne l’énergie du milieu.;1B
+chloroplaste;thylakoïde;Les thylakoïdes hébergent les photosystèmes.;2A
+chlorophylle;pigment;La chlorophylle capte l’énergie lumineuse.;2A
+photosystème;antenne;Un photosystème possède une antenne collectrice.;2A
+Rubisco;carboxylase;La Rubisco fixe le CO₂ au cycle de Calvin.;2A
+xylème;ascension;Le xylème assure l’ascension de la sève brute.;2A
+phloème;translocation;Le phloème transporte les sucres vers les puits.;2A
+racine;poil-absorbant;Les poils absorbants augmentent l’absorption.;2A
+symbiose;mycorhize;La mycorhize échange eau/minéraux contre sucres.;2A
+légumineuse;rhizobium;Rhizobium fixe l’azote dans des nodosités.;2A
+auxine;phototropisme;L’auxine pilote le phototropisme.;2A
+gibbérelline;allongement;Les gibbérellines stimulent l’allongement.;2A
+cytokinine;division;Les cytokinines favorisent la division cellulaire.;2A
+acide-abscissique;dormance;L’ABA déclenche dormance et fermeture stomatique.;2A
+éthylène;maturation;L’éthylène accélère la maturation des fruits.;2A
+cuticule;cire;La cuticule cireuse limite la transpiration.;2A
+graine;albumen;L’albumen stocke des réserves pour l’embryon.;2A
+germination;imbibition;L’imbibition d’eau déclenche la germination.;2A
+fleur;anthère;L’anthère produit le pollen.;2A
+pistil;stigmate;Le stigmate reçoit le pollen.;2A
+fruit;péricarpe;Le péricarpe enveloppe le fruit (ovaire).;2A
+domestication;sélection;La domestication repose sur la sélection variétale.;2A
+rendement;amélioration;La sélection améliore le rendement.;2A
+OGM;transgénèse;La transgénèse introduit un gène d’intérêt.;2A
+greffage;porte-greffe;Le greffage associe greffon et porte‑greffe.;2A
+bouturage;clonage;La bouture réalise un clonage végétatif.;2A
+parenchyme;photosynth;Le parenchyme chlorophyllien photosynthétise.;2A
+sève-brute;cohésion;La cohésion‑adhésion tire la sève brute.;2A
+sève-élaborée;source-puits;La sève élaborée circule de la source vers le puits.;2A
+phyllotaxie;arrangement;La phyllotaxie décrit l’arrangement des feuilles.;2A
+pollinisation;vecteur;Le vecteur (vent/insecte) transporte le pollen.;2A
+dissémination;anémophile;Dissémination par le vent chez certaines espèces.;2A
+tropisme;géotropisme;Le géotropisme oriente racines et tiges.;2A
+phytochrome;photopériode;Le phytochrome perçoit la photopériode.;2A
+apomixie;asexuée;L’apomixie est une reproduction asexuée chez la plante.;2A
+callose;tamis;La callose colmate les plaques criblées du phloème.;2A
+albédo;réflexion;L’albédo mesure la fraction de lumière réfléchie.;2B
+forçage;radiatif;Un forçage radiatif modifie l’équilibre énergétique.;2B
+CO₂;effet-serre;Le CO₂ contribue à l’effet de serre.;2B
+CH₄;puissance;Le méthane a un pouvoir réchauffant élevé.;2B
+N₂O;agricole;Le N₂O provient notamment des pratiques agricoles.;2B
+ozone-strato;UV-B;L’ozone stratosphérique filtre les UV‑B.;2B
+aérosol;diffusion;Les aérosols diffusent la lumière et refroidissent.;2B
+permafrost;dégel;Le dégel du pergélisol libère CH₄ et CO₂.;2B
+banquise;extension;L’extension de la banquise influence l’albédo.;2B
+glacier;bilan-masse;Le bilan de masse oppose accumulation et ablation.;2B
+niveau-mer;dilatation;La dilatation thermique élève le niveau marin.;2B
+AMOC;transport;La circulation atlantique transporte chaleur et sel.;2B
+ENSO;oscillation;El Niño/La Niña forment ENSO.;2B
+proxy-climat;isotopes;Les isotopes (δ18O) servent de proxys climatiques.;2B
+dendro;cernes;La dendrochronologie lit le climat dans les cernes.;2B
+tourbière;stockage;Les tourbières stockent durablement du carbone.;2B
+forêt;puits;Les forêts agissent en puits de carbone.;2B
+désert;aridité;Un désert se définit par une aridité extrême.;2B
+ruissellement;érosion;Le ruissellement accroît l’érosion des sols.;2B
+fertilité;limon;Les limons déposés augmentent la fertilité.;2B
+biodiversité;richesse;La richesse spécifique mesure la biodiversité locale.;2B
+fragmentation;habitat;La fragmentation isole les populations.;2B
+espèce-clé;influence;Une espèce clé a une influence disproportionnée.;2B
+réseau-trophique;maillage;Un réseau trophique maille plusieurs chaînes.;2B
+eutrophisation;prolifération;L’enrichissement en nutriments cause des proliférations algales.;2B
+zone-morte;anoxie;Une zone morte est une région côtière anoxique.;2B
+acidification;carbonate;L’acidification dissout les carbonates marins.;2B
+pH-océan;baisse;Le pH océanique baisse avec l’absorption de CO₂.;2B
+anthropique;empreinte;L’activité humaine laisse une empreinte climatique.;2B
+adaptation;résilience;L’adaptation renforce la résilience aux impacts.;2B
+atténuation;réduction;L’atténuation vise la réduction des émissions.;2B
+GIEC;évaluation;Le GIEC évalue l’état des connaissances climatiques.;2B
+alizés;circulation;Les alizés structurent la circulation atmosphérique.;2B
+cyclone;latente;Les cyclones tirent de l’énergie de la chaleur latente.;2B
+sécheresse;déficit;Déficit hydrique prolongé = sécheresse.;2B
+inondation;crue;Les inondations surviennent lors de crues.;2B
+feux-végétation;combustible;Le risque dépend du combustible et du climat.;2B
+îlot-chaleur;urbain;Les villes créent des îlots de chaleur urbains.;2B
+ozone-tropos;photochimie;L’ozone troposphérique provient de photochimie polluante.;2B
+neurone;influx;Le neurone conduit l’influx nerveux.;3
+synapse;neurotransmetteur;La synapse libère un neurotransmetteur.;3
+axone;conduction;L’axone assure la conduction du signal.;3
+dendrite;réception;Les dendrites reçoivent les signaux.;3
+gaine-de-myéline;saltation;La myéline permet la conduction saltatoire.;3
+canal-Na+;dépolarisation;L’ouverture des canaux Na+ dépolarise la membrane.;3
+pompe-NaK;gradient;La pompe Na⁺/K⁺ restaure les gradients.;3
+réflexe;arc;Un arc réflexe est une voie simple et rapide.;3
+cortex;intégration;Le cortex intègre l’information.;3
+cervelet;coordination;Le cervelet coordonne posture et mouvements.;3
+tronc-cérébral;centres-vitaux;Le tronc cérébral héberge des centres vitaux.;3
+hippocampe;mémoire;L’hippocampe est crucial pour la mémoire.;3
+amygdale;émotion;L’amygdale traite la valence émotionnelle.;3
+dopamine;récompense;La dopamine signale la récompense.;3
+sérotonine;humeur;La sérotonine module l’humeur.;3
+noradrénaline;vigilance;La noradrénaline augmente la vigilance.;3
+mélatonine;rythme;La mélatonine règle les rythmes circadiens.;3
+motoneurone;plaque-motrice;Le motoneurone synapse sur la plaque motrice.;3
+acétylcholine;nicotinique;À la jonction neuromusculaire, le récepteur est nicotinique.;3
+muscle-squelettique;sarcomère;Le sarcomère est l’unité contractile.;3
+actine;filament-fin;L’actine forme les filaments fins.;3
+myosine;tête-motrice;Les têtes de myosine génèrent le glissement.;3
+troponine;capteur-Ca²+;La troponine détecte le Ca²⁺ et libère les sites d’actine.;3
+tropomyosine;masquage;La tropomyosine masque les sites d’interaction au repos.;3
+t-tubule;couplage;Les T‑tubules assurent le couplage excitation‑contraction.;3
+réticulum-sarcoplasmique;libération-Ca²+;Le RS libère le Ca²⁺ à l’activation.;3
+phosphocréatine;tampon-ATP;La phosphocréatine tamponne l’ATP rapide.;3
+glycolyse;pyruvate;La glycolyse produit du pyruvate et de l’ATP.;3
+cycle-de-Krebs;NADH;Krebs fournit NADH à la chaîne respiratoire.;3
+chaîne-respiratoire;ATP-synthase;L’ATP synthase fabrique l’ATP.;3
+VO₂max;capacité;Le VO₂max mesure la capacité aérobie.;3
+cœur;débit-cardiaque;Le cœur éjecte un débit par minute.;3
+ventricule-gauche;éjection-systolique;Le VG assure l’éjection systolique vers l’aorte.;3
+valve-mitrale;orifice-AV;La valve mitrale contrôle l’orifice auriculo‑ventriculaire.;3
+valve-aortique;ouverture-systole;La valve aortique s’ouvre en systole.;3
+artère-coronaire;perfusion;Les coronaires perfusent le myocarde.;3
+ECG;ondes-PQRS;L’ECG enregistre P, QRS et T.;3
+hématocrite;érythrocytes;L’hématocrite est la proportion de globules rouges.;3
+plaquette;hémostase;Les plaquettes initient l’hémostase primaire.;3
+fibrinogène;fibrine;Le fibrinogène devient fibrine et stabilise le caillot.;3
+albumine;pression-oncotique;L’albumine maintient la pression oncotique.;3
+hépatocyte;biotransformation;Les hépatocytes métabolisent les xénobiotiques.;3
+bile;émulsification;La bile émulsionne les lipides.;3
+lipase;triglycérides;La lipase hydrolyse les triglycérides.;3
+amylase;dextrines;L’amylase scinde l’amidon en dextrines.;3
+pepsine;protéolyse;La pepsine initie la protéolyse gastrique.;3
+intestin-grêle;microvillosités;Les microvillosités augmentent l’absorption.;3
+côlon;microbiote;Le côlon abrite un microbiote fermentaire.;3
+néphron;unité-fonctionnelle;Le néphron est l’unité fonctionnelle du rein.;3
+anse-de-Henle;contre-courant;L’anse crée un gradient à contre‑courant.;3
+aldostérone;réabsorption-Na+;L’aldostérone favorise la réabsorption de Na+.;3
+angiotensine-II;vasoconstriction;Puissant vasoconstricteur du SRAA.;3
+ANF;natriurèse;Le peptide ANF favorise la natriurèse.;3
+osmorécepteur;hypothalamus;Les osmorécepteurs hypothalamiques détectent l’osmolalité.;3
+chémorécepteur;carotidien;Les chémorécepteurs carotidiens répondent à O₂, CO₂, pH.;3
+Hb-fœtale;affinité-élevée;L’Hb fœtale a une forte affinité pour O₂.;3
+hème;fer;Le groupement hème contient le fer fixant O₂.;3
+myoglobine;réserve-O₂;La myoglobine stocke l’oxygène musculaire.;3
+diaphragme;ventilation;Le diaphragme est le principal muscle ventilatoire.;3
+plèvre;pression-négative;La plèvre maintient une pression intrapleurale négative.;3
+volume-courant;repos;Volume d’air échangé au repos.;3
+VEMS;obstruction;Le VEMS baisse en cas d’obstruction bronchique.;3
+spirométrie;débit-volume;La spirométrie analyse volumes et débits.;3
+pneumocyte-II;surfactant;Les pneumocytes II sécrètent le surfactant.;3
+SGLT;Na+-glucose;Le cotransport SGLT absorbe glucose avec Na+.;3
+hypothalamus;homéostat;L’hypothalamus agit comme homéostat neuroendocrinien.;3
+neurohypophyse;ADH-ocytocine;La post‑hypophyse libère ADH et ocytocine.;3
+adénohypophyse;trophiques;L’antéhypophyse sécrète des hormones trophiques.;3
+TRH;TSH;La TRH stimule la sécrétion hypophysaire de TSH.;3
+TSH;thyroïde;La TSH stimule la thyroïde (T3/T4).;3
+PTH;calcémie;La parathormone élève la calcémie.;3
+calcitonine;ostéoclastes;La calcitonine freine les ostéoclastes.;3
+vitamine-D;absorption-Ca²+;La vitamine D augmente l’absorption du calcium.;3
+glycémie;régulation;Insuline et glucagon régulent la glycémie.;3
+hémostase-secondaire;cascade;La cascade de coagulation stabilise le clou plaquettaire.;3
+œstrogènes;endomètre;Les œstrogènes prolifèrent l’endomètre.;3
+progestérone;sécrétion;La progestérone transforme l’endomètre en phase sécrétoire.;3
+testostérone;androgénie;La testostérone soutient l’anabolisme et les caractères sexuels.;3
+FSH;follicule;La FSH stimule la croissance folliculaire.;3
+LH;ovulation;Le pic de LH déclenche l’ovulation.;3
+HCG;grossesse;L’HCG soutient le corps jaune en début de grossesse.;3
+endomètre;implantation;L’implantation a lieu dans l’endomètre.;3
+placenta;échanges;Le placenta assure les échanges materno‑fœtaux.;3
+lactation;prolactine;La prolactine initie et maintient la lactation.;3
+ocytocine;éjection-lait;L’ocytocine déclenche l’éjection du lait.;3
+thermorégulation;sudation;La sudation dissipe la chaleur par évaporation.;3
+glycogène;réserve;Le glycogène est une réserve énergétique.;3
+barrière-hématoencéphalique;protection;La BHE protège le tissu nerveux.;3
+nociception;seuil;La nociception détecte les stimuli douloureux.;3
+proprioception;posture;La proprioception informe sur posture et mouvement.;3
+vestibule;accélération;L’appareil vestibulaire détecte les accélérations.;3
+rétine;cônes;Les cônes permettent la vision des couleurs.;3
+bâtonnets;faible-lumière;Les bâtonnets sont sensibles aux faibles luminances.;3
+cristallin;accommodation;Le cristallin ajuste la focalisation.;3
+cornée;réfraction;La cornée assure l’essentiel de la réfraction.;3
+oreille-interne;labyrinthe;L’oreille interne contient le labyrinthe cochléaire et vestibulaire.;3
+articulation;synoviale;Une articulation synoviale permet un mouvement fluide.;3
+cartilage;chondrocyte;Le cartilage est entretenu par les chondrocytes.;3
+tissu-osseux;ostéoblaste;Les ostéoblastes synthétisent la matrice osseuse.;3
+parathyroïde;PTH;Les parathyroïdes sécrètent la PTH.;3
+érythropoïétine;érythropoïèse;L’EPO stimule la production d’érythrocytes.;3
+système-lymphatique;drainage;Le système lymphatique draine les liquides.;3
+ganglion;filtration;Les ganglions filtrent la lymphe et activent l’immunité.;3
+immunité-innée;barrières;Barrières, phagocytes et inflammation.;3
+immunité-adaptative;spécificité;Spécifique, avec mémoire immunitaire.;3
+antigène;déterminant;Un antigène porte des déterminants reconnus.;3
+anticorps;paratope;Le paratope de l’anticorps se lie à un épitope.;3
+CMH;présentation;Le CMH présente des peptides aux lymphocytes T.;3
+LT-CD8;cytotoxique;Les LT CD8 détruisent les cellules infectées.;3
+LT-CD4;auxiliaire;Les LT CD4 aident l’orchestration des réponses.;3
+LB;plasmocyte;Les LB deviennent plasmocytes sécréteurs d’Ac.;3
+mémoire-immunitaire;rappel;La mémoire permet une réponse secondaire rapide.;3
+vaccin;immunogène;Un vaccin introduit un immunogène sûr.;3
+allergie;histamine;L’allergie libère de l’histamine.;3
+auto-immunité;tolérance;La perte de tolérance mène à l’auto‑immunité.;3
+inflammation;cytokines;Les cytokines orchestrent l’inflammation.;3
+opsonisation;marquage;L’opsonisation marque pour la phagocytose.;3
+complément;lyse;Le complément peut lyser des cellules.;3
+interféron;antiviral;Les interférons induisent un état antiviral.;3
+antibiotique;cible;Un antibiotique cible des fonctions bactériennes.;3
+cancer;tumeur;Une tumeur résulte d’une prolifération cellulaire.;3
+oncogène;activation;L’activation d’un oncogène favorise la tumorigenèse.;3
+suppresseur-tumoral;perte-fonction;La perte d’un gène suppresseur lève des freins.;3
+apoptose;programmée;L’apoptose est une mort cellulaire programmée.;3
+angiogenèse;vascularisation;La tumeur stimule sa vascularisation.;3
+métastase;dissémination;Les métastases proviennent de la dissémination.;3
+radiothérapie;ionisants;La radiothérapie utilise des rayonnements ionisants.;3
+chimiothérapie;cytotoxiques;La chimiothérapie cible des cellules prolifératives.;3
+dépistage;précoce;Le dépistage favorise un diagnostic précoce.;3
+ribonucléase;dégradation-ARN;Les ribonucléases dégradent l’ARN.;1A
+exonucléase;correction;Les exonucléases corrigent des erreurs d’ADN.;1A
+répresseur;liaison-opérateur;Un répresseur se lie à l’opérateur et bloque la transcription.;1A
+lithosphère;rigide;La lithosphère se comporte en rigide.;1B
+ophiolite-liste;serpentinite;Les ophiolites incluent serpentinite et gabbro.;1B
+mylonite;déformation;Les mylonites attestent de fortes cisaillements.;1B
+phytohormone;signal;Les phytohormones véhiculent des signaux de croissance.;2A
+plasmodesme;continuité;Les plasmodesmes assurent la continuité cytoplasmique.;2A
+cutine;barrière;La cutine forme une barrière hydrophobe.;2A
+aérosol-sulfaté;refroidissement;Les aérosols sulfatés induisent un refroidissement.;2B
+carbone-bleu;marais;Les marais côtiers stockent du “carbone bleu”.;2B
+télédétection;albédo-neige;La télédétection suit l’albédo de la neige.;2B
+ADH;perméabilité;L’ADH augmente la perméabilité à l’eau du collecteur.;3
+glucagon;glycogénolyse;Le glucagon stimule la glycogénolyse hépatique.;3
+thyroxine;métabolisme;La thyroxine module le métabolisme basal.;3
+baroréflexe;pression;Le baroréflexe régule la pression artérielle.;3

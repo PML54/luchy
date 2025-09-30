@@ -1,0 +1,12 @@
+# build.yaml
+targets:
+  $default:
+    builders:
+      freezed:
+        generate_for:
+          include:
+            - lib/app/config/app_config.dart
+            - lib/**/*.dart
+      json_serializable:
+        options:
+          explicit_to_json: true
